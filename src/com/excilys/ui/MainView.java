@@ -2,6 +2,7 @@ package com.excilys.ui;
 
 import java.sql.SQLException;
 
+import com.excilys.model.Computer;
 import com.excilys.model.ConnectionDB;
 
 public class MainView {
@@ -27,7 +28,9 @@ public class MainView {
 		// TODO Auto-generated method stub
 		MainView mv = new MainView();
 		try {
-			mv.getConn().drawComputer();
+			for(Computer c: mv.getConn().listComputer().values()) {
+				System.out.println(c);
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
