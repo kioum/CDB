@@ -22,22 +22,18 @@ Methodes : getter & setter
 ### ConnectionDB
 Variables 
 * private id:Connection
-* private computers:HashMap<Long, Computer>
-* private companies:HashMap<Long, Company>
 
 Methodes : getter & setter
-* HashMap<Long, Computer> listComputer()
-* HashMap<Long, Company> listCompany()
+* ArrayList<Computer> listComputer()
+* ArrayList<Company> listCompany()
 * Computer showComputerDetails(Long id)
-* Computer createComputer(String name, Timestamp introduced, Timestamp discontinued, Long idManu)
-* Computer updateComputer(Computer c)
+* int createComputer(String name, Timestamp introduced, Timestamp discontinued, Long idManu)
+* int updateComputer(Computer c)
 
 ## CONTROLLEUR
 
 ## VUE
 ### MainView
-Variables
-* conn:ConnectionDB
 
 Methodes : 
 * public static void main(String[] args)

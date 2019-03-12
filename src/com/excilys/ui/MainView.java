@@ -1,40 +1,36 @@
 package com.excilys.ui;
 
-import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.excilys.model.Company;
-import com.excilys.model.ConnectionDB;
+import com.excilys.model.Computer;
 
 public class MainView {
-	private ConnectionDB conn;
+
+	public void drawMenu() {
+		System.out.println("|---------------------|\t");
+		System.out.println("|  Computer Database  |\t");
+		System.out.println("|---------------------|\t\n");
+		System.out.println("1. Show list computers");
+		System.out.println("2. Show list companies");
+		System.out.println("3. Show computer details");
+		System.out.println("4. Create computer");
+		System.out.println("5. Update computer");
+		System.out.println("6. Delete computer");
+	}
 	
-	public MainView() {
-		try {
-			conn = new ConnectionDB();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public void drawListComputer(List<Computer> list) {
+		System.out.println(" List computers : ");
+		for(Computer computer:list) {
+			System.out.println("\t" + computer);
 		}
 	}
 	
-	public ConnectionDB getConn() {
-		return conn;
-	}
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		MainView mv = new MainView();
-		try {
-			for(Company c: mv.getConn().listCompany().values()) {
-				System.out.println(c);
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public void drawListCompany(List<Company> list) {
+		System.out.println(" List company : ");
+		for(Company company:list) {
+			System.out.println("\t" + company);
 		}
 	}
-
 }
