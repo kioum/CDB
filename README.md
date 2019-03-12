@@ -43,9 +43,9 @@ Methodes :
 * public static void main(String[] args)
 
 # Fonctionnalité
-List computers 
-List companies
-Show computer details 
-Create a computer
-Update a computer
-Delete a computer
+* List computers 
+* List companies
+* Show computer details 
+* Create a computer
+* Update a computer
+* Delete a computer
