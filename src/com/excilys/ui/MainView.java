@@ -2,7 +2,7 @@ package com.excilys.ui;
 
 import java.sql.SQLException;
 
-import com.excilys.model.Computer;
+import com.excilys.model.Company;
 import com.excilys.model.ConnectionDB;
 
 public class MainView {
@@ -28,7 +28,7 @@ public class MainView {
 		// TODO Auto-generated method stub
 		MainView mv = new MainView();
 		try {
-			for(Computer c: mv.getConn().listComputer().values()) {
+			for(Company c: mv.getConn().listCompany().values()) {
 				System.out.println(c);
 			}
 		} catch (SQLException e) {
