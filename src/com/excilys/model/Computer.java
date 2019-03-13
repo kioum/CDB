@@ -25,7 +25,6 @@ public class Computer {
 	public void setManufacturer(Company manufacturer) {
 		this.manufacturer = manufacturer;
 	}
-
 	
 	public Long getId() {
 		return id;
