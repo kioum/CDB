@@ -1,15 +1,42 @@
 package com.excilys.persistence;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface IDAO<T> {
 	Connection conn = DAOFactory.getConnection();
+
+	/**
+	 * Get all the elements in the database
+	 * @return ArrayList<T> the list of all elements
+	 */
+	abstract ArrayList<T> getList();
 	
-	abstract ArrayList<T> getList() throws SQLException;
-	abstract T findById(Long id) throws SQLException;
-	abstract int create(T comp) throws SQLException;
-	abstract int update(T comp) throws SQLException;
-	abstract int deleteById(Long id) throws SQLException;
+	/**
+	 * find a element by this id
+	 * @param id
+	 * @return T found element. If element not found return null
+	 */
+	abstract T findById(Long id);
+	
+	/**
+	 * 
+	 * @param comp
+	 * @return 1 element created. 0 if a any problems.
+	 */
+	abstract int create(T comp);
+	
+	/**
+	 * update a element in the database
+	 * @param comp
+	 * @return 1 element updated. 0 if a any problems.
+	 */
+	abstract int update(T comp);
+	
+	/**
+	 * delete a element by this id
+	 * @param id
+	 * @return 1 element deleted. 0 if a any problems. 
+	 */
+	abstract int deleteById(Long id);
 }

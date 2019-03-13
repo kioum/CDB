@@ -35,6 +35,10 @@ public class DAOFactory {
 		password = config.getProperty("jdbc.password");
 	}
 	
+	/**
+	 * get the instance of the database
+	 * @return Connection
+	 */
 	public static Connection getConnection() {
 		try {
 			Class.forName(driver);

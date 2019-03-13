@@ -1,21 +1,20 @@
 package com.excilys.ui;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import com.excilys.model.Company;
 import com.excilys.model.Computer;
 
 public class MainView {
-	
-	private final int NBELEMENTAFF = 20;
 	private Scanner in;
-	
+
 	public MainView() {
 		this.in = new Scanner(System.in);
 	}
-	
+
+	/**
+	 * Draw the menu for the user
+	 */
 	public void drawMenu() {
 		System.out.println("|---------------------|\t");
 		System.out.println("|  Computer Database  |\t");
@@ -29,47 +28,39 @@ public class MainView {
 		System.out.println("0. Exit");
 	}
 
+	/**
+	 * Draw a message and return the response
+	 * @param message
+	 * @return String
+	 */
 	public String getInputUser(String message) {
 		System.out.println(message);
 		return in.nextLine();
 	}
-	
+
+	/**
+	 * Draw a message
+	 * @param message
+	 */
 	public void drawMessage(String message) {
 		System.out.println(message);
 	}
 	
-	public void drawListComputer(ArrayList<Computer> list) {
-		System.out.println("List computers : ");
-		for(int i = 0; i < Math.floor(list.size()/NBELEMENTAFF) + 1; i++) {
-			int beg = i*NBELEMENTAFF;
-			int end = (i+1)*NBELEMENTAFF;
-			
-			if(end > list.size())
-				end = list.size();
-			
-			for(Computer comp :list.subList(beg, end))
-					System.out.println("\t" + comp);
-			System.out.println("To continue press any key");
-			in.nextLine();
-		}
+	/**
+	 * draw all of elements of list
+	 * @param list
+	 * @param page
+	 */
+	public <T> void drawList(List<T> list, int page) {
+		System.out.println("Page " + page + " of list computers  : ");
+		for(T comp :list)
+			System.out.println("\t" + comp);
 	}
 
-	public void drawListCompany(ArrayList<Company> list) {
-		System.out.println("List company : ");
-		for(int i = 0; i < Math.floor(list.size()/NBELEMENTAFF) +1; i++) {
-			int beg = i*NBELEMENTAFF;
-			int end = (i+1)*NBELEMENTAFF;
-			
-			if(end > list.size())
-				end = list.size();
-			
-			for(Company comp :list.subList(beg, end))
-					System.out.println("\t" + comp);
-			System.out.println("To continue press any key");
-			in.nextLine();
-		}
-	}
-
+	/**
+	 * draw the computer
+	 * @param computer
+	 */
 	public void drawComputerDetails(Computer computer) {
 		System.out.println("\n" + computer + "\n");
 	}

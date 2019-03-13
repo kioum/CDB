@@ -16,40 +16,47 @@ public class CompanyDAO implements IDAO<Company> {
 	private final static String QUERY_DELETEBYID = "";
 
 	@Override
-	public ArrayList<Company> getList() throws SQLException {
+	public ArrayList<Company> getList(){
 		// TODO Auto-generated method stub
-		PreparedStatement pstmt = conn.prepareStatement(QUERY_GETLIST);
-		ResultSet res = pstmt.executeQuery();
+		PreparedStatement pstmt;
+		try {
+			pstmt = conn.prepareStatement(QUERY_GETLIST);
+			ResultSet res = pstmt.executeQuery();
 
-		ArrayList<Company> companies = new ArrayList<Company>();
+			ArrayList<Company> companies = new ArrayList<Company>();
 
-		while(res.next()) {
-			companies.add(new Company(res.getLong("id"), res.getString("name")));
+			while(res.next()) {
+				companies.add(new Company(res.getLong("id"), res.getString("name")));
+			}
+
+			return companies;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-
-		return companies;
+		return null;
 	}
 
 	@Override
-	public Company findById(Long id) throws SQLException {
+	public Company findById(Long id){
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public int create(Company comp) throws SQLException {
+	public int create(Company comp){
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public int update(Company comp) throws SQLException {
+	public int update(Company comp) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public int deleteById(Long id) throws SQLException {
+	public int deleteById(Long id) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
