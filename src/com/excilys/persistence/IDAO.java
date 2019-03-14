@@ -1,11 +1,8 @@
 package com.excilys.persistence;
 
-import java.sql.Connection;
 import java.util.ArrayList;
 
 public interface IDAO<T> {
-	Connection conn = DAOFactory.getConnection();
-
 	/**
 	 * Get all the elements in the database
 	 * @return ArrayList<T> the list of all elements

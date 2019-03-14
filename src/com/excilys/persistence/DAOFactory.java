@@ -22,10 +22,8 @@ public class DAOFactory {
 		try {
 			config.load(new FileInputStream(FICHIER_PROPERTIES));
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -44,7 +42,6 @@ public class DAOFactory {
 			Class.forName(driver);
 			return DriverManager.getConnection(url, username, password);
 		} catch (SQLException | ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;

@@ -3,10 +3,14 @@ package com.excilys.ui;
 import java.util.List;
 import java.util.Scanner;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.model.Computer;
 
 public class MainView {
 	private Scanner in;
+	private static final Logger LOG = LoggerFactory.getLogger(MainView.class);
 
 	public MainView() {
 		this.in = new Scanner(System.in);
@@ -45,7 +49,7 @@ public class MainView {
 	public void drawMessage(String message) {
 		System.out.println(message);
 	}
-	
+
 	/**
 	 * draw all of elements of list
 	 * @param list
@@ -62,6 +66,8 @@ public class MainView {
 	 * @param computer
 	 */
 	public void drawComputerDetails(Computer computer) {
-		System.out.println("\n" + computer + "\n");
+		if(computer != null)
+			System.out.println("\n" + computer + "\n");
+		else LOG.info("Computer not found !\n");
 	}
 }

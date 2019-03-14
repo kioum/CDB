@@ -21,25 +21,25 @@ public class MainController {
 	private MainView mw;
 	private ComputerDAO dComputer;
 	private CompanyDAO dCompany;
-	
+
 	private static final Logger LOG = LoggerFactory.getLogger(MainController.class);
 
 	public MainController(){
 		this.mw = new MainView();
 		this.dCompany = new CompanyDAO();
 		this.dComputer = new ComputerDAO();
-		
+
 		mainMenu();
 	}
 
-	/**
+	/**"
 	 * Controller of the main Menu
 	 */
 	public void mainMenu(){
 		mw.drawMenu();
-		
+
 		int cmd = Integer.parseInt(mw.getInputUser("").toUpperCase());
-		
+
 		switch(Order.values()[cmd].name()) {
 		case "EXIT" :
 			LOG.info("Exit - Bye");
@@ -51,8 +51,7 @@ public class MainController {
 			drawList(dCompany.getList());
 			break;
 		case "SHOWCOMPUTER":
-			Long id = Long.valueOf(mw.getInputUser("Enter the id : "));
-			mw.drawComputerDetails(dComputer.findById(id));
+			drawComputer();
 			break;
 		case "CREATECOMPUTER":
 			createComputer();
@@ -61,14 +60,20 @@ public class MainController {
 			updateComputer();
 			break;
 		case "DELETECOMPUTER":
-			id = Long.valueOf(mw.getInputUser("Enter the id : "));
-			int success = dComputer.deleteById(id);
-			if(success == 1)
-				LOG.info("Your computer is deleted !\n");
-			else LOG.info("Impossible to delete your computer\n");
+			deleteComputer();
 			break;
 		}
 		mainMenu();
+	}
+	
+	public void drawComputer() {
+		Long id = Long.valueOf(mw.getInputUser("Enter the id : "));
+		mw.drawComputerDetails(dComputer.findById(id));
+	}
+	
+	public void deleteComputer() {
+		Long id = Long.valueOf(mw.getInputUser("Enter the id : "));
+		successLOG(dComputer.deleteById(id), "delete");
 	}
 
 	/**
@@ -78,22 +83,22 @@ public class MainController {
 	 */
 	public <T> void drawList(ArrayList<T> list) {
 		int nbElement = Integer.parseInt(mw.getInputUser("How many by page ? "));
-		
+
 		Page<T> page = new Page<T>(list, nbElement);
 		mw.drawList(page.currentPage(), page.getNumPage());
-		
+
 		String cmd = "";
-		
+
 		while(!cmd.equals("Q")) {
 			if(cmd.equals("P"))
 				mw.drawList(page.precPage(), page.getNumPage());
 			else if(cmd.equals("N"))
 				mw.drawList(page.nextPage(), page.getNumPage());
-			
+
 			cmd = mw.getInputUser("Press key : p (Prec), n (next) or q (quit)").toUpperCase();
 		}
 	}
-	
+
 	/**
 	 * Ask to user a id. For each element ask if user want changes that.
 	 * Update computer in the DB
@@ -116,11 +121,8 @@ public class MainController {
 		String idManu = mw.getInputUser("Enter the id of Manufacturer or just press enter :");
 		if(!idManu.equals("")) 
 			computer.getManufacturer().setId(Long.valueOf(idManu));
-		
-		int success = dComputer.update(computer);
-		if(success == 1)
-			LOG.info("Your computer is updated !\n");
-		else LOG.info("Impossible to update your computer\n");
+
+		successLOG(dComputer.update(computer), "update");
 	}
 
 	/**
@@ -136,12 +138,9 @@ public class MainController {
 		Timestamp discontinued = getATimestamp();
 
 		Long idManu = Long.valueOf(mw.getInputUser("Enter the id of Manufacturer : "));
-		
-		int success = dComputer.create(new Computer(Long.valueOf(0), name, introduced, discontinued, 
-				new Company(idManu, "")));
-		if(success == 1)
-			LOG.info("Your computer is created !\n");
-		else LOG.info("Impossible to create your computer\n");
+
+		successLOG(dComputer.create(new Computer(Long.valueOf(0), name, introduced, discontinued, 
+				new Company(idManu, ""))), "create");
 	}
 
 	/**
@@ -154,19 +153,23 @@ public class MainController {
 		if(date.equals("null")) return null;
 
 		Date newdate = null;
-			try {
-				newdate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				LOG.info("Parse of date failed");
-				return getATimestamp();
-			}
+		try {
+			newdate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+		} catch (ParseException e) {
+			LOG.info("Parse of date failed");
+			return getATimestamp();
+		}
 
 		return new Timestamp(newdate.getTime());
 	}
+	
+	public void successLOG(int success, String cmd) {
+		if(success == 1)
+			LOG.info("Your computer is " + cmd + "d !\n");
+		else LOG.info("Impossible to " + cmd + " your computer\n");
+	}
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-			new MainController();
+		new MainController();
 	}
 }
