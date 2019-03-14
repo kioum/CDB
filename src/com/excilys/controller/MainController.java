@@ -155,13 +155,13 @@ public class MainController {
 		if(date.equals("null")) return null;
 
 		Date newdate = null;
-		try {
-			newdate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			LOG.info("Error : parse of date doens't work");
-			return getATimestamp();
-		}
+			try {
+				newdate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				LOG.info("Parse of date failed");
+				return getATimestamp();
+			}
 
 		return new Timestamp(newdate.getTime());
 	}
