@@ -11,9 +11,11 @@ import org.slf4j.LoggerFactory;
 
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
+import com.excilys.model.Page;
 import com.excilys.persistence.CompanyDAO;
 import com.excilys.persistence.ComputerDAO;
 import com.excilys.ui.MainView;
+import com.excilys.util.Order;
 
 public class MainController {
 	private MainView mw;
@@ -35,34 +37,36 @@ public class MainController {
 	 */
 	public void mainMenu(){
 		mw.drawMenu();
-
-		switch(mw.getInputUser("").toUpperCase()) {
-		case "1":
+		
+		int cmd = Integer.parseInt(mw.getInputUser("").toUpperCase());
+		
+		switch(Order.values()[cmd].name()) {
+		case "EXIT" :
+			LOG.info("Exit - Bye");
+			return;
+		case "LISTCOMPUTER":
 			drawList(dComputer.getList());
 			break;
-		case "2":
+		case "LISTCOMPANY":
 			drawList(dCompany.getList());
 			break;
-		case "3":
+		case "SHOWCOMPUTER":
 			Long id = Long.valueOf(mw.getInputUser("Enter the id : "));
 			mw.drawComputerDetails(dComputer.findById(id));
 			break;
-		case "4":
+		case "CREATECOMPUTER":
 			createComputer();
 			break;
-		case "5":
+		case "UPDATECOMPUTER":
 			updateComputer();
 			break;
-		case "6":
+		case "DELETECOMPUTER":
 			id = Long.valueOf(mw.getInputUser("Enter the id : "));
 			int success = dComputer.deleteById(id);
 			if(success == 1)
 				LOG.info("Your computer is deleted !\n");
 			else LOG.info("Impossible to delete your computer\n");
 			break;
-		case "0" :
-			LOG.info("Exit - Bye");
-			return;
 		}
 		mainMenu();
 	}
@@ -75,22 +79,17 @@ public class MainController {
 	public <T> void drawList(ArrayList<T> list) {
 		int nbElement = Integer.parseInt(mw.getInputUser("How many by page ? "));
 		
+		Page<T> page = new Page<T>(list, nbElement);
+		mw.drawList(page.currentPage(), page.getNumPage());
+		
 		String cmd = "";
-		int cpt = 0;
-		int maxPage = (int) (Math.floor(list.size()/nbElement));
+		
 		while(!cmd.equals("Q")) {
-			if(cmd.equals("P") && cpt > 0)
-				cpt--;
-			if(cmd.equals("N") && cpt < maxPage) 
-				cpt++;
+			if(cmd.equals("P"))
+				mw.drawList(page.precPage(), page.getNumPage());
+			else if(cmd.equals("N"))
+				mw.drawList(page.nextPage(), page.getNumPage());
 			
-			int beg = cpt * nbElement;
-			int end = (cpt+1) * nbElement;
-			
-			if(end > list.size())
-				end = list.size();
-			
-			mw.drawList(list.subList(beg, end), cpt);
 			cmd = mw.getInputUser("Press key : p (Prec), n (next) or q (quit)").toUpperCase();
 		}
 	}
