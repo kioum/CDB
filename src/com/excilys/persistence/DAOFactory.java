@@ -8,8 +8,12 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-public class DAOFactory {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+public class DAOFactory {
+	private static final Logger LOG = LoggerFactory.getLogger(DAOFactory.class);
+	
 	private static final String FICHIER_PROPERTIES = "WebContent/WEB-INF/dao.properties";
 
 	private static String url;
@@ -22,9 +26,9 @@ public class DAOFactory {
 		try {
 			config.load(new FileInputStream(FICHIER_PROPERTIES));
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			LOG.error(e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOG.error(e.getMessage());
 		}
 
 		driver = config.getProperty("jdbc.driver");
@@ -42,7 +46,7 @@ public class DAOFactory {
 			Class.forName(driver);
 			return DriverManager.getConnection(url, username, password);
 		} catch (SQLException | ClassNotFoundException e) {
-			e.printStackTrace();
+			LOG.error(e.getMessage());
 		}
 		return null;
 	}

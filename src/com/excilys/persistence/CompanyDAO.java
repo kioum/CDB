@@ -5,10 +5,15 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.mapper.CompanyMapper;
 import com.excilys.model.Company;
 
 public class CompanyDAO implements IDAO<Company> {
+	private static final Logger LOG = LoggerFactory.getLogger(ComputerDAO.class);
+	
 	private final static String QUERY_GETLIST = "SELECT id, name "
 			+ "FROM company";
 	/*private final static String QUERY_FINDBYID = "";
@@ -22,7 +27,7 @@ public class CompanyDAO implements IDAO<Company> {
 				PreparedStatement pstmt = conn.prepareStatement(QUERY_GETLIST);){
 			return new CompanyMapper().mapList(pstmt.executeQuery());
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LOG.error(e.getMessage());
 		}
 		return null;
 	}

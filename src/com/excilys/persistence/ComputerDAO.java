@@ -5,10 +5,15 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.mapper.ComputerMapper;
 import com.excilys.model.Computer;
 
 public class ComputerDAO implements IDAO<Computer> {
+	private static final Logger LOG = LoggerFactory.getLogger(ComputerDAO.class);
+	
 	private final static String QUERY_GETLIST = "SELECT c1.id, c1.name, c1.introduced, c1.discontinued, c2.id, c2.name " 
 			+ "FROM computer c1 LEFT JOIN company c2 " 
 			+ "ON c1.company_id = c2.id ;";
@@ -30,7 +35,7 @@ public class ComputerDAO implements IDAO<Computer> {
 				PreparedStatement  pstmt = conn.prepareStatement(QUERY_GETLIST);){
 			return new ComputerMapper().mapList(pstmt.executeQuery());
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LOG.debug(e.getMessage());
 		}
 		return null;
 	}
@@ -42,7 +47,7 @@ public class ComputerDAO implements IDAO<Computer> {
 			pstmt.setLong(1, id);
 			return new ComputerMapper().map(pstmt.executeQuery());
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LOG.error(e.getMessage());
 		}
 		return null;
 	}
@@ -58,7 +63,7 @@ public class ComputerDAO implements IDAO<Computer> {
 			return pstmt.executeUpdate();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LOG.error(e.getMessage());
 		}
 
 		return -1;
@@ -76,7 +81,7 @@ public class ComputerDAO implements IDAO<Computer> {
 
 			return pstmt.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LOG.error(e.getMessage());
 		}
 		return -1;
 	}
@@ -88,7 +93,7 @@ public class ComputerDAO implements IDAO<Computer> {
 			pstmt.setLong(1, id);
 			return pstmt.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LOG.error(e.getMessage());
 		}
 
 		return -1;

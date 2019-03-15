@@ -4,10 +4,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 
 public class ComputerMapper implements IMapper<Computer>{
+	private static final Logger LOG = LoggerFactory.getLogger(ComputerMapper.class);
 	
 	@Override
 	public Computer map(ResultSet res) {
@@ -17,7 +21,7 @@ public class ComputerMapper implements IMapper<Computer>{
 						res.getTimestamp("c1.introduced"), res.getTimestamp("c1.discontinued"), 
 						new Company(res.getLong("c2.id"), res.getString("c2.name")));
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LOG.error(e.getMessage());
 		};
 		
 		return null;
@@ -34,7 +38,7 @@ public class ComputerMapper implements IMapper<Computer>{
 						new Company(res.getLong("c2.id"), res.getString("c2.name"))));
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LOG.error(e.getMessage());
 		}
 		
 		return computers;
