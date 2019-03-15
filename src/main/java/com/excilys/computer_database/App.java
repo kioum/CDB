@@ -8,7 +8,7 @@ import com.excilys.controller.MainController;
  */
 public class App 
 {
-    public static void main( String[] args )
+    public static final void main( String[] args )
     {
     	new MainController();
     }
