@@ -168,8 +168,4 @@ public class MainController {
 			LOG.info("Your computer is " + cmd + "d !\n");
 		else LOG.info("Impossible to " + cmd + " your computer\n");
 	}
-
-	public static void main(String[] args) {
-		new MainController();
-	}
 }
