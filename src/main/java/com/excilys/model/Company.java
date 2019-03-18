@@ -31,6 +31,14 @@ public class Company{
 	}
 
 	@Override
+	public boolean equals(Object obj) {
+		Company comp = (Company)obj;
+		if(comp == null) return false;
+		if(comp.id == id && comp.name == name) return true;
+		else return false;
+	}
+
+	@Override
 	public String toString() {
 		return "Compagny [id=" + id + ", name=" + name + "]";
 	}
