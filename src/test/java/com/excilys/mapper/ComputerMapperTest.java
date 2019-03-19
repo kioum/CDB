@@ -23,7 +23,8 @@ public class ComputerMapperTest extends TestCase{
 	@BeforeEach
 	public void setUp() throws SQLException {
 		rs = Mockito.mock(ResultSet.class);
-		Mockito.when(rs.next()).thenReturn(true);
+		
+		Mockito.when(rs.next()).thenReturn(true).thenReturn(false);
 		Mockito.when(rs.getLong("c1.id")).thenReturn(Long.valueOf(1));
 		Mockito.when(rs.getString("c1.name")).thenReturn("Test computer");
 		Mockito.doReturn(Timestamp.valueOf("1960-09-11 00:11:22"))
@@ -37,6 +38,7 @@ public class ComputerMapperTest extends TestCase{
 	@Test
 	public void testMap() {
 		Computer comp = new ComputerMapper().map(rs);
+		
 		assertEquals(comp.getId(), Long.valueOf(1));
 		assertEquals(comp.getName(), "Test computer");
 		assertEquals(comp.getIntroduced(), Timestamp.valueOf("1960-09-11 00:11:22"));

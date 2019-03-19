@@ -10,26 +10,26 @@ import org.slf4j.LoggerFactory;
 import com.excilys.model.Company;
 
 public class CompanyMapper implements IMapper<Company> {
-	private static final Logger LOG = LoggerFactory.getLogger(CompanyMapper.class);
-	
-	@Override
-	public Company map(ResultSet res) {
-		return null;
-	}
+  private static final Logger LOG = LoggerFactory.getLogger(CompanyMapper.class);
 
-	@Override
-	public ArrayList<Company> mapList(ResultSet res) {
-		ArrayList<Company> companies = new ArrayList<Company>();
+  @Override
+  public Company map(ResultSet res) {
+    return null;
+  }
 
-		try {
-			while(res.next()) {
-				companies.add(new Company(res.getLong("id"), res.getString("name")));
-			}
-		} catch (SQLException e) {
-			LOG.error(e.getMessage());
-		}
-		
-		return companies;
-	}
+  @Override
+  public ArrayList<Company> mapList(ResultSet res) {
+    ArrayList<Company> companies = new ArrayList<Company>();
+
+    try {
+      while(res.next()) {
+        companies.add(new Company(res.getLong("id"), res.getString("name")));
+      }
+    } catch (SQLException e) {
+      LOG.error(e.getMessage());
+    }
+
+    return companies;
+  }
 
 }

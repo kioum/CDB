@@ -33,9 +33,18 @@ public class Company{
 	@Override
 	public boolean equals(Object obj) {
 		Company comp = (Company)obj;
-		if(comp == null) return false;
-		if(comp.id == id && comp.name == name) return true;
-		else return false;
+		
+		if (obj == this) return true;
+		if (obj == null) return false;
+		if (this.getClass() != obj.getClass()) return false;
+		
+		if (this.id != comp.getId()) return false;
+		
+		if (this.name == null && comp.getName() != null) return false;
+		if (this.name != null && comp.getName() == null) return false;
+		if (!this.name.equals(comp.getName())) return false;
+		
+		return true;
 	}
 
 	@Override

@@ -59,6 +59,35 @@ public class Computer {
 	}
 
 	@Override
+	public boolean equals(Object obj) {
+		Computer comp = (Computer)obj;
+		
+		if (obj == this) return true;
+		if (obj == null) return false;
+		if (this.getClass() != obj.getClass()) return false;
+		
+		if (this.id != comp.getId()) return false;
+		
+		if (this.name == null && comp.getName() != null) return false;
+		if (this.name != null && comp.getName() == null) return false;
+		if (!this.name.equals(comp.getName())) return false;
+		
+		if (this.introduced == null && comp.getIntroduced() != null) return false;
+		if (this.introduced != null && comp.getIntroduced() == null) return false;
+		if (!this.introduced.equals(comp.getIntroduced())) return false;
+		
+		if (this.discontinued == null && comp.getDiscontinued() != null) return false;
+		if (this.discontinued != null && comp.getDiscontinued() == null) return false;
+		if (!this.discontinued.equals(comp.getDiscontinued())) return false;
+		
+		if (this.manufacturer == null && comp.getManufacturer() != null) return false;
+		if (this.manufacturer != null && comp.getManufacturer() == null) return false;
+		if (!this.manufacturer.equals(comp.getManufacturer())) return false;
+		
+		return true;
+	}
+	
+	@Override
 	public String toString() {
 		return "Computer [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued
 				+ ", manufacturer=" + manufacturer + "]";
