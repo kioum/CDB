@@ -14,6 +14,6 @@ public class ComputerDAOTest extends TestCase {
 	
 	@Test
 	public void testShowDetails() {
-		
+	  assertTrue(true);
 	}
 }

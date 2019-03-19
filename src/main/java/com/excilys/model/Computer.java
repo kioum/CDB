@@ -60,11 +60,12 @@ public class Computer {
 
 	@Override
 	public boolean equals(Object obj) {
-		Computer comp = (Computer)obj;
 		
 		if (obj == this) return true;
 		if (obj == null) return false;
 		if (this.getClass() != obj.getClass()) return false;
+		
+		Computer comp = (Computer)obj;
 		
 		if (this.id != comp.getId()) return false;
 		

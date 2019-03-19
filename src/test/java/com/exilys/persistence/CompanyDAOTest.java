@@ -6,7 +6,7 @@ import junit.framework.TestCase;
 
 public class CompanyDAOTest extends TestCase{
 	@Test
-	public void getListTest() {
-		
+	public void testGetList() {
+		assertTrue(true);
 	}
 }
