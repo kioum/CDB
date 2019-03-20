@@ -17,11 +17,11 @@ public class ComputerTest extends TestCase {
 	public void setUp() {
 		comp1 = new Computer((long)1, "Test computer",  
 				Timestamp.valueOf("1960-09-11 00:11:22"), Timestamp.valueOf("2020-09-11 00:11:22"), 
-				new Company((long)0, "Test company"));
+				new Company(0L, "Test company"));
 		
 		comp2 = new Computer((long)2, "Test Computer",  
 				Timestamp.valueOf("1960-09-11 00:11:22"), Timestamp.valueOf("2020-09-11 00:11:22"), 
-				new Company((long)1, "Test company 2S"));
+				new Company(1L, "Test company 2S"));
 	}
 	
 	@Test

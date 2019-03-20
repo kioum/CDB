@@ -12,8 +12,8 @@ public class CompanyTest extends Company {
 	
 	@Before
 	public void setUp() {
-		comp1 = new Company((long)0, "Test company");		
-		comp2 = new Company((long)1, "Test company 2S");
+		comp1 = new Company(0L, "Test company");		
+		comp2 = new Company(1L, "Test company 2S");
 	}
 	
 	@Test
