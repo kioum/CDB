@@ -14,7 +14,8 @@ import org.slf4j.LoggerFactory;
 public class DAOFactory {
 	private static final Logger LOG = LoggerFactory.getLogger(DAOFactory.class);
 	
-	private static final String FICHIER_PROPERTIES = "WebContent/WEB-INF/dao.properties";
+	private static final String FICHIER_PROPERTIES = "/home/excilys/eclipse-workspace/computer-database/"
+			+ "WebContent/WEB-INF/dao.properties";
 
 	private static String url;
 	private static String driver;
@@ -43,6 +44,7 @@ public class DAOFactory {
 	 */
 	public static Connection getConnection() {
 		try {
+			if(driver == null) System.out.println("null");
 			Class.forName(driver);
 			return DriverManager.getConnection(url, username, password);
 		} catch (SQLException | ClassNotFoundException e) {

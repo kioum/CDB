@@ -1,6 +1,7 @@
 package com.excilys.servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,7 +15,7 @@ import com.excilys.model.Page;
 import com.excilys.persistence.ComputerDAO;
 
 @WebServlet("/Dashboard")
-public class dashboardServlet extends HttpServlet {
+public class DashboardServlet extends HttpServlet {
 
 	/**
 	 * 
@@ -23,15 +24,14 @@ public class dashboardServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		super.doGet(req, resp);
+		ArrayList<Computer> computers = ComputerDAO.getList().get();
+		Page<Computer> pageComputer = new Page<Computer>(computers, 10);
 
-		ComputerDAO.getList();
-		//Page<Computer> pageComputer = new Page<Computer>(ComputerDAO.getList(), 10);
-
-		//RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/views/dashboard.jsp");
-		//req.setAttribute("listComputer", pageComputer.currentPage());
-
-		//rd.forward(req, resp);
+		RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/views/dashboard.jsp");
+		req.setAttribute("listAllComputers", computers);
+		req.setAttribute("listPageComputer", pageComputer.currentPage());
+		
+		rd.forward(req, resp);
 	}
 
 	@Override
