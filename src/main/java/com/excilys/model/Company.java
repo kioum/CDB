@@ -5,7 +5,7 @@ public class Company{
 	private String name;
 	
 	public Company() {
-		id = (long) -1.0;
+		id = -1L;
 		name = "Unknown";
 	}
 	

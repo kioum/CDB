@@ -5,8 +5,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
@@ -20,7 +20,8 @@ public class ComputerMapperTest extends TestCase{
 	@Mock
 	ResultSet rs;
 
-	@BeforeEach
+	@Override
+	@Before
 	public void setUp() throws SQLException {
 		rs = Mockito.mock(ResultSet.class);
 		

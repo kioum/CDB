@@ -4,8 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
@@ -18,7 +18,8 @@ public class CompanyMapperTest extends TestCase{
 	@Mock
 	ResultSet rs;
 
-	@BeforeEach
+	@Override
+	@Before
 	public void setUp() throws SQLException {
 		rs = Mockito.mock(ResultSet.class);
 		Mockito.when(rs.next()).thenReturn(true).thenReturn(false);

@@ -7,6 +7,7 @@ import junit.framework.TestCase;
 
 public class ComputerDAOTest extends TestCase {
 
+	@Override
 	@Before
 	protected void setUp() throws Exception {
 		
