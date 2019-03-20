@@ -3,12 +3,12 @@ package com.excilys.model;
 public class Company{
 	private Long id;
 	private String name;
-	
+
 	public Company() {
 		id = -1L;
 		name = "Unknown";
 	}
-	
+
 	public Company(Long id, String name) {
 		this.id = id;
 		this.name = name;
@@ -31,19 +31,33 @@ public class Company{
 	}
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+
+	@Override
 	public boolean equals(Object obj) {
-		if (obj == this) return true;
-		if (obj == null) return false;
-		if (this.getClass() != obj.getClass()) return false;
-		
-  Company comp = (Company)obj;
-  
-		if (this.id != comp.getId()) return false;
-		
-		if (this.name == null && comp.getName() != null) return false;
-		if (this.name != null && comp.getName() == null) return false;
-		if (!this.name.equals(comp.getName())) return false;
-		
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Company other = (Company) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
 		return true;
 	}
 

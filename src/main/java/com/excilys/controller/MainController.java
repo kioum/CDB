@@ -5,8 +5,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.NoSuchElementException;
 
-import org.apache.log4j.BasicConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,8 +20,6 @@ import com.excilys.util.Order;
 
 public class MainController {
 	private MainView mw;
-	private ComputerDAO daoComputer;
-	private CompanyDAO daoCompany;
 
 	private static final Logger LOG = LoggerFactory.getLogger(MainController.class);
 
@@ -29,11 +27,7 @@ public class MainController {
 	 * Constructor
 	 */
 	public MainController() {
-		BasicConfigurator.configure();
 		this.mw = new MainView();
-		this.daoCompany = new CompanyDAO();
-		this.daoComputer = new ComputerDAO();
-
 		mainMenu();
 	}
 
@@ -50,10 +44,10 @@ public class MainController {
 			LOG.info("Exit - Bye");
 			return;
 		case "LISTCOMPUTER":
-			drawList(daoComputer.getList());
+			drawList(ComputerDAO.getList().get());
 			break;
 		case "LISTCOMPANY":
-			drawList(daoCompany.getList());
+			drawList(CompanyDAO.getList().get());
 			break;
 		case "SHOWCOMPUTER":
 			drawComputer();
@@ -75,12 +69,17 @@ public class MainController {
 
 	public void drawComputer() {
 		Long id = Long.valueOf(mw.getInputUser("Enter the id : "));
-		mw.drawComputerDetails(daoComputer.findById(id));
+		
+		try {
+			mw.drawComputerDetails(ComputerDAO.findById(id).get());
+		}catch(NoSuchElementException e) {
+			LOG.error("Computer id =" + id + " doesn't exist");
+		}
 	}
 
 	public void deleteComputer() {
 		Long id = Long.valueOf(mw.getInputUser("Enter the id : "));
-		successLog(daoComputer.deleteById(id), "delete");
+		successLog(ComputerDAO.deleteById(id), "delete");
 	}
 
 	/**
@@ -112,7 +111,13 @@ public class MainController {
 	 */
 	public void updateComputer() {
 		Long id = Long.valueOf(mw.getInputUser("Enter the id : "));
-		Computer computer = daoComputer.findById(id);
+		Computer computer = null;
+
+		try {
+			computer = ComputerDAO.findById(id).get();
+		}catch(NoSuchElementException e) {
+			LOG.error("Computer id =" + id + " doesn't exist");
+		}
 
 		String name = mw.getInputUser("Enter the name or just press enter :");
 		if (!name.equals("")) { 
@@ -134,7 +139,7 @@ public class MainController {
 			computer.getManufacturer().setId(Long.valueOf(idManu));
 
 		}
-		successLog(daoComputer.update(computer), "update");
+		successLog(ComputerDAO.update(computer), "update");
 	}
 
 	/**
@@ -151,7 +156,7 @@ public class MainController {
 
 		Long idManu = Long.valueOf(mw.getInputUser("Enter the id of Manufacturer : "));
 
-		successLog(daoComputer.create(new Computer(Long.valueOf(0), name, introduced, discontinued, 
+		successLog(ComputerDAO.create(new Computer(Long.valueOf(0), name, introduced, discontinued, 
 				new Company(idManu, ""))), "create");
 	}
 

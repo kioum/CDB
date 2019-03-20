@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import com.excilys.mapper.ComputerMapper;
 import com.excilys.model.Computer;
 
-public class ComputerDAO implements IDAO<Computer> {
+public class ComputerDAO {
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerDAO.class);
 	
 	private final static String QUERY_GETLIST = "SELECT c1.id, c1.name, c1.introduced, c1.discontinued, c2.id, c2.name " 
@@ -28,32 +29,35 @@ public class ComputerDAO implements IDAO<Computer> {
 			+ "WHERE id = ?;";
 	private final static String QUERY_DELETEBYID = "DELETE FROM computer "
 			+ "WHERE id = ?;";
-
-	@Override
-	public ArrayList<Computer> getList(){
+	
+	public static Optional<ArrayList<Computer>> getList(){
+		ArrayList<Computer> computers = null;
+		
 		try (Connection conn = DAOFactory.getConnection();
 				PreparedStatement  pstmt = conn.prepareStatement(QUERY_GETLIST);){
-			return new ComputerMapper().mapList(pstmt.executeQuery());
+			computers = ComputerMapper.mapList(pstmt.executeQuery());
 		} catch (SQLException e) {
 			LOG.debug(e.getMessage());
 		}
-		return null;
+		
+		return Optional.ofNullable(computers);
 	}
-
-	@Override
-	public Computer findById(Long id){
+	
+	public static Optional<Computer> findById(Long id){
+		Computer computer = null;
+		
 		try (Connection conn = DAOFactory.getConnection();
 				PreparedStatement  pstmt = conn.prepareStatement(QUERY_FINDBYID);){
 			pstmt.setLong(1, id);
-			return new ComputerMapper().map(pstmt.executeQuery());
+			computer = ComputerMapper.map(pstmt.executeQuery());
 		} catch (SQLException e) {
 			LOG.error(e.getMessage());
 		}
-		return null;
+		
+		return Optional.ofNullable(computer);
 	}
-
-	@Override
-	public int create(Computer comp){
+	
+	public static int create(Computer comp){
 		try (Connection conn = DAOFactory.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement(QUERY_CREATE);){
 			pstmt.setString(1, comp.getName());
@@ -68,9 +72,8 @@ public class ComputerDAO implements IDAO<Computer> {
 
 		return -1;
 	}
-
-	@Override
-	public int update(Computer comp) {
+	
+	public static int update(Computer comp) {
 		try(Connection conn = DAOFactory.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement(QUERY_UPDATEBYID);){
 			pstmt.setString(1, comp.getName());
@@ -83,11 +86,12 @@ public class ComputerDAO implements IDAO<Computer> {
 		} catch (SQLException e) {
 			LOG.error(e.getMessage());
 		}
+		
 		return -1;
 	}
 
-	@Override
-	public int deleteById(Long id){
+	
+	public static int deleteById(Long id){
 		try (Connection conn = DAOFactory.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement(QUERY_DELETEBYID);){
 			pstmt.setLong(1, id);

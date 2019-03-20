@@ -4,52 +4,31 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.mapper.CompanyMapper;
 import com.excilys.model.Company;
+import com.excilys.model.Computer;
 
-public class CompanyDAO implements IDAO<Company> {
-	private static final Logger LOG = LoggerFactory.getLogger(ComputerDAO.class);
+public class CompanyDAO {
+	private static final Logger LOG = LoggerFactory.getLogger(CompanyDAO.class);
 	
 	private final static String QUERY_GETLIST = "SELECT id, name "
 			+ "FROM company";
-	/*private final static String QUERY_FINDBYID = "";
-	private final static String QUERY_CREATE = "";
-	private final static String QUERY_UPDATEBYID = "";
-	private final static String QUERY_DELETEBYID = "";*/
 
-	@Override
-	public ArrayList<Company> getList(){
+	public static Optional<ArrayList<Company>> getList(){
+		ArrayList<Company> companies = null;
+		
 		try (Connection conn = DAOFactory.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement(QUERY_GETLIST);){
-			return new CompanyMapper().mapList(pstmt.executeQuery());
+			companies = CompanyMapper.mapList(pstmt.executeQuery());
 		} catch (SQLException e) {
 			LOG.error(e.getMessage());
 		}
-		return null;
+		
+		return Optional.ofNullable(companies);
 	}
-
-	@Override
-	public Company findById(Long id){
-		return null;
-	}
-
-	@Override
-	public int create(Company comp){
-		return 0;
-	}
-
-	@Override
-	public int update(Company comp) {
-		return 0;
-	}
-
-	@Override
-	public int deleteById(Long id) {
-		return 0;
-	}
-
 }

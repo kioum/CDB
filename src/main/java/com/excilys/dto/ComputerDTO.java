@@ -7,9 +7,9 @@ public class ComputerDTO {
 	private String name;
 	private Timestamp introduced;
 	private Timestamp discontinued;
-	private CompanyDTO manufacturer;
+	private Long manufacturer;
 	
-	public ComputerDTO(Long id, String name, Timestamp introduced, Timestamp discontinued, CompanyDTO manufacturer) {
+	public ComputerDTO(Long id, String name, Timestamp introduced, Timestamp discontinued, Long manufacturer) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -18,11 +18,11 @@ public class ComputerDTO {
 		this.manufacturer = manufacturer;
 	}
 
-	public CompanyDTO getManufacturer() {
+	public Long getManufacturer() {
 		return manufacturer;
 	}
 
-	public void setManufacturer(CompanyDTO manufacturer) {
+	public void setManufacturer(Long manufacturer) {
 		this.manufacturer = manufacturer;
 	}
 	

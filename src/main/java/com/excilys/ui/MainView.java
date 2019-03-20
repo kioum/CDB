@@ -66,8 +66,6 @@ public class MainView {
 	 * @param computer
 	 */
 	public void drawComputerDetails(Computer computer) {
-		if(computer != null)
-			System.out.println("\n" + computer + "\n");
-		else LOG.info("Computer not found !\n");
+		System.out.println("\n" + computer + "\n");
 	}
 }

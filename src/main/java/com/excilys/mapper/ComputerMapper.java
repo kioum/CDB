@@ -10,11 +10,10 @@ import org.slf4j.LoggerFactory;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 
-public class ComputerMapper implements IMapper<Computer>{
+public class ComputerMapper {
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerMapper.class);
 	
-	@Override
-	public Computer map(ResultSet res) {
+	public static Computer map(ResultSet res) {
 		try {
 			if(res.next())
 				return new Computer(res.getLong("c1.id"), res.getString("c1.name"),
@@ -27,8 +26,7 @@ public class ComputerMapper implements IMapper<Computer>{
 		return null;
 	}
 
-	@Override
-	public ArrayList<Computer> mapList(ResultSet res) {
+	public static ArrayList<Computer> mapList(ResultSet res) {
 		ArrayList<Computer> computers = new ArrayList<Computer>();
 
 		try {

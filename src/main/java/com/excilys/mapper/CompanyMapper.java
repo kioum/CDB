@@ -9,18 +9,12 @@ import org.slf4j.LoggerFactory;
 
 import com.excilys.model.Company;
 
-public class CompanyMapper implements IMapper<Company> {
+public class CompanyMapper {
   private static final Logger LOG = LoggerFactory.getLogger(CompanyMapper.class);
 
-  @Override
-  public Company map(ResultSet res) {
-    return null;
-  }
-
-  @Override
-  public ArrayList<Company> mapList(ResultSet res) {
+  public static ArrayList<Company> mapList(ResultSet res) {
     ArrayList<Company> companies = new ArrayList<Company>();
-
+    
     try {
       while(res.next()) {
         companies.add(new Company(res.getLong("id"), res.getString("name")));
