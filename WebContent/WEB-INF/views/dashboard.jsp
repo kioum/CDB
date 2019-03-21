@@ -1,14 +1,22 @@
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ page import="com.excilys.model.*"%>
+<%@ page session="true"%>
 <!DOCTYPE html>
 <html>
 <head>
 <title>Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
-<link href="../css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="../css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="../css/main.css" rel="stylesheet" media="screen">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/css/bootstrap.min.css"
+	media="screen">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/css/font-awesome.css"
+	media="screen">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/css/main.css" media="screen">
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
@@ -18,9 +26,13 @@
 		</div>
 	</header>
 
+	<%
+		Page<Computer> pageComp = (Page<Computer>) session.getAttribute("page");
+		pageContext.setAttribute("page", pageComp);
+	%>
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${listAllComputers.size()}Computers found</h1>
+			<h1 id="homeTitle">${page.getList().size()}Computers found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -68,7 +80,7 @@
 				</thead>
 				<!-- Browse attribute computers -->
 				<tbody id="results">
-					<c:forEach var="comp" items="${listPageComputers}">
+					<c:forEach var="comp" items="${page.currentPage()}">
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="0"></td>
@@ -86,27 +98,33 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<ul class="pagination">
-				<li><a href="#" aria-label="Previous"> <span
-						aria-hidden="true">&laquo;</span>
+				<li><a href="?numPage=${page.numPage-1}" aria-label="Previous">
+						<span aria-hidden="true">&laquo;</span>
 				</a></li>
-				<li><a href="#">1</a></li>
-				<li><a href="#">2</a></li>
-				<li><a href="#">3</a></li>
-				<li><a href="#">4</a></li>
-				<li><a href="#">5</a></li>
-				<li><a href="#" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+				<c:forEach begin="${page.getBeginPagePreview()}" end="${page.getEndPagePreview()}"
+					varStatus="loop">
+					<li><a href="?numPage=${loop.index}">${loop.index + 1}</a></li>
+				</c:forEach>
+				<li><a href="?numPage=${page.numPage+1}" aria-label="Next">
+						<span aria-hidden="true">&raquo;</span>
 				</a></li>
 			</ul>
-
 			<div class="btn-group btn-group-sm pull-right" role="group">
-				<button type="button" class="btn btn-default">10</button>
-				<button type="button" class="btn btn-default">50</button>
-				<button type="button" class="btn btn-default">100</button>
+				<button
+					onclick="location.href='${pageContext.request.contextPath}/Dashboard?maxElement=10'"
+					type="button" class="btn btn-default">10</button>
+				<button
+					onclick="location.href='${pageContext.request.contextPath}/Dashboard?maxElement=50'"
+					type="button" class="btn btn-default">50</button>
+				<button
+					onclick="location.href='${pageContext.request.contextPath}/Dashboard?maxElement=100'"
+					type="button" class="btn btn-default">100</button>
 			</div>
+		</div>
 	</footer>
-	<script src="../js/jquery.min.js"></script>
-	<script src="../js/bootstrap.min.js"></script>
-	<script src="../js/dashboard.js"></script>
+	<script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
+	<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+	<script src="${pageContext.request.contextPath}/js/dashboard.js"></script>
 
 </body>
 </html>

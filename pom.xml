@@ -17,9 +17,10 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<slf4j.version>1.7.26</slf4j.version>
 		<junit.version>4.12</junit.version>
-		<jstl.version>4.0.1</jstl.version>
+		<servlet.version>4.0.1</servlet.version>
 		<mysql.version>8.0.15</mysql.version>
 		<mock.version>2.25.0</mock.version>
+		<jstl.version>1.2</jstl.version>
 	</properties>
 
 	<dependencies>
@@ -49,7 +50,7 @@
 			<version>${slf4j.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
@@ -59,8 +60,15 @@
 
 		<dependency>
 			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
+			<artifactId>jstl</artifactId>
 			<version>${jstl.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>${servlet.version}</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

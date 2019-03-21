@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.excilys.model.Computer;
 import com.excilys.model.Page;
@@ -25,12 +26,27 @@ public class DashboardServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		ArrayList<Computer> computers = ComputerDAO.getList().get();
-		Page<Computer> pageComputer = new Page<Computer>(computers, 10);
-
-		RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/views/dashboard.jsp");
-		req.setAttribute("listAllComputers", computers);
-		req.setAttribute("listPageComputer", pageComputer.currentPage());
 		
+		HttpSession session = req.getSession();
+		Page<Computer> pageComputer = null;
+		if(session.getAttribute("page") == null)
+			pageComputer = new Page<Computer>(computers, 10);
+		else pageComputer = (Page<Computer>) session.getAttribute("page");
+		
+		pageComputer.setList(computers);
+		
+		String maxElement = req.getParameter("maxElement");
+		if(maxElement != null) {
+			pageComputer.setMaxElement(Integer.valueOf(maxElement));
+		}
+		
+		String numPage = req.getParameter("numPage");
+		if(numPage != null) {
+			pageComputer.setNumPage(Integer.valueOf(numPage));
+		}
+		
+		session.setAttribute("page", pageComputer);
+		RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/views/dashboard.jsp");
 		rd.forward(req, resp);
 	}
 
