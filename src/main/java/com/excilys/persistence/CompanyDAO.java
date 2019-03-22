@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import com.excilys.mapper.CompanyMapper;
 import com.excilys.model.Company;
-import com.excilys.model.Computer;
 
 public class CompanyDAO {
 	private static final Logger LOG = LoggerFactory.getLogger(CompanyDAO.class);
@@ -35,7 +34,7 @@ public class CompanyDAO {
 		return Optional.ofNullable(companies);
 	}
 	
-	public static Optional<Company> findById(Long id){
+	public static Optional<Company> findById(long id){
 		Company company = null;
 		
 		try (Connection conn = DAOFactory.getConnection();

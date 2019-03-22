@@ -53,7 +53,7 @@ public class CreateServlet extends HttpServlet {
 		
 		String companyId = request.getParameter("companyId");
 		
-		ComputerDTO compDTO = new ComputerDTO(0L, computerName, introduced, discontinued, Long.valueOf(companyId));
+		ComputerDTO compDTO = new ComputerDTO(0L, computerName, introduced, discontinued, Long.valueOf(companyId), "");
 		
 		ComputerDAO.create(ComputerMapper.dtoToComputer(compDTO));
 		

@@ -38,7 +38,7 @@ public class ComputerMapperTest extends TestCase{
 
 	@Test
 	public void testMap() {
-		Computer comp = new ComputerMapper().map(rs);
+		Computer comp = ComputerMapper.map(rs);
 		
 		assertEquals(comp.getId(), Long.valueOf(1));
 		assertEquals(comp.getName(), "Test computer");
@@ -49,7 +49,7 @@ public class ComputerMapperTest extends TestCase{
 
 	@Test
 	public void testMapList() {
-		ArrayList<Computer> comp = new ComputerMapper().mapList(rs);
+		ArrayList<Computer> comp = ComputerMapper.mapList(rs);
 		
 		assertEquals(comp.size(), 1);
 		assertEquals(comp.get(0).getId(), Long.valueOf(1));

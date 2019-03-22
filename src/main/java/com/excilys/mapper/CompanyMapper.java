@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.excilys.dto.CompanyDTO;
 import com.excilys.model.Company;
 
-public class CompanyMapper {
+public abstract class CompanyMapper {
 	private static final Logger LOG = LoggerFactory.getLogger(CompanyMapper.class);
 
 	public static ArrayList<Company> mapList(ResultSet res) {

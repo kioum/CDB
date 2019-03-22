@@ -1,4 +1,5 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page session="true"%>
@@ -21,8 +22,8 @@
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
 			<a class="navbar-brand"
-				href="${pageContext.request.contextPath}/Dashboard">
-				Application - Computer Database </a>
+				href="${pageContext.request.contextPath}/Dashboard"> Application
+				- Computer Database </a>
 		</div>
 	</header>
 
@@ -84,10 +85,14 @@
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="0"></td>
-							<td><a href="editComputer.html" onclick="">${comp.name}</a></td>
-							<td>${comp.introduced}</td>
-							<td>${comp.discontinued}</td>
-							<td>${comp.manufacturer}</td>
+							<td><a href="editComputer.html" onclick=""><c:out value="${comp.name}" /></a></td>
+							<td><c:if test="${comp.introduced != ''}">
+									<c:out value="${comp.introduced}" />
+								</c:if></td>
+							<td><c:if test="${comp.discontinued != ''}">
+									<c:out value="${comp.discontinued}" />
+								</c:if></td>
+							<td><c:out value="${comp.manufacturerName}" /></td>
 						</tr>
 					</c:forEach>
 				</tbody>

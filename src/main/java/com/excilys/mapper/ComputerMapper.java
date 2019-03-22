@@ -3,6 +3,7 @@ package com.excilys.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import org.slf4j.Logger;
@@ -11,9 +12,8 @@ import org.slf4j.LoggerFactory;
 import com.excilys.dto.ComputerDTO;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
-import com.excilys.persistence.CompanyDAO;
 
-public class ComputerMapper {
+public abstract class ComputerMapper {
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerMapper.class);
 
 	public static Computer map(ResultSet res) {
@@ -48,26 +48,34 @@ public class ComputerMapper {
 	public static ArrayList<ComputerDTO> mapDTO(ArrayList<Computer> list) {
 		ArrayList<ComputerDTO> computers = new ArrayList<ComputerDTO>();
 
-		for(Computer comp:list)
-			computers.add(new ComputerDTO(comp.getId(), comp.getName(), String.valueOf(comp.getIntroduced()), 
-					String.valueOf(comp.getDiscontinued()), comp.getManufacturer().getId()));
+		for(Computer comp:list) {
+			String introduced = null;
+			if(comp.getIntroduced() != null)
+				introduced = new SimpleDateFormat("yyyy-MM-dd").format(comp.getIntroduced());
 
+			String discontinued = null;
+			if(comp.getDiscontinued() != null)
+				discontinued = new SimpleDateFormat("yyyy-MM-dd").format(comp.getDiscontinued());
+			computers.add(new ComputerDTO(comp.getId(), comp.getName(), introduced, 
+					discontinued, comp.getManufacturer().getId(), comp.getManufacturer().getName()));
+
+		}
 		return computers;
 	}
 
 	public static Computer dtoToComputer(ComputerDTO computerDTO) {
 		Long id = computerDTO.getId();
 		String name = computerDTO.getName();
-		
+
 		Timestamp introduced = null;
 		if(!computerDTO.getIntroduced().equals(""))
 			introduced = Timestamp.valueOf(computerDTO.getIntroduced());
-		
+
 		Timestamp discontinued = null;
 		if(!computerDTO.getDiscontinued().equals(""))
 			discontinued = Timestamp.valueOf(computerDTO.getDiscontinued());
-		
-		Company comp = CompanyDAO.findById(computerDTO.getManufacturer()).get();
+
+		Company comp = new Company(computerDTO.getManufacturerId(), computerDTO.getManufacturerName());
 
 		return new Computer(id, name, introduced, discontinued, comp);
 	}

@@ -37,7 +37,7 @@ public class CompanyMapperTest extends TestCase{
 
 	@Test
 	public void testMapList() {
-		ArrayList<Company> comp = new CompanyMapper().mapList(rs);
+		ArrayList<Company> comp = CompanyMapper.mapList(rs);
 		
 		assertEquals(comp.size(), 1);
 		assertEquals(comp.get(0).getId(), Long.valueOf(1));

@@ -1,27 +1,29 @@
 package com.excilys.dto;
 
 public class ComputerDTO {
-	private Long id;
+	private long id;
 	private String name;
 	private String introduced;
 	private String discontinued;
-	private Long manufacturer;
+	private long manufacturerId;
+	private String manufacturerName;
 	
-	public ComputerDTO(Long id, String name, String introduced, String discontinued, Long manufacturer) {
+	public ComputerDTO(long id, String name, String introduced, String discontinued, long manufacturerId, String manufacturerName) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.introduced = introduced;
 		this.discontinued = discontinued;
-		this.manufacturer = manufacturer;
+		this.manufacturerId = manufacturerId;
+		this.setManufacturerName(manufacturerName);
 	}
 
-	public Long getManufacturer() {
-		return manufacturer;
+	public Long getManufacturerId() {
+		return manufacturerId;
 	}
 
-	public void setManufacturer(Long manufacturer) {
-		this.manufacturer = manufacturer;
+	public void setManufacturerId(Long manufacturer) {
+		this.manufacturerId = manufacturer;
 	}
 	
 	public Long getId() {
@@ -55,11 +57,13 @@ public class ComputerDTO {
 	public void setDiscontinued(String discontinued) {
 		this.discontinued = discontinued;
 	}
-	
-	@Override
-	public String toString() {
-		return "ComputerDTO [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued
-				+ ", manufacturer=" + manufacturer + "]";
+
+	public String getManufacturerName() {
+		return manufacturerName;
+	}
+
+	public void setManufacturerName(String manufacturerName) {
+		this.manufacturerName = manufacturerName;
 	}
 	
 }
