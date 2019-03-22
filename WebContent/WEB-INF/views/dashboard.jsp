@@ -1,7 +1,6 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="com.excilys.model.*"%>
 <%@ page session="true"%>
 <!DOCTYPE html>
 <html>
@@ -21,14 +20,14 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard.html"> Application -
-				Computer Database </a>
+			<a class="navbar-brand"
+				href="${pageContext.request.contextPath}/Dashboard">
+				Application - Computer Database </a>
 		</div>
 	</header>
 
 	<%
-		Page<Computer> pageComp = (Page<Computer>) session.getAttribute("page");
-		pageContext.setAttribute("page", pageComp);
+		pageContext.setAttribute("page", session.getAttribute("page"));
 	%>
 	<section id="main">
 		<div class="container">
@@ -44,7 +43,8 @@
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="addComputer.html">Add
+					<a class="btn btn-success" id="addComputer"
+						href="${pageContext.request.contextPath}/CreateServlet">Add
 						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
 						onclick="$.fn.toggleEditMode();">Edit</a>
 				</div>
@@ -87,7 +87,7 @@
 							<td><a href="editComputer.html" onclick="">${comp.name}</a></td>
 							<td>${comp.introduced}</td>
 							<td>${comp.discontinued}</td>
-							<td>${comp.manufacturer.id}</td>
+							<td>${comp.manufacturer}</td>
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -101,8 +101,8 @@
 				<li><a href="?numPage=${page.numPage-1}" aria-label="Previous">
 						<span aria-hidden="true">&laquo;</span>
 				</a></li>
-				<c:forEach begin="${page.getBeginPagePreview()}" end="${page.getEndPagePreview()}"
-					varStatus="loop">
+				<c:forEach begin="${page.getBeginPagePreview()}"
+					end="${page.getEndPagePreview()}" varStatus="loop">
 					<li><a href="?numPage=${loop.index}">${loop.index + 1}</a></li>
 				</c:forEach>
 				<li><a href="?numPage=${page.numPage+1}" aria-label="Next">

@@ -18,6 +18,9 @@ public class CompanyDAO {
 	
 	private final static String QUERY_GETLIST = "SELECT id, name "
 			+ "FROM company";
+	private final static String QUERY_FINDBYID = "SELECT id, name "
+			+ "FROM company "
+			+ "WHERE id = ?";
 
 	public static Optional<ArrayList<Company>> getList(){
 		ArrayList<Company> companies = null;
@@ -30,5 +33,19 @@ public class CompanyDAO {
 		}
 		
 		return Optional.ofNullable(companies);
+	}
+	
+	public static Optional<Company> findById(Long id){
+		Company company = null;
+		
+		try (Connection conn = DAOFactory.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement(QUERY_FINDBYID);){
+			pstmt.setLong(1, id);
+			company = CompanyMapper.map(pstmt.executeQuery());
+		} catch (SQLException e) {
+			LOG.error(e.getMessage());
+		}
+		
+		return Optional.ofNullable(company);
 	}
 }

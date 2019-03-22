@@ -11,7 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.excilys.model.Computer;
+import com.excilys.dto.ComputerDTO;
+import com.excilys.mapper.ComputerMapper;
 import com.excilys.model.Page;
 import com.excilys.persistence.ComputerDAO;
 
@@ -25,13 +26,13 @@ public class DashboardServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		ArrayList<Computer> computers = ComputerDAO.getList().get();
+		ArrayList<ComputerDTO> computers = ComputerMapper.mapDTO(ComputerDAO.getList().get());
 		
 		HttpSession session = req.getSession();
-		Page<Computer> pageComputer = null;
+		Page<ComputerDTO> pageComputer = null;
 		if(session.getAttribute("page") == null)
-			pageComputer = new Page<Computer>(computers, 10);
-		else pageComputer = (Page<Computer>) session.getAttribute("page");
+			pageComputer = new Page<ComputerDTO>(computers, 10);
+		else pageComputer = (Page<ComputerDTO>) session.getAttribute("page");
 		
 		pageComputer.setList(computers);
 		
