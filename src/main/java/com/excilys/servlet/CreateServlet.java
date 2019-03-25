@@ -48,8 +48,9 @@ public class CreateServlet extends HttpServlet {
 			introduced += " 00:00:00";
 
 		String discontinued = request.getParameter("discontinued");
-		if(!discontinued.equals(""))
+		if(discontinued != null && !discontinued.equals(""))
 			discontinued += " 00:00:00";
+		else if (discontinued == null) discontinued = "";
 
 		String companyId = request.getParameter("companyId");
 

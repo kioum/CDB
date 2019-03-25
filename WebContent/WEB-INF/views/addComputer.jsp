@@ -34,8 +34,7 @@
 							<div class="form-group">
 								<label for="computerName">Computer name</label> <input
 									type="text" class="form-control" id="computerName"
-									name="computerName" placeholder="Computer name"
-									required="required">
+									name="computerName" placeholder="Computer name">
 							</div>
 							<div class="form-group">
 								<label for="introduced">Introduced date</label> <input
@@ -57,7 +56,7 @@
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
-							<input type="submit" value="Add" class="btn btn-primary">
+							<input id="btnSubmit"  type="submit" value="Add" class="btn btn-primary">
 							or <a href="<c:url value="/Dashboard"/>" class="btn btn-default">Cancel</a>
 						</div>
 					</form>
