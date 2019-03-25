@@ -21,8 +21,8 @@ public class CompanyDAO {
 			+ "FROM company "
 			+ "WHERE id = ?";
 
-	public static Optional<ArrayList<Company>> getList(){
-		ArrayList<Company> companies = null;
+	public static ArrayList<Company> getList(){
+		ArrayList<Company> companies = new ArrayList<Company>();
 		
 		try (Connection conn = DAOFactory.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement(QUERY_GETLIST);){
@@ -31,7 +31,7 @@ public class CompanyDAO {
 			LOG.error(e.getMessage());
 		}
 		
-		return Optional.ofNullable(companies);
+		return companies;
 	}
 	
 	public static Optional<Company> findById(long id){

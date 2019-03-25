@@ -9,20 +9,18 @@
 <title>Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/css/bootstrap.min.css"
+<link rel="stylesheet" href="<c:url value="/css/bootstrap.min.css"/>"
 	media="screen">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/css/font-awesome.css"
+<link rel="stylesheet" href="<c:url value="css/font-awesome.css"/>"
 	media="screen">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/css/main.css" media="screen">
+<link rel="stylesheet" href="<c:url value="/css/main.css"/>"
+	media="screen">
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
 			<a class="navbar-brand"
-				href="${pageContext.request.contextPath}/Dashboard"> Application
+				href="<c:url value="/Dashboard"/>"> Application
 				- Computer Database </a>
 		</div>
 	</header>
@@ -32,7 +30,7 @@
 	%>
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${page.getList().size()}Computers found</h1>
+			<h1 id="homeTitle">${page.getList().size()} Computers found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -45,7 +43,7 @@
 				</div>
 				<div class="pull-right">
 					<a class="btn btn-success" id="addComputer"
-						href="${pageContext.request.contextPath}/CreateServlet">Add
+						href="<c:url value="/CreateServlet"/>">Add
 						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
 						onclick="$.fn.toggleEditMode();">Edit</a>
 				</div>
@@ -85,7 +83,8 @@
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="0"></td>
-							<td><a href="editComputer.html" onclick=""><c:out value="${comp.name}" /></a></td>
+							<td><a href="editComputer.html" onclick=""><c:out
+										value="${comp.name}" /></a></td>
 							<td><c:if test="${comp.introduced != ''}">
 									<c:out value="${comp.introduced}" />
 								</c:if></td>
@@ -116,20 +115,20 @@
 			</ul>
 			<div class="btn-group btn-group-sm pull-right" role="group">
 				<button
-					onclick="location.href='${pageContext.request.contextPath}/Dashboard?maxElement=10'"
+					onclick="location.href='<c:url value="/Dashboard?maxElement=10'"/>"
 					type="button" class="btn btn-default">10</button>
 				<button
-					onclick="location.href='${pageContext.request.contextPath}/Dashboard?maxElement=50'"
+					onclick="location.href='<c:url value="/Dashboard?maxElement=50'"/>"
 					type="button" class="btn btn-default">50</button>
 				<button
-					onclick="location.href='${pageContext.request.contextPath}/Dashboard?maxElement=100'"
+					onclick="location.href='<c:url value="/Dashboard?maxElement=100'"/>"
 					type="button" class="btn btn-default">100</button>
 			</div>
 		</div>
 	</footer>
-	<script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
-	<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
-	<script src="${pageContext.request.contextPath}/js/dashboard.js"></script>
+	<script src="<c:url value="/js/jquery.min.js"/>"></script>
+	<script src="<c:url value="/js/bootstrap.min.js"/>"></script>
+	<script src="<c:url value="/js/dashboard.js"/>"></script>
 
 </body>
 </html>

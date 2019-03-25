@@ -44,10 +44,10 @@ public class MainController {
 			LOG.info("Exit - Bye");
 			return;
 		case "LISTCOMPUTER":
-			drawList(ComputerDAO.getList().get());
+			drawList(ComputerDAO.getList());
 			break;
 		case "LISTCOMPANY":
-			drawList(CompanyDAO.getList().get());
+			drawList(CompanyDAO.getList());
 			break;
 		case "SHOWCOMPUTER":
 			drawComputer();

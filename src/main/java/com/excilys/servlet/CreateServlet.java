@@ -10,14 +10,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.jsp.PageContext;
 
 import com.excilys.dto.CompanyDTO;
 import com.excilys.dto.ComputerDTO;
-import com.excilys.mapper.CompanyMapper;
 import com.excilys.mapper.ComputerMapper;
-import com.excilys.persistence.CompanyDAO;
+import com.excilys.model.Computer;
 import com.excilys.persistence.ComputerDAO;
+import com.excilys.service.CompanyService;
+import com.excilys.validator.ComputerValidator;
 
 @WebServlet("/CreateServlet")
 public class CreateServlet extends HttpServlet {
@@ -29,7 +29,7 @@ public class CreateServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		ArrayList<CompanyDTO> companies = CompanyMapper.mapDTO(CompanyDAO.getList().get());
+		ArrayList<CompanyDTO> companies = CompanyService.getAll();
 
 		HttpSession session = req.getSession();
 		session.setAttribute("companies", companies);
@@ -45,18 +45,20 @@ public class CreateServlet extends HttpServlet {
 		String computerName = request.getParameter("computerName");
 		String introduced = request.getParameter("introduced");
 		if(!introduced.equals(""))
-				introduced += " 00:00:00";
-		
+			introduced += " 00:00:00";
+
 		String discontinued = request.getParameter("discontinued");
 		if(!discontinued.equals(""))
 			discontinued += " 00:00:00";
-		
+
 		String companyId = request.getParameter("companyId");
-		
+
 		ComputerDTO compDTO = new ComputerDTO(0L, computerName, introduced, discontinued, Long.valueOf(companyId), "");
-		
-		ComputerDAO.create(ComputerMapper.dtoToComputer(compDTO));
-		
+
+		Computer newComp = ComputerMapper.dtoToComputer(compDTO);
+		if(ComputerValidator.isCreatable(newComp))
+			ComputerDAO.create(ComputerMapper.dtoToComputer(compDTO));
+
 		response.sendRedirect("Dashboard");
 	}
 }
