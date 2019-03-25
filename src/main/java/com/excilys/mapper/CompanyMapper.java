@@ -18,7 +18,7 @@ public abstract class CompanyMapper {
 
 		try {
 			while(res.next()) {
-				companies.add(new Company(res.getLong("id"), res.getString("name")));
+				companies.add(new Company.CompanyBuilder().id(res.getLong("id")).name(res.getString("name")).build());
 			}
 		} catch (SQLException e) {
 			LOG.error(e.getMessage());
@@ -32,7 +32,7 @@ public abstract class CompanyMapper {
 
 		try {
 			if(res.next()) {
-				company = new Company(res.getLong("id"), res.getString("name"));
+				company = new Company.CompanyBuilder().id(res.getLong("id")).name(res.getString("name")).build();
 			}
 		} catch (SQLException e) {
 			LOG.error(e.getMessage());

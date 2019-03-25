@@ -156,8 +156,11 @@ public class MainController {
 
 		Long idManu = Long.valueOf(mw.getInputUser("Enter the id of Manufacturer : "));
 
-		successLog(ComputerDAO.create(new Computer(Long.valueOf(0), name, introduced, discontinued, 
-				new Company(idManu, ""))), "create");
+		Company company = new Company.CompanyBuilder().id(idManu).build();
+		Computer computer = new Computer.ComputerBuilder().name(name).introduced(introduced)
+				.discontinued(discontinued).manufacturer(company).build();
+		
+		successLog(ComputerDAO.create(computer), "create");
 	}
 
 	/**

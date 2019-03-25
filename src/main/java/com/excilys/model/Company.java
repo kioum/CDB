@@ -3,17 +3,7 @@ package com.excilys.model;
 public class Company{
 	private Long id;
 	private String name;
-
-	public Company() {
-		id = -1L;
-		name = "Unknown";
-	}
-
-	public Company(Long id, String name) {
-		this.id = id;
-		this.name = name;
-	}
-
+	
 	public Long getId() {
 		return id;
 	}
@@ -63,6 +53,34 @@ public class Company{
 
 	@Override
 	public String toString() {
-		return "Compagny [id=" + id + ", name=" + name + "]";
+		return "Company [id=" + id + ", name=" + name + "]";
+	}
+
+	public static class CompanyBuilder{
+		private Long id;
+		private String name;
+		
+		public CompanyBuilder() {
+			id = 0L;
+			name = "";
+		}
+
+		public CompanyBuilder id(long id) {
+			this.id = id;
+			return this;
+		}
+
+		public CompanyBuilder name(String name) {
+			this.name = name;
+			return this;
+		}
+		
+		public Company build() {
+			Company comp = new Company();
+			comp.id = id;
+			comp.name = name;
+			
+			return comp;
+		}
 	}
 }

@@ -18,10 +18,12 @@ public abstract class ComputerMapper {
 
 	public static Computer map(ResultSet res) {
 		try {
-			if(res.next())
-				return new Computer(res.getLong("c1.id"), res.getString("c1.name"),
-						res.getTimestamp("c1.introduced"), res.getTimestamp("c1.discontinued"), 
-						new Company(res.getLong("c2.id"), res.getString("c2.name")));
+			if(res.next()) {
+				Company company = new Company.CompanyBuilder().id(res.getLong("c2.id")).name(res.getString("c2.name")).build();
+				return new Computer.ComputerBuilder().id(res.getLong("c1.id")).name(res.getString("c1.name"))
+						.introduced(res.getTimestamp("c1.introduced")).discontinued(res.getTimestamp("c1.discontinued")) 
+						.manufacturer(company).build();
+			}
 		} catch (SQLException e) {
 			LOG.error(e.getMessage());
 		};
@@ -34,9 +36,10 @@ public abstract class ComputerMapper {
 
 		try {
 			while(res.next()) {
-				computers.add(new Computer(res.getLong("c1.id"), res.getString("c1.name"),
-						res.getTimestamp("c1.introduced"), res.getTimestamp("c1.discontinued"), 
-						new Company(res.getLong("c2.id"), res.getString("c2.name"))));
+				Company company = new Company.CompanyBuilder().id(res.getLong("c2.id")).name(res.getString("c2.name")).build();
+				computers.add(new Computer.ComputerBuilder().id(res.getLong("c1.id")).name(res.getString("c1.name"))
+						.introduced(res.getTimestamp("c1.introduced")).discontinued(res.getTimestamp("c1.discontinued")) 
+						.manufacturer(company).build());
 			}
 		} catch (SQLException e) {
 			LOG.error(e.getMessage());
@@ -75,8 +78,12 @@ public abstract class ComputerMapper {
 		if(!computerDTO.getDiscontinued().equals(""))
 			discontinued = Timestamp.valueOf(computerDTO.getDiscontinued());
 
-		Company comp = new Company(computerDTO.getManufacturerId(), computerDTO.getManufacturerName());
-
-		return new Computer(id, name, introduced, discontinued, comp);
+		Company company = new Company.CompanyBuilder().id(computerDTO.getManufacturerId())
+				.name(computerDTO.getManufacturerName()).build();
+		
+		Computer computer = new Computer.ComputerBuilder().id(id).name(name).introduced(introduced)
+				.discontinued(discontinued).manufacturer(company).build();
+		
+		return computer;
 	}
 }

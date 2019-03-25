@@ -44,7 +44,7 @@ public class ComputerMapperTest extends TestCase{
 		assertEquals(comp.getName(), "Test computer");
 		assertEquals(comp.getIntroduced(), Timestamp.valueOf("1960-09-11 00:11:22"));
 		assertEquals(comp.getDiscontinued(), Timestamp.valueOf("2020-09-11 00:11:22"));
-		assertEquals(comp.getManufacturer(), new Company((long)1, "Company"));
+		assertEquals(comp.getManufacturer(), new Company.CompanyBuilder().id(1L).name("Company").build());
 	}
 
 	@Test
@@ -56,7 +56,7 @@ public class ComputerMapperTest extends TestCase{
 		assertEquals(comp.get(0).getName(), "Test computer");
 		assertEquals(comp.get(0).getIntroduced(), Timestamp.valueOf("1960-09-11 00:11:22"));
 		assertEquals(comp.get(0).getDiscontinued(), Timestamp.valueOf("2020-09-11 00:11:22"));
-		assertEquals(comp.get(0).getManufacturer(), new Company((long)1, "Company"));
+		assertEquals(comp.get(0).getManufacturer(), new Company.CompanyBuilder().id(1L).name("Company").build());
 	}
 
 }

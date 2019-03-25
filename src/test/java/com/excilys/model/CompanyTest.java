@@ -12,8 +12,8 @@ public class CompanyTest extends Company {
 	
 	@Before
 	public void setUp() {
-		comp1 = new Company(0L, "Test company");		
-		comp2 = new Company(1L, "Test company 2S");
+		comp1 = new Company.CompanyBuilder().id(0L).name("Test company").build();		
+		comp2 = new Company.CompanyBuilder().id(1L).name("Test company 2").build();
 	}
 	
 	@Test

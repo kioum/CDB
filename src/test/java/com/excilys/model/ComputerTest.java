@@ -16,13 +16,14 @@ public class ComputerTest extends TestCase {
 	@Override
 	@Before
 	public void setUp() {
-		comp1 = new Computer((long)1, "Test computer",  
-				Timestamp.valueOf("1960-09-11 00:11:22"), Timestamp.valueOf("2020-09-11 00:11:22"), 
-				new Company(0L, "Test company"));
+		Company manu1 = new Company.CompanyBuilder().id(0L).name("Test company").build();		
+		Company manu2 = new Company.CompanyBuilder().id(1L).name("Test company 2").build();
 		
-		comp2 = new Computer((long)2, "Test Computer",  
-				Timestamp.valueOf("1960-09-11 00:11:22"), Timestamp.valueOf("2020-09-11 00:11:22"), 
-				new Company(1L, "Test company 2S"));
+		comp1 = new Computer.ComputerBuilder().id(1L).name("Test Computer").introduced(Timestamp.valueOf("1960-09-11 00:11:22"))
+				.discontinued(Timestamp.valueOf("2020-09-11 00:11:22")).manufacturer(manu1).build();
+		
+		comp2 = new Computer.ComputerBuilder().id(2L).name("Test Computer").introduced(Timestamp.valueOf("1960-09-11 00:11:22"))
+				.discontinued(Timestamp.valueOf("2020-09-11 00:11:22")).manufacturer(manu2).build();
 	}
 	
 	@Test

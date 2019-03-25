@@ -8,14 +8,13 @@ public class Computer {
 	private Timestamp introduced;
 	private Timestamp discontinued;
 	private Company manufacturer;
-	
-	public Computer(Long id, String name, Timestamp introduced, Timestamp discontinued, Company manufacturer) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.introduced = introduced;
-		this.discontinued = discontinued;
-		this.manufacturer = manufacturer;
+
+	public Computer(ComputerBuilder builder) {
+		this.id = builder.id;
+		this.name = builder.name;
+		this.introduced = builder.introduced;
+		this.discontinued = builder.discontinued;
+		this.manufacturer = builder.manufacturer;
 	}
 
 	public Company getManufacturer() {
@@ -25,7 +24,7 @@ public class Computer {
 	public void setManufacturer(Company manufacturer) {
 		this.manufacturer = manufacturer;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -106,11 +105,55 @@ public class Computer {
 			return false;
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Computer [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued
 				+ ", manufacturer=" + manufacturer + "]";
 	}
-	
+
+	public static class ComputerBuilder{
+		private Long id;
+		private String name;
+		private Timestamp introduced;
+		private Timestamp discontinued;
+		private Company manufacturer;
+
+		public ComputerBuilder() {
+			this.id = -1L;
+			this.name = "";
+			this.introduced = null;
+			this.discontinued = null;
+			this.manufacturer = null;
+		}
+
+		public ComputerBuilder id(Long id) {
+			this.id = id;
+			return this;
+		}
+
+		public ComputerBuilder name(String name) {
+			this.name = name;
+			return this;
+		}
+
+		public ComputerBuilder introduced(Timestamp introduced) {
+			this.introduced = introduced;
+			return this;
+		}
+
+		public ComputerBuilder discontinued(Timestamp discontinued) {
+			this.discontinued = discontinued;
+			return this;
+		}
+
+		public ComputerBuilder manufacturer(Company company) {
+			this.manufacturer = company;
+			return this;
+		}
+		
+		public Computer build() {
+			return new Computer(this);
+		}
+	}
 }
