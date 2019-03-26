@@ -57,9 +57,9 @@ public class CreateServlet extends HttpServlet {
 		ComputerDTO compDTO = new ComputerDTO(0L, computerName, introduced, discontinued, Long.valueOf(companyId), "");
 
 		Computer newComp = ComputerMapper.dtoToComputer(compDTO);
-		if(ComputerValidator.isCreatable(newComp))
+		if(ComputerValidator.isCreatable(newComp)) {
 			ComputerDAO.create(ComputerMapper.dtoToComputer(compDTO));
-
-		response.sendRedirect("Dashboard");
+			response.sendRedirect("Dashboard");
+		}
 	}
 }

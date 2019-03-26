@@ -3,15 +3,11 @@ package com.excilys.ui;
 import java.util.List;
 import java.util.Scanner;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.excilys.model.Computer;
 
 public class MainView {
 	private Scanner in;
-	private static final Logger LOG = LoggerFactory.getLogger(MainView.class);
-
+	
 	public MainView() {
 		this.in = new Scanner(System.in);
 	}

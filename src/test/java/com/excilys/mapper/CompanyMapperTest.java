@@ -16,7 +16,7 @@ import junit.framework.TestCase;
 public class CompanyMapperTest extends TestCase{
 
 	@Mock
-	ResultSet rs;
+	private ResultSet rs;
 
 	@Override
 	@Before

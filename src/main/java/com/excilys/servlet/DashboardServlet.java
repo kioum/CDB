@@ -26,25 +26,26 @@ public class DashboardServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		ArrayList<ComputerDTO> computers = ComputerService.getAll();
-		
+
 		HttpSession session = req.getSession();
 		Page<ComputerDTO> pageComputer = null;
 		if(session.getAttribute("page") == null)
 			pageComputer = new Page<ComputerDTO>(computers, 10);
-		else pageComputer = (Page<ComputerDTO>) session.getAttribute("page");
-		
+		else if (session.getAttribute("page") instanceof Page<?>)
+			pageComputer = (Page<ComputerDTO>) session.getAttribute("page");
+
 		pageComputer.setList(computers);
-		
+
 		String maxElement = req.getParameter("maxElement");
 		if(maxElement != null) {
 			pageComputer.setMaxElement(Integer.valueOf(maxElement));
 		}
-		
+
 		String numPage = req.getParameter("numPage");
 		if(numPage != null) {
 			pageComputer.setNumPage(Integer.valueOf(numPage));
 		}
-		
+
 		session.setAttribute("page", pageComputer);
 		RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/views/dashboard.jsp");
 		rd.forward(req, resp);

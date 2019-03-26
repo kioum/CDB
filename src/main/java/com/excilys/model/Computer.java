@@ -77,31 +77,12 @@ public class Computer {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
+		
 		Computer other = (Computer) obj;
-		if (discontinued == null) {
-			if (other.discontinued != null)
-				return false;
-		} else if (!discontinued.equals(other.discontinued))
-			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
-			return false;
-		if (introduced == null) {
-			if (other.introduced != null)
-				return false;
-		} else if (!introduced.equals(other.introduced))
-			return false;
-		if (manufacturer == null) {
-			if (other.manufacturer != null)
-				return false;
-		} else if (!manufacturer.equals(other.manufacturer))
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
 			return false;
 		return true;
 	}
@@ -120,8 +101,8 @@ public class Computer {
 		private Company manufacturer;
 
 		public ComputerBuilder() {
-			this.id = -1L;
-			this.name = "";
+			this.id = null;
+			this.name = null;
 			this.introduced = null;
 			this.discontinued = null;
 			this.manufacturer = null;

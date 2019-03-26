@@ -35,7 +35,7 @@ public class Page<T> {
 		return currentPage();
 	}
 
-	public int getBeginPagePreview() {
+	public int startPage() {
 		if(numPage + 4 > getMaxPage() && numPage > 3)
 			return getMaxPage()-4;
 		if(numPage < 3)
@@ -43,7 +43,7 @@ public class Page<T> {
 		return numPage-2;
 	}
 	
-	public int getEndPagePreview() {
+	public int endPage() {
 		if(numPage < 3 && getMaxPage() >= 5)
 			return 4;
 		if(numPage < 3 && getMaxPage() < 5)
@@ -62,7 +62,7 @@ public class Page<T> {
 	}
 
 	public void setNumPage(int numPage) {
-		if(numPage > 0 && numPage <= getMaxPage())
+		if(numPage >= 0 && numPage <= getMaxPage())
 			this.numPage = numPage;
 	}
 

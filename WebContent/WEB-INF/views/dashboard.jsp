@@ -105,8 +105,8 @@
 				<li><a href="?numPage=${page.numPage-1}" aria-label="Previous">
 						<span aria-hidden="true">&laquo;</span>
 				</a></li>
-				<c:forEach begin="${page.getBeginPagePreview()}"
-					end="${page.getEndPagePreview()}" varStatus="loop">
+				<c:forEach begin="${page.startPage()}"
+					end="${page.endPage()}" varStatus="loop">
 					<li><a href="?numPage=${loop.index}">${loop.index + 1}</a></li>
 				</c:forEach>
 				<li><a href="?numPage=${page.numPage+1}" aria-label="Next">

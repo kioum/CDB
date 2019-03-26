@@ -2,25 +2,34 @@ package com.excilys.model;
 
 import java.util.ArrayList;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import junit.framework.TestCase;
 
 public class PageTest extends TestCase{
+	private int maxElement;
+	private ArrayList<String> list;
+	private Page<String> page;
+	
+	@BeforeEach
+	public void setUp() {
+		list = new ArrayList<String>();
+		maxElement = 2;
+		page = new Page<String>(list, maxElement);
+	}
+	
 	@Test
 	public void testPrecPage() {
-		ArrayList<String> list = new ArrayList<String>();
 		list.add("Page 1");
 		list.add("Page 1");
 		list.add("Page 2");
 		list.add("Page 2");
 		list.add("Page 3");
 		
-		int maxElement = 2;
-		
-		Page<String> page = new Page<String>(list, maxElement);
+		page.setList(list);
 		int numPage = 2;
-		page.setNumPage(2);
+		page.setNumPage(numPage);
 		
 		numPage--;
 		assertEquals(list.subList(maxElement*numPage, maxElement*(numPage+1)), page.precPage());
@@ -34,16 +43,13 @@ public class PageTest extends TestCase{
 	
 	@Test
 	public void testNextPage() {
-		ArrayList<String> list = new ArrayList<String>();
 		list.add("Page 1");
 		list.add("Page 1");
 		list.add("Page 2");
 		list.add("Page 2");
 		list.add("Page 3");
 		
-		int maxElement = 2;
-		
-		Page<String> page = new Page<String>(list, maxElement);
+		page.setList(list);
 		int numPage = 0;
 		page.setNumPage(0);
 		
@@ -59,14 +65,11 @@ public class PageTest extends TestCase{
 	
 	@Test
 	public void testCurrentPage() {
-		ArrayList<String> list = new ArrayList<String>();
 		list.add("Page 1");
 		list.add("Page 1");
 		list.add("Page 3");
 		
-		int maxElement = 2;
-		
-		Page<String> page = new Page<String>(list, maxElement);
+		page.setList(list);
 		int numPage = 0;
 		page.setNumPage(0);
 		
@@ -78,5 +81,19 @@ public class PageTest extends TestCase{
 		
 		assertEquals(list.subList(maxElement*numPage, list.size()), page.currentPage());
 		assertEquals(numPage, page.getNumPage());
+	}
+	
+	@Test
+	public void testSetNumPage() {
+		list.add("Page 1");
+		list.add("Page 1");
+		list.add("Page 3");
+		
+		page.setList(list);
+		page.setNumPage(-1);
+		assertEquals(0, page.getNumPage());
+		
+		page.setNumPage(1000);
+		assertEquals(0, page.getNumPage());
 	}
 }

@@ -21,6 +21,7 @@
 		<mysql.version>8.0.15</mysql.version>
 		<mock.version>2.25.0</mock.version>
 		<jstl.version>1.2</jstl.version>
+		<dbunit.version>2.5.3</dbunit.version>
 	</properties>
 
 	<dependencies>
@@ -29,6 +30,12 @@
 			<artifactId>junit</artifactId>
 			<version>${junit.version}</version>
 			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.dbunit</groupId>
+			<artifactId>dbunit</artifactId>
+			<version>${dbunit.version}</version>
 		</dependency>
 
 		<dependency>

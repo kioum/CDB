@@ -18,7 +18,7 @@ import junit.framework.TestCase;
 public class ComputerMapperTest extends TestCase{
 
 	@Mock
-	ResultSet rs;
+	private ResultSet rs;
 
 	@Override
 	@Before
