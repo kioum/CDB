@@ -31,9 +31,6 @@ public class CreateServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		ArrayList<CompanyDTO> companies = CompanyService.getAll();
 
-		HttpSession session = req.getSession();
-		session.setAttribute("companies", companies);
-
 		req.setAttribute("companies", companies);
 		RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/views/addComputer.jsp");
 		rd.forward(req, resp);
@@ -54,7 +51,7 @@ public class CreateServlet extends HttpServlet {
 
 		String companyId = request.getParameter("companyId");
 
-		ComputerDTO compDTO = new ComputerDTO(0L, computerName, introduced, discontinued, Long.valueOf(companyId), "");
+		ComputerDTO compDTO = new ComputerDTO(0L, computerName, introduced, discontinued, Long.valueOf(companyId), "unknown");
 
 		Computer newComp = ComputerMapper.dtoToComputer(compDTO);
 		if(ComputerValidator.isCreatable(newComp)) {

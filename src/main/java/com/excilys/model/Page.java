@@ -5,11 +5,12 @@ import java.util.List;
 public class Page<T> {
 	private List<T> list;
 	private int maxElement;
+
 	private int numPage;
 
 	public Page(List<T> list, int maxElement){
 		this.list = list;
-		this.maxElement = maxElement;
+		this.maxElement = 10;
 		this.numPage = 0;
 	}
 
@@ -62,10 +63,17 @@ public class Page<T> {
 	}
 
 	public void setNumPage(int numPage) {
-		if(numPage >= 0 && numPage <= getMaxPage())
-			this.numPage = numPage;
+		if(numPage < 0)
+			this.numPage = 0;
+		else if(numPage > getMaxPage())
+			this.numPage = getMaxPage();
+		else this.numPage = numPage;
 	}
 
+	public int getMaxElement() {
+		return maxElement;
+	}
+	
 	public void setMaxElement(int maxElement) {
 		this.maxElement = maxElement;
 		if(maxElement*(numPage+1) > list.size())

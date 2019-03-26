@@ -18,21 +18,17 @@ import com.excilys.service.ComputerService;
 @WebServlet("/Dashboard")
 public class DashboardServlet extends HttpServlet {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -922693522541784648L;
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		ArrayList<ComputerDTO> computers = ComputerService.getAll();
 
-		HttpSession session = req.getSession();
-		Page<ComputerDTO> pageComputer = null;
-		if(session.getAttribute("page") == null)
-			pageComputer = new Page<ComputerDTO>(computers, 10);
-		else if (session.getAttribute("page") instanceof Page<?>)
-			pageComputer = (Page<ComputerDTO>) session.getAttribute("page");
+		Page<ComputerDTO> pageComputer = new Page<ComputerDTO>(computers, 10);
+		
+		if (req.getAttribute("page") != null) {
+			pageComputer = (Page<ComputerDTO>) req.getAttribute("page");
+		}
 
 		pageComputer.setList(computers);
 
@@ -46,7 +42,7 @@ public class DashboardServlet extends HttpServlet {
 			pageComputer.setNumPage(Integer.valueOf(numPage));
 		}
 
-		session.setAttribute("page", pageComputer);
+		req.setAttribute("page", pageComputer);
 		RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/views/dashboard.jsp");
 		rd.forward(req, resp);
 	}

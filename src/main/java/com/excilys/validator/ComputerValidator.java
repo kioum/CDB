@@ -15,8 +15,8 @@ public class ComputerValidator {
 		if(comp.getIntroduced() != null && comp.getDiscontinued() != null) 
 			if(comp.getIntroduced().after(comp.getDiscontinued())) return false;
 
-		if(!CompanyValidator.iscreatable(comp.getManufacturer())) return false;
-			
+		if(comp.getManufacturer() != null && !CompanyValidator.iscreatable(comp.getManufacturer())) return false;
+
 		return true;
 	}
 }

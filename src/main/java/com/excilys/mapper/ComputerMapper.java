@@ -59,6 +59,7 @@ public abstract class ComputerMapper {
 			String discontinued = null;
 			if(comp.getDiscontinued() != null)
 				discontinued = new SimpleDateFormat("yyyy-MM-dd").format(comp.getDiscontinued());
+
 			computers.add(new ComputerDTO(comp.getId(), comp.getName(), introduced, 
 					discontinued, comp.getManufacturer().getId(), comp.getManufacturer().getName()));
 
@@ -78,12 +79,16 @@ public abstract class ComputerMapper {
 		if(!computerDTO.getDiscontinued().equals(""))
 			discontinued = Timestamp.valueOf(computerDTO.getDiscontinued());
 
-		Company company = new Company.CompanyBuilder().id(computerDTO.getManufacturerId())
-				.name(computerDTO.getManufacturerName()).build();
-		
+
+		Company company = null;
+
+		if(computerDTO.getId() == 0L)
+			company = new Company.CompanyBuilder().id(computerDTO.getManufacturerId())
+			.name(computerDTO.getManufacturerName()).build();
+
 		Computer computer = new Computer.ComputerBuilder().id(id).name(name).introduced(introduced)
 				.discontinued(discontinued).manufacturer(company).build();
-		
+
 		return computer;
 	}
 }

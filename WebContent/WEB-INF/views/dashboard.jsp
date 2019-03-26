@@ -25,9 +25,6 @@
 		</div>
 	</header>
 
-	<%
-		pageContext.setAttribute("page", session.getAttribute("page"));
-	%>
 	<section id="main">
 		<div class="container">
 			<h1 id="homeTitle">${page.getList().size()} Computers found</h1>
@@ -102,26 +99,26 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<ul class="pagination">
-				<li><a href="?numPage=${page.numPage-1}" aria-label="Previous">
+				<li><a href="?numPage=${page.numPage-1}&maxElement=${page.maxElement}" aria-label="Previous">
 						<span aria-hidden="true">&laquo;</span>
 				</a></li>
 				<c:forEach begin="${page.startPage()}"
 					end="${page.endPage()}" varStatus="loop">
-					<li><a href="?numPage=${loop.index}">${loop.index + 1}</a></li>
+					<li><a href="?numPage=${loop.index}&maxElement=${page.maxElement}">${loop.index + 1}</a></li>
 				</c:forEach>
-				<li><a href="?numPage=${page.numPage+1}" aria-label="Next">
+				<li><a href="?numPage=${page.numPage+1}&maxElement=${page.maxElement}" aria-label="Next">
 						<span aria-hidden="true">&raquo;</span>
 				</a></li>
 			</ul>
 			<div class="btn-group btn-group-sm pull-right" role="group">
 				<button
-					onclick="location.href='<c:url value="/Dashboard?maxElement=10'"/>"
+					onclick="location.href='<c:url value="/Dashboard?numPage=${page.numPage}&maxElement=10'"/>"
 					type="button" class="btn btn-default">10</button>
 				<button
-					onclick="location.href='<c:url value="/Dashboard?maxElement=50'"/>"
+					onclick="location.href='<c:url value="/Dashboard?numPage=${page.numPage}&maxElement=50'"/>"
 					type="button" class="btn btn-default">50</button>
 				<button
-					onclick="location.href='<c:url value="/Dashboard?maxElement=100'"/>"
+					onclick="location.href='<c:url value="/Dashboard?numPage=${page.numPage}&maxElement=100'"/>"
 					type="button" class="btn btn-default">100</button>
 			</div>
 		</div>

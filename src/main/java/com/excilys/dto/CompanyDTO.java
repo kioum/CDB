@@ -4,11 +4,6 @@ public class CompanyDTO{
 	private Long id;
 	private String name;
 	
-	public CompanyDTO() {
-		id = -1L;
-		name = "Unknown";
-	}
-	
 	public CompanyDTO(Long id, String name) {
 		this.id = id;
 		this.name = name;
