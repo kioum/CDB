@@ -61,8 +61,8 @@ public class ComputerDAO {
 		return Optional.ofNullable(computer);
 	}
 
-	public static Optional<ArrayList<Computer>> findByName(String name){
-		ArrayList<Computer> computer = null;
+	public static ArrayList<Computer> findByName(String name){
+		ArrayList<Computer> computer = new ArrayList<Computer>();
 
 		try (Connection conn = DAOFactory.getConnection();
 				PreparedStatement  pstmt = conn.prepareStatement(QUERY_FINDBYNAME);){
@@ -72,7 +72,7 @@ public class ComputerDAO {
 			LOG.error(e.getMessage());
 		}
 
-		return Optional.ofNullable(computer);
+		return computer;
 	}
 
 	public static int create(Computer comp){
