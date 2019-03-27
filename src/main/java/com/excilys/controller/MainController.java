@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.model.Page;
-import com.excilys.persistence.CompanyDAO;
 import com.excilys.persistence.ComputerDAO;
 import com.excilys.ui.MainView;
 import com.excilys.util.Order;

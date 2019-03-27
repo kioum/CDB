@@ -4,6 +4,8 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.format.DateTimeFormatter;
 
+import com.excilys.exception.TimestampException;
+
 public class TimestampConverter {
 	public static String formatToString(Timestamp timestamp, String format) {
 		if(timestamp == null) return null;
@@ -17,8 +19,12 @@ public class TimestampConverter {
 		return timeToString;
 	}
 	
-	public static Timestamp valueOf(String timestamp) {
+	public static Timestamp valueOf(String timestamp) throws TimestampException {
 		if(timestamp.equals("")) return null;
+		
+		if(!timestamp.matches("/(^$|[0-9]{4}[-][0-9]{2}[-][0-9]{2}$)/"))
+			throw new TimestampException("Impossible to parse string : " + timestamp);
+		
 		return Timestamp.valueOf(timestamp);
 	}
 }

@@ -18,9 +18,8 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand"
-				href="<c:url value="/Dashboard"/>"> Application
-				- Computer Database </a>
+			<a class="navbar-brand" href="<c:url value="/Dashboard"/>">
+				Application - Computer Database </a>
 		</div>
 	</header>
 
@@ -55,9 +54,16 @@
 								</select>
 							</div>
 						</fieldset>
+						<c:if test="${not empty exception}">
+							<p>
+								Exception :
+								<c:out value="${exception}" />
+							</p>
+						</c:if>
 						<div class="actions pull-right">
-							<input id="btnSubmit"  type="submit" value="Add" class="btn btn-primary">
-							or <a href="<c:url value="/Dashboard"/>" class="btn btn-default">Cancel</a>
+							<input id="btnSubmit" type="submit" value="Add"
+								class="btn btn-primary"> or <a
+								href="<c:url value="/Dashboard"/>" class="btn btn-default">Cancel</a>
 						</div>
 					</form>
 				</div>

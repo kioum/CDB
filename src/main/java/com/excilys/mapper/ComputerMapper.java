@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.dto.ComputerDTO;
+import com.excilys.exception.TimestampException;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.util.TimestampConverter;
@@ -60,15 +61,19 @@ public abstract class ComputerMapper {
 					discontinued, comp.getManufacturer().getId(), comp.getManufacturer().getName()));
 
 		}
-		
+
 		return computers;
 	}
 
-	public static Computer dtoToComputer(ComputerDTO computerDTO) {
+	public static Computer dtoToComputer(ComputerDTO computerDTO) throws TimestampException {
 		Long id = computerDTO.getId();
 		String name = computerDTO.getName();
-		Timestamp introduced = TimestampConverter.valueOf(computerDTO.getIntroduced());
-		Timestamp discontinued = TimestampConverter.valueOf(computerDTO.getDiscontinued());
+		Timestamp introduced = null;
+		Timestamp discontinued = null;
+
+		introduced = TimestampConverter.valueOf(computerDTO.getIntroduced());
+		discontinued = TimestampConverter.valueOf(computerDTO.getDiscontinued());
+
 		Company company = null;
 
 		if(computerDTO.getId() > 0L)

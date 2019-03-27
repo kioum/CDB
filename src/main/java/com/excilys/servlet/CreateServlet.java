@@ -12,12 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.dto.CompanyDTO;
 import com.excilys.dto.ComputerDTO;
+import com.excilys.exception.TimestampException;
+import com.excilys.exception.ValidatorException;
 import com.excilys.mapper.ComputerMapper;
-import com.excilys.model.Computer;
-import com.excilys.persistence.ComputerDAO;
 import com.excilys.service.CompanyService;
 import com.excilys.service.ComputerService;
-import com.excilys.validator.ComputerValidator;
 
 @WebServlet("/CreateServlet")
 public class CreateServlet extends HttpServlet {
@@ -37,26 +36,27 @@ public class CreateServlet extends HttpServlet {
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		String computerName = request.getParameter("computerName");
+		String computerName = req.getParameter("computerName");
 		
-		String introduced = request.getParameter("introduced");	
+		String introduced = req.getParameter("introduced");	
 		if(!introduced.equals("")) introduced += " 00:00:00";
 
-		String discontinued = request.getParameter("discontinued");
+		String discontinued = req.getParameter("discontinued");
 		if (discontinued == null) discontinued = "";
 		else if (!discontinued.equals("")) discontinued += " 00:00:00";
 
-		String companyId = request.getParameter("companyId");
+		String companyId = req.getParameter("companyId");
 
 		ComputerDTO compDTO = new ComputerDTO(0L, computerName, introduced, discontinued, Long.valueOf(companyId), "unknown");
 
-		boolean success = ComputerService.getInstance().create(ComputerMapper.dtoToComputer(compDTO));
-		if(success) response.sendRedirect("Dashboard");
-		else {
-			RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/views/addComputer.jsp");
-			rd.forward(request, response);
+		try {
+			ComputerService.getInstance().create(ComputerMapper.dtoToComputer(compDTO));
+		} catch (ValidatorException | TimestampException e) {
+			req.setAttribute("exception", e.getMessage());
+			doGet(req, resp);
 		}
+		resp.sendRedirect("Dashboard");
 	}
 }
