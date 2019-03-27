@@ -13,6 +13,8 @@ import com.excilys.mapper.ComputerMapper;
 import com.excilys.model.Computer;
 
 public class ComputerDAO {
+	private static ComputerDAO instance;
+	
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerDAO.class);
 
 	private final static String QUERY_GETLIST = "SELECT c1.id, c1.name, c1.introduced, c1.discontinued, c2.id, c2.name " 
@@ -33,12 +35,13 @@ public class ComputerDAO {
 			+ "WHERE id = ?;";
 	private final static String QUERY_DELETEBYID = "DELETE FROM computer "
 			+ "WHERE id = ?;";
+	
+	private ComputerDAO() {}
 
-	public static ArrayList<Computer> getList(){
+	public ArrayList<Computer> getList(){
 		ArrayList<Computer> computers = new ArrayList<Computer>();
 
-		try (Connection conn = DAOFactory.getConnection();
-				PreparedStatement  pstmt = conn.prepareStatement(QUERY_GETLIST);){
+		try (PreparedStatement pstmt = getConnection().prepareStatement(QUERY_GETLIST);){
 			computers = ComputerMapper.mapList(pstmt.executeQuery());
 		} catch (SQLException e) {
 			LOG.debug(e.getMessage());
@@ -47,11 +50,10 @@ public class ComputerDAO {
 		return computers;
 	}
 
-	public static Optional<Computer> findById(Long id){
+	public Optional<Computer> findById(Long id){
 		Computer computer = null;
 
-		try (Connection conn = DAOFactory.getConnection();
-				PreparedStatement  pstmt = conn.prepareStatement(QUERY_FINDBYID);){
+		try (PreparedStatement pstmt = getConnection().prepareStatement(QUERY_FINDBYID);){
 			pstmt.setLong(1, id);
 			computer = ComputerMapper.map(pstmt.executeQuery());
 		} catch (SQLException e) {
@@ -61,11 +63,10 @@ public class ComputerDAO {
 		return Optional.ofNullable(computer);
 	}
 
-	public static ArrayList<Computer> findByName(String name){
+	public ArrayList<Computer> findByName(String name){
 		ArrayList<Computer> computer = new ArrayList<Computer>();
 
-		try (Connection conn = DAOFactory.getConnection();
-				PreparedStatement  pstmt = conn.prepareStatement(QUERY_FINDBYNAME);){
+		try (PreparedStatement pstmt = getConnection().prepareStatement(QUERY_FINDBYNAME);){
 			pstmt.setString(1, "%" + name + "%");
 			computer = ComputerMapper.mapList(pstmt.executeQuery());
 		} catch (SQLException e) {
@@ -75,9 +76,8 @@ public class ComputerDAO {
 		return computer;
 	}
 
-	public static int create(Computer comp){
-		try (Connection conn = DAOFactory.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement(QUERY_CREATE);){
+	public int create(Computer comp){
+		try (PreparedStatement pstmt = getConnection().prepareStatement(QUERY_CREATE);){
 			pstmt.setString(1, comp.getName());
 			pstmt.setTimestamp(2, comp.getIntroduced());
 			pstmt.setTimestamp(3, comp.getDiscontinued());
@@ -91,9 +91,8 @@ public class ComputerDAO {
 		return -1;
 	}
 
-	public static int update(Computer comp) {
-		try(Connection conn = DAOFactory.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement(QUERY_UPDATEBYID);){
+	public int update(Computer comp) {
+		try(PreparedStatement pstmt = getConnection().prepareStatement(QUERY_UPDATEBYID);){
 			pstmt.setString(1, comp.getName());
 			pstmt.setTimestamp(2, comp.getIntroduced());
 			pstmt.setTimestamp(3, comp.getDiscontinued());
@@ -109,9 +108,8 @@ public class ComputerDAO {
 	}
 
 
-	public static int deleteById(Long id){
-		try (Connection conn = DAOFactory.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement(QUERY_DELETEBYID);){
+	public int deleteById(Long id){
+		try (PreparedStatement pstmt = getConnection().prepareStatement(QUERY_DELETEBYID);){
 			pstmt.setLong(1, id);
 			return pstmt.executeUpdate();
 		} catch (SQLException e) {
@@ -121,4 +119,18 @@ public class ComputerDAO {
 		return -1;
 	}
 
+	private Connection getConnection() {
+		return DAOFactory.getInstance().getConnection();
+	}
+	
+	public static ComputerDAO getInstance() {
+        if(instance == null) {
+            synchronized (DAOFactory.class) {
+                if(instance == null) {
+                	instance = new ComputerDAO();
+                }
+            }
+        }
+        return instance;
+	}
 }

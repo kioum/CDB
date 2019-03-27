@@ -20,6 +20,8 @@ import com.excilys.util.Order;
 
 public class MainController {
 	private MainView mw;
+	private ComputerDAO computerDao;
+	private ComputerDAO companyDao;
 
 	private static final Logger LOG = LoggerFactory.getLogger(MainController.class);
 
@@ -28,6 +30,8 @@ public class MainController {
 	 */
 	public MainController() {
 		this.mw = new MainView();
+		this.computerDao = ComputerDAO.getInstance();
+		this.companyDao = ComputerDAO.getInstance();
 		mainMenu();
 	}
 
@@ -44,10 +48,10 @@ public class MainController {
 			LOG.info("Exit - Bye");
 			return;
 		case "LISTCOMPUTER":
-			drawList(ComputerDAO.getList());
+			drawList(computerDao.getList());
 			break;
 		case "LISTCOMPANY":
-			drawList(CompanyDAO.getList());
+			drawList(companyDao.getList());
 			break;
 		case "SHOWCOMPUTER":
 			drawComputer();
@@ -71,7 +75,7 @@ public class MainController {
 		Long id = Long.valueOf(mw.getInputUser("Enter the id : "));
 		
 		try {
-			mw.drawComputerDetails(ComputerDAO.findById(id).get());
+			mw.drawComputerDetails(computerDao.findById(id).get());
 		}catch(NoSuchElementException e) {
 			LOG.error("Computer id =" + id + " doesn't exist");
 		}
@@ -79,7 +83,7 @@ public class MainController {
 
 	public void deleteComputer() {
 		Long id = Long.valueOf(mw.getInputUser("Enter the id : "));
-		successLog(ComputerDAO.deleteById(id), "delete");
+		successLog(computerDao.deleteById(id), "delete");
 	}
 
 	/**
@@ -114,7 +118,7 @@ public class MainController {
 		Computer computer = null;
 
 		try {
-			computer = ComputerDAO.findById(id).get();
+			computer = computerDao.findById(id).get();
 		}catch(NoSuchElementException e) {
 			LOG.error("Computer id =" + id + " doesn't exist");
 		}
@@ -126,12 +130,12 @@ public class MainController {
 
 		String introduced = mw.getInputUser("Change the date of introduced ? (y or any key) :");
 		if (introduced.toUpperCase().equals("Y")) {
-			computer.setIntroduced(getATimestamp());
+			computer.setIntroduced(getInputTimestamp());
 		}
 
 		String discontinued = mw.getInputUser("Change the date of discontinued ? (y or any key) :");
 		if (discontinued.toUpperCase().equals("Y")) {
-			computer.setDiscontinued(getATimestamp());
+			computer.setDiscontinued(getInputTimestamp());
 		}
 
 		String idManu = mw.getInputUser("Enter the id of Manufacturer or just press enter :");
@@ -139,7 +143,7 @@ public class MainController {
 			computer.getManufacturer().setId(Long.valueOf(idManu));
 
 		}
-		successLog(ComputerDAO.update(computer), "update");
+		successLog(computerDao.update(computer), "update");
 	}
 
 	/**
@@ -149,10 +153,10 @@ public class MainController {
 		String name = mw.getInputUser("Enter the name :");
 
 		mw.drawMessage("Enter the date of introduced :");
-		Timestamp introduced = getATimestamp();
+		Timestamp introduced = getInputTimestamp();
 
 		mw.drawMessage("Enter the date of discontinued :");
-		Timestamp discontinued = getATimestamp();
+		Timestamp discontinued = getInputTimestamp();
 
 		Long idManu = Long.valueOf(mw.getInputUser("Enter the id of Manufacturer : "));
 
@@ -160,14 +164,14 @@ public class MainController {
 		Computer computer = new Computer.ComputerBuilder().name(name).introduced(introduced)
 				.discontinued(discontinued).manufacturer(company).build();
 		
-		successLog(ComputerDAO.create(computer), "create");
+		successLog(computerDao.create(computer), "create");
 	}
 
 	/**
 	 * Ask to user to enter a Date with format "YYYY-MM-DD" and return the date.
 	 * @return Timestamp
 	 */
-	public Timestamp getATimestamp() {
+	public Timestamp getInputTimestamp() {
 		String date = mw.getInputUser("Enter a date like YYYY-MM-DD or null:");
 
 		if (date.equals("null")) {
@@ -179,7 +183,7 @@ public class MainController {
 			newdate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
 		} catch (ParseException e) {
 			LOG.info("Parse of date failed");
-			return getATimestamp();
+			return getInputTimestamp();
 		}
 
 		return new Timestamp(newdate.getTime());

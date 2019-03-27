@@ -12,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class DAOFactory {
+	private static DAOFactory instance;
+	
 	private static final Logger LOG = LoggerFactory.getLogger(DAOFactory.class);
 	
 	private static final String FICHIER_PROPERTIES = "/home/excilys/eclipse-workspace/computer-database/"
@@ -22,7 +24,7 @@ public class DAOFactory {
 	private static String username;
 	private static String password;
 
-	static {
+	private DAOFactory(){
 		Properties config = new Properties();
 		try {
 			config.load(new FileInputStream(FICHIER_PROPERTIES));
@@ -31,25 +33,31 @@ public class DAOFactory {
 		} catch (IOException e) {
 			LOG.error(e.getMessage());
 		}
-
+		
 		driver = config.getProperty("jdbc.driver");
 		url = config.getProperty("jdbc.url");
 		username = config.getProperty("jdbc.username");
 		password = config.getProperty("jdbc.password");
 	}
 	
-	/**
-	 * get the instance of the database
-	 * @return Connection
-	 */
-	public static Connection getConnection() {
+	public Connection getConnection() {		
 		try {
-			if(driver == null) System.out.println("null");
 			Class.forName(driver);
 			return DriverManager.getConnection(url, username, password);
 		} catch (SQLException | ClassNotFoundException e) {
 			LOG.error(e.getMessage());
 		}
 		return null;
+	}
+	
+	public static DAOFactory getInstance() {
+        if(instance == null) {
+            synchronized (DAOFactory.class) {
+                if(instance == null) {
+                	instance = new DAOFactory();
+                }
+            }
+        }
+        return instance;
 	}
 }

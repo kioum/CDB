@@ -13,6 +13,8 @@ import com.excilys.mapper.CompanyMapper;
 import com.excilys.model.Company;
 
 public class CompanyDAO {
+	private static CompanyDAO instance;
+	
 	private static final Logger LOG = LoggerFactory.getLogger(CompanyDAO.class);
 	
 	private final static String QUERY_GETLIST = "SELECT id, name "
@@ -21,11 +23,12 @@ public class CompanyDAO {
 			+ "FROM company "
 			+ "WHERE id = ?";
 
-	public static ArrayList<Company> getList(){
+	private CompanyDAO() {}
+	
+	public ArrayList<Company> getList(){
 		ArrayList<Company> companies = new ArrayList<Company>();
 		
-		try (Connection conn = DAOFactory.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement(QUERY_GETLIST);){
+		try (PreparedStatement pstmt = getConnection().prepareStatement(QUERY_GETLIST);){
 			companies = CompanyMapper.mapList(pstmt.executeQuery());
 		} catch (SQLException e) {
 			LOG.error(e.getMessage());
@@ -34,11 +37,10 @@ public class CompanyDAO {
 		return companies;
 	}
 	
-	public static Optional<Company> findById(long id){
+	public Optional<Company> findById(long id){
 		Company company = null;
 		
-		try (Connection conn = DAOFactory.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement(QUERY_FINDBYID);){
+		try (PreparedStatement pstmt = getConnection().prepareStatement(QUERY_FINDBYID);){
 			pstmt.setLong(1, id);
 			company = CompanyMapper.map(pstmt.executeQuery());
 		} catch (SQLException e) {
@@ -46,5 +48,20 @@ public class CompanyDAO {
 		}
 		
 		return Optional.ofNullable(company);
+	}
+	
+	private Connection getConnection() {
+		return DAOFactory.getInstance().getConnection();
+	}
+	
+	public static CompanyDAO getInstance() {
+        if(instance == null) {
+            synchronized (DAOFactory.class) {
+                if(instance == null) {
+                	instance = new CompanyDAO();
+                }
+            }
+        }
+        return instance;
 	}
 }
