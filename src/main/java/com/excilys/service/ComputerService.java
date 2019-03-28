@@ -65,6 +65,10 @@ public class ComputerService {
 		}
 	}
 	
+	public ArrayList<ComputerDTO> findByName(String search) {
+		return ComputerMapper.mapListDTO(ComputerDAO.getInstance().findByName(search));
+	}
+	
 	public static ComputerService getInstance() {
 		if(instance == null) {
 			synchronized (DAOFactory.class) {

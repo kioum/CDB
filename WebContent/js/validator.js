@@ -8,12 +8,12 @@
 	var btnSubmit = $("#btnSubmit");
 	
 	$('#computerName').prop("required", true);
-
-	if(introduced.val() == "")
-		discontinued.prop("disabled", true);	
-
+	
+	if(introduced.val() == "") discontinued.prop("disabled", true);	
+	
 	introduced.change(function(){
 		if($("#dateWarning").length > 0) $("#dateWarning").remove();
+		if(introduced.val() == "") discontinued.prop("disabled", true);	
 		
 		var introSplit = introduced.val().split('-');
 		var discSplit = discontinued.val().split('-');

@@ -8,7 +8,7 @@ import com.excilys.exception.TimestampException;
 
 public class TimestampConverter {
 	public static String formatToString(Timestamp timestamp, String format) {
-		if(timestamp == null) return null;
+		if(timestamp == null) return "";
 		
 		String timeToString = "";
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);

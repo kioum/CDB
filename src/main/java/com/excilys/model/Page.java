@@ -1,6 +1,10 @@
 package com.excilys.model;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+
+import com.excilys.dto.ComputerDTO;
 
 public class Page<T> {
 	private List<T> list;
@@ -10,7 +14,13 @@ public class Page<T> {
 
 	public Page(List<T> list, int maxElement){
 		this.list = list;
-		this.maxElement = 10;
+		this.maxElement = maxElement;
+		this.numPage = 0;
+	}
+
+	public Page(int maxElement) {
+		this.list = null;
+		this.maxElement = maxElement;
 		this.numPage = 0;
 	}
 
@@ -43,7 +53,7 @@ public class Page<T> {
 			return 0;
 		return numPage-2;
 	}
-	
+
 	public int endPage() {
 		if(numPage < 3 && getMaxPage() >= 5)
 			return 4;
@@ -53,7 +63,7 @@ public class Page<T> {
 			return getMaxPage();
 		return numPage+2;
 	}
-	
+
 	public int getMaxPage() {
 		return (int) (Math.floor(list.size()/maxElement));
 	}
@@ -73,7 +83,7 @@ public class Page<T> {
 	public int getMaxElement() {
 		return maxElement;
 	}
-	
+
 	public void setMaxElement(int maxElement) {
 		this.maxElement = maxElement;
 		if(maxElement*(numPage+1) > list.size())

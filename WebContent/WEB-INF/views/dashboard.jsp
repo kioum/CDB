@@ -29,7 +29,7 @@
 				Computers found
 			</h1>
 			<c:if test="${not empty exception}">
-				<p>
+				<p style="color: red">
 					Exception :
 					<c:out value="${exception}" />
 				</p>
@@ -37,7 +37,6 @@
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
-
 						<input type="search" id="searchbox" name="search"
 							class="form-control" placeholder="Search name" /> <input
 							type="submit" id="searchsubmit" value="Filter by name"
@@ -71,12 +70,19 @@
 										class="fa fa-trash-o fa-lg"></i>
 								</a>
 							</span></th>
-							<th>Computer name</th>
-							<th>Introduced date</th>
+							<th
+								onclick="location.href='<c:url value="/Dashboard?sortBy=name"/>'">Computer
+								name</th>
+							<th
+								onclick="location.href='<c:url value="/Dashboard?sortBy=introduced"/>'">Introduced
+								date</th>
 							<!-- Table header for Discontinued Date -->
-							<th>Discontinued date</th>
+							<th
+								onclick="location.href='<c:url value="/Dashboard?sortBy=discontinued"/>'">Discontinued
+								date</th>
 							<!-- Table header for Company -->
-							<th>Company</th>
+							<th
+								onclick="location.href='<c:url value="/Dashboard?sortBy=companyid"/>'">Company</th>
 
 						</tr>
 					</thead>

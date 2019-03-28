@@ -54,7 +54,7 @@
 							</div>
 						</fieldset>
 						<c:if test="${not empty exception}">
-							<p>
+							<p style = "color:red" >
 								Exception :
 								<c:out value="${exception}" />
 							</p>

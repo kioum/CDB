@@ -1,7 +1,7 @@
 package com.excilys.servlet;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Comparator;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.dto.ComputerDTO;
 import com.excilys.exception.ValidatorException;
+import com.excilys.mapper.ComputerMapper;
 import com.excilys.model.Page;
 import com.excilys.service.ComputerService;
 
@@ -22,15 +23,20 @@ public class DashboardServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		ArrayList<ComputerDTO> computers = ComputerService.getInstance().getAll();
-
-		Page<ComputerDTO> pageComputer = new Page<ComputerDTO>(computers, 10);
-
+		Page<ComputerDTO> pageComputer = new Page<ComputerDTO>(10);
 		if (req.getAttribute("page") != null) {
 			pageComputer = (Page<ComputerDTO>) req.getAttribute("page");
 		}
 
-		pageComputer.setList(computers);
+		String search = req.getParameter("search");		
+		if(search != null) {
+			pageComputer.setList(ComputerService.getInstance().findByName(search));
+		}else pageComputer.setList(ComputerService.getInstance().getAll());
+		
+		String sort = req.getParameter("sortBy");
+		if(sort != null) {
+			pageComputer.setList(ComputerMapper.sortBy(pageComputer.getList(), sort.toUpperCase()));
+		}
 
 		String maxElement = req.getParameter("maxElement");
 		if(maxElement != null) {
@@ -59,6 +65,7 @@ public class DashboardServlet extends HttpServlet {
 				} catch (ValidatorException e) {
 					req.setAttribute("exception", e.getMessage());
 				}
+			
 		doGet(req, resp);
 	}
 }

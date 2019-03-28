@@ -4,6 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +14,7 @@ import com.excilys.dto.ComputerDTO;
 import com.excilys.exception.TimestampException;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
+import com.excilys.util.AttrComputer;
 import com.excilys.util.TimestampConverter;
 
 public abstract class ComputerMapper {
@@ -68,7 +71,7 @@ public abstract class ComputerMapper {
 	public static ComputerDTO computerToDTO(Computer comp) {
 		String introduced = TimestampConverter.formatToString(comp.getIntroduced(), "yyyy-MM-dd");
 		String discontinued = TimestampConverter.formatToString(comp.getDiscontinued(), "yyyy-MM-dd");
-
+		
 		return new ComputerDTO(comp.getId(), comp.getName(), introduced, 
 				discontinued, comp.getManufacturer().getId(), comp.getManufacturer().getName());
 	}
@@ -92,5 +95,25 @@ public abstract class ComputerMapper {
 				.discontinued(discontinued).manufacturer(company).build();
 
 		return computer;
+	}
+
+	public static List<ComputerDTO> sortBy(List<ComputerDTO> list, String attr){
+		list.sort(new Comparator<ComputerDTO>(){
+			@Override
+			public int compare(ComputerDTO arg0, ComputerDTO arg1) {
+				switch(AttrComputer.valueOf(attr)) {
+				case NAME:
+					return arg0.getName().compareTo(arg1.getName());
+				case INTRODUCED:
+					return arg0.getIntroduced().compareTo(arg1.getIntroduced());
+				case DISCONTINUED:
+					return arg0.getDiscontinued().compareTo(arg1.getDiscontinued());
+				case COMPANYID:
+					return arg0.getManufacturerId().compareTo(arg1.getManufacturerId());
+				}
+				return 0;
+			}
+		});
+		return list;
 	}
 }

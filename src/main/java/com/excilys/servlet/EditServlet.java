@@ -23,9 +23,6 @@ import com.excilys.service.ComputerService;
 @WebServlet("/EditServlet")
 public class EditServlet extends HttpServlet {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -1342895835008890400L;
 
 	@Override
@@ -53,7 +50,7 @@ public class EditServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		String computerId = req.getParameter("id");
-		
+
 		String computerName = req.getParameter("computerName");
 
 		String introduced = req.getParameter("introduced");
