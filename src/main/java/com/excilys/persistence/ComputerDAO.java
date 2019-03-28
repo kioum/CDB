@@ -27,7 +27,8 @@ public class ComputerDAO {
 	private final static String QUERY_FINDBYNAME = "SELECT c1.id, c1.name, c1.introduced, c1.discontinued, c2.id, c2.name "
 			+ "FROM computer c1 LEFT JOIN company c2 "
 			+ "ON c1.company_id = c2.id "
-			+ "WHERE c1.name LIKE ?;";
+			+ "WHERE c1.name LIKE ? "
+			+ "OR c2.name LIKE ?;";
 	private final static String QUERY_CREATE = "INSERT INTO computer (name,introduced,discontinued,company_id) "
 			+ "VALUES (?, ?, ?, ?); ";
 	private final static String QUERY_UPDATEBYID = "UPDATE computer "
@@ -68,6 +69,7 @@ public class ComputerDAO {
 
 		try (PreparedStatement pstmt = getConnection().prepareStatement(QUERY_FINDBYNAME);){
 			pstmt.setString(1, "%" + name + "%");
+			pstmt.setString(2, "%" + name + "%");
 			computer = ComputerMapper.mapList(pstmt.executeQuery());
 		} catch (SQLException e) {
 			LOG.error(e.getMessage());

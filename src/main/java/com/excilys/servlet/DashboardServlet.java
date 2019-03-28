@@ -1,7 +1,6 @@
 package com.excilys.servlet;
 
 import java.io.IOException;
-import java.util.Comparator;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -23,16 +22,13 @@ public class DashboardServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		Page<ComputerDTO> pageComputer = new Page<ComputerDTO>(10);
-		if (req.getAttribute("page") != null) {
-			pageComputer = (Page<ComputerDTO>) req.getAttribute("page");
-		}
+		Page<ComputerDTO> pageComputer = new Page<ComputerDTO>(ComputerService.getInstance().getAll(), 10);
 
-		String search = req.getParameter("search");		
+		String search = req.getParameter("search");
 		if(search != null) {
 			pageComputer.setList(ComputerService.getInstance().findByName(search));
-		}else pageComputer.setList(ComputerService.getInstance().getAll());
-		
+		}
+
 		String sort = req.getParameter("sortBy");
 		if(sort != null) {
 			pageComputer.setList(ComputerMapper.sortBy(pageComputer.getList(), sort.toUpperCase()));
@@ -49,6 +45,8 @@ public class DashboardServlet extends HttpServlet {
 		}
 
 		req.setAttribute("page", pageComputer);
+		req.setAttribute("search", search);
+		req.setAttribute("sortBy", sort);
 		RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/views/dashboard.jsp");
 		rd.forward(req, resp);
 	}
@@ -65,7 +63,7 @@ public class DashboardServlet extends HttpServlet {
 				} catch (ValidatorException e) {
 					req.setAttribute("exception", e.getMessage());
 				}
-			
+
 		doGet(req, resp);
 	}
 }

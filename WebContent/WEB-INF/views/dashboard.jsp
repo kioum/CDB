@@ -71,18 +71,18 @@
 								</a>
 							</span></th>
 							<th
-								onclick="location.href='<c:url value="/Dashboard?sortBy=name"/>'">Computer
+								onclick="location.href='<c:url value="/Dashboard?sortBy=name&maxElement=${page.maxElement}"/>'">Computer
 								name</th>
 							<th
-								onclick="location.href='<c:url value="/Dashboard?sortBy=introduced"/>'">Introduced
+								onclick="location.href='<c:url value="/Dashboard?sortBy=introduced&maxElement=${page.maxElement}"/>'">Introduced
 								date</th>
 							<!-- Table header for Discontinued Date -->
 							<th
-								onclick="location.href='<c:url value="/Dashboard?sortBy=discontinued"/>'">Discontinued
+								onclick="location.href='<c:url value="/Dashboard?sortBy=discontinued&maxElement=${page.maxElement}"/>'">Discontinued
 								date</th>
 							<!-- Table header for Company -->
 							<th
-								onclick="location.href='<c:url value="/Dashboard?sortBy=companyid"/>'">Company</th>
+								onclick="location.href='<c:url value="/Dashboard?sortBy=companyid&maxElement=${page.maxElement}"/>'">Company</th>
 
 						</tr>
 					</thead>
