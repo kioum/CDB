@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.dto.ComputerDTO;
+import com.excilys.exception.ValidatorException;
 import com.excilys.model.Page;
 import com.excilys.service.ComputerService;
 
@@ -24,7 +25,7 @@ public class DashboardServlet extends HttpServlet {
 		ArrayList<ComputerDTO> computers = ComputerService.getInstance().getAll();
 
 		Page<ComputerDTO> pageComputer = new Page<ComputerDTO>(computers, 10);
-		
+
 		if (req.getAttribute("page") != null) {
 			pageComputer = (Page<ComputerDTO>) req.getAttribute("page");
 		}
@@ -47,8 +48,17 @@ public class DashboardServlet extends HttpServlet {
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		doGet(request, response);
+		String[] listComputers = req.getParameterValues("cb");
+
+		if(listComputers != null)
+			for(String id: listComputers)
+				try {
+					ComputerService.getInstance().deleteById(Long.valueOf(id));
+				} catch (ValidatorException e) {
+					req.setAttribute("exception", e.getMessage());
+				}
+		doGet(req, resp);
 	}
 }

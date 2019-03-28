@@ -50,7 +50,7 @@ public abstract class ComputerMapper {
 		return computers;
 	}
 
-	public static ArrayList<ComputerDTO> mapDTO(ArrayList<Computer> list) {
+	public static ArrayList<ComputerDTO> mapListDTO(ArrayList<Computer> list) {
 		ArrayList<ComputerDTO> computers = new ArrayList<ComputerDTO>();
 
 		for(Computer comp:list) {
@@ -63,6 +63,14 @@ public abstract class ComputerMapper {
 		}
 
 		return computers;
+	}
+
+	public static ComputerDTO computerToDTO(Computer comp) {
+		String introduced = TimestampConverter.formatToString(comp.getIntroduced(), "yyyy-MM-dd");
+		String discontinued = TimestampConverter.formatToString(comp.getDiscontinued(), "yyyy-MM-dd");
+
+		return new ComputerDTO(comp.getId(), comp.getName(), introduced, 
+				discontinued, comp.getManufacturer().getId(), comp.getManufacturer().getName());
 	}
 
 	public static Computer dtoToComputer(ComputerDTO computerDTO) throws TimestampException {

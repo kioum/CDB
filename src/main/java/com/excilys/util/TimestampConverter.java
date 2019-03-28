@@ -22,8 +22,10 @@ public class TimestampConverter {
 	public static Timestamp valueOf(String timestamp) throws TimestampException {
 		if(timestamp.equals("")) return null;
 		
-		if(!timestamp.matches("/(^$|[0-9]{4}[-][0-9]{2}[-][0-9]{2}$)/"))
+		if(!timestamp.matches("^\\d{4}-\\d{2}-\\d{2}$"))
 			throw new TimestampException("Impossible to parse string : " + timestamp);
+		
+		timestamp += " 00:00:00";
 		
 		return Timestamp.valueOf(timestamp);
 	}

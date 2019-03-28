@@ -1,8 +1,6 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page session="true"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,7 +9,7 @@
 <!-- Bootstrap -->
 <link rel="stylesheet" href="<c:url value="/css/bootstrap.min.css"/>"
 	media="screen">
-<link rel="stylesheet" href="<c:url value="css/font-awesome.css"/>"
+<link rel="stylesheet" href="<c:url value="/css/font-awesome.css"/>"
 	media="screen">
 <link rel="stylesheet" href="<c:url value="/css/main.css"/>"
 	media="screen">
@@ -19,15 +17,23 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand"
-				href="<c:url value="/Dashboard"/>"> Application
-				- Computer Database </a>
+			<a class="navbar-brand" href="<c:url value="/Dashboard"/>">
+				Application - Computer Database </a>
 		</div>
 	</header>
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${page.getList().size()} Computers found</h1>
+			<h1 id="homeTitle">
+				<c:out value="${page.getList().size()}" />
+				Computers found
+			</h1>
+			<c:if test="${not empty exception}">
+				<p>
+					Exception :
+					<c:out value="${exception}" />
+				</p>
+			</c:if>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -40,8 +46,8 @@
 				</div>
 				<div class="pull-right">
 					<a class="btn btn-success" id="addComputer"
-						href="<c:url value="/CreateServlet"/>">Add
-						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
+						href="<c:url value="/CreateServlet"/>">Add Computer</a> <a
+						class="btn btn-default" id="editComputer" href="#"
 						onclick="$.fn.toggleEditMode();">Edit</a>
 				</div>
 			</div>
@@ -49,76 +55,80 @@
 
 		<form id="deleteForm" action="#" method="POST">
 			<input type="hidden" name="selection" value="">
-		</form>
 
-		<div class="container" style="margin-top: 10px;">
-			<table class="table table-striped table-bordered">
-				<thead>
-					<tr>
-						<!-- Variable declarations for passing labels as parameters -->
-						<!-- Table header for Computer Name -->
 
-						<th class="editMode" style="width: 60px; height: 22px;"><input
-							type="checkbox" id="selectall" /> <span
-							style="vertical-align: top;"> - <a href="#"
-								id="deleteSelected" onclick="$.fn.deleteSelected();"> <i
-									class="fa fa-trash-o fa-lg"></i>
-							</a>
-						</span></th>
-						<th>Computer name</th>
-						<th>Introduced date</th>
-						<!-- Table header for Discontinued Date -->
-						<th>Discontinued date</th>
-						<!-- Table header for Company -->
-						<th>Company</th>
-
-					</tr>
-				</thead>
-				<!-- Browse attribute computers -->
-				<tbody id="results">
-					<c:forEach var="comp" items="${page.currentPage()}">
+			<div class="container" style="margin-top: 10px;">
+				<table class="table table-striped table-bordered">
+					<thead>
 						<tr>
-							<td class="editMode"><input type="checkbox" name="cb"
-								class="cb" value="0"></td>
-							<td><a href="editComputer.html" onclick=""><c:out
-										value="${comp.name}" /></a></td>
-							<td><c:if test="${comp.introduced != ''}">
-									<c:out value="${comp.introduced}" />
-								</c:if></td>
-							<td><c:if test="${comp.discontinued != ''}">
-									<c:out value="${comp.discontinued}" />
-								</c:if></td>
-							<td><c:out value="${comp.manufacturerName}" /></td>
+							<!-- Variable declarations for passing labels as parameters -->
+							<!-- Table header for Computer Name -->
+
+							<th class="editMode" style="width: 60px; height: 22px;"><input
+								type="checkbox" id="selectall" /> <span
+								style="vertical-align: top;"> - <a href="#"
+									id="deleteSelected" onclick="$.fn.deleteSelected();"> <i
+										class="fa fa-trash-o fa-lg"></i>
+								</a>
+							</span></th>
+							<th>Computer name</th>
+							<th>Introduced date</th>
+							<!-- Table header for Discontinued Date -->
+							<th>Discontinued date</th>
+							<!-- Table header for Company -->
+							<th>Company</th>
+
 						</tr>
-					</c:forEach>
-				</tbody>
-			</table>
-		</div>
+					</thead>
+					<!-- Browse attribute computers -->
+					<tbody id="results">
+						<c:forEach var="comp" items="${page.currentPage()}">
+							<tr>
+								<td class="editMode"><input type="checkbox" name="cb"
+									class="cb" value="${comp.id}"></td>
+								<td><a href="<c:url value="/EditServlet?id=${comp.id}"/>"
+									onclick=""><c:out value="${comp.name}" /></a></td>
+								<td><c:if test="${comp.introduced != ''}">
+										<c:out value="${comp.introduced}" />
+									</c:if></td>
+								<td><c:if test="${comp.discontinued != ''}">
+										<c:out value="${comp.discontinued}" />
+									</c:if></td>
+								<td><c:out value="${comp.manufacturerName}" /></td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</div>
+		</form>
 	</section>
 
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<ul class="pagination">
-				<li><a href="?numPage=${page.numPage-1}&maxElement=${page.maxElement}" aria-label="Previous">
-						<span aria-hidden="true">&laquo;</span>
+				<li><a
+					href="?numPage=${page.numPage-1}&maxElement=${page.maxElement}"
+					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 				</a></li>
-				<c:forEach begin="${page.startPage()}"
-					end="${page.endPage()}" varStatus="loop">
-					<li><a href="?numPage=${loop.index}&maxElement=${page.maxElement}">${loop.index + 1}</a></li>
+				<c:forEach begin="${page.startPage()}" end="${page.endPage()}"
+					varStatus="loop">
+					<li><a
+						href="?numPage=${loop.index}&maxElement=${page.maxElement}">${loop.index + 1}</a></li>
 				</c:forEach>
-				<li><a href="?numPage=${page.numPage+1}&maxElement=${page.maxElement}" aria-label="Next">
-						<span aria-hidden="true">&raquo;</span>
+				<li><a
+					href="?numPage=${page.numPage+1}&maxElement=${page.maxElement}"
+					aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 				</a></li>
 			</ul>
 			<div class="btn-group btn-group-sm pull-right" role="group">
 				<button
-					onclick="location.href='<c:url value="/Dashboard?numPage=${page.numPage}&maxElement=10'"/>"
+					onclick="location.href='<c:url value="/Dashboard?numPage=${page.numPage}&maxElement=10"/>'"
 					type="button" class="btn btn-default">10</button>
 				<button
-					onclick="location.href='<c:url value="/Dashboard?numPage=${page.numPage}&maxElement=50'"/>"
+					onclick="location.href='<c:url value="/Dashboard?numPage=${page.numPage}&maxElement=50"/>'"
 					type="button" class="btn btn-default">50</button>
 				<button
-					onclick="location.href='<c:url value="/Dashboard?numPage=${page.numPage}&maxElement=100'"/>"
+					onclick="location.href='<c:url value="/Dashboard?numPage=${page.numPage}&maxElement=100"/>'"
 					type="button" class="btn btn-default">100</button>
 			</div>
 		</div>

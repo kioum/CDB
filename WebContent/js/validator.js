@@ -21,7 +21,7 @@
 		var introDate = new Date(introSplit[0], introSplit[1] - 1, introSplit[2]);
 		var discDate = new Date(discSplit[0], discSplit[1] - 1, discSplit[2]);
 
-		if(introDate.after(discDate)) {
+		if(introDate.getTime() > discDate.getTime()) {
 			introduced.css("border","1px solid #FF0000").parent().append("<p id='dateWarning' style='color:#FF0000'>Invalid date. Introduced date must have before discontinued date</p>");
 			btnSubmit.prop("disabled", true);
 		}else {
@@ -41,7 +41,7 @@
 		var introDate = new Date(introSplit[0], introSplit[1] - 1, introSplit[2]);
 		var discDate = new Date(discSplit[0], discSplit[1] - 1, discSplit[2]);
 
-		if(introDate.after(discDate)) {
+		if(introDate.getTime() > discDate.getTime()) {
 			discontinued.css("border","1px solid #FF0000").parent().append("<p id='dateWarning' style='color:#FF0000'>Invalid date. Discontinued date must have after introduced date</p>");
 			btnSubmit.prop("disabled", true);
 		}else {

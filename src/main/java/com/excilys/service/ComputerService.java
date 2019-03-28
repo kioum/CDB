@@ -6,8 +6,8 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.controller.MainController;
 import com.excilys.dto.ComputerDTO;
+import com.excilys.exception.ComputerException;
 import com.excilys.exception.ValidatorException;
 import com.excilys.mapper.ComputerMapper;
 import com.excilys.model.Computer;
@@ -23,11 +23,14 @@ public class ComputerService {
 	private ComputerService() {}
 
 	public ArrayList<ComputerDTO> getAll() {
-		return ComputerMapper.mapDTO(ComputerDAO.getInstance().getList());
+		return ComputerMapper.mapListDTO(ComputerDAO.getInstance().getList());
 	}
 	
-	public Optional<Computer> findById(Long id) {
-		return ComputerDAO.getInstance().findById(id);
+	public Computer findById(Long id) throws ComputerException {
+		Optional<Computer> optionComputer = ComputerDAO.getInstance().findById(id);
+		if(optionComputer.isPresent())
+			return ComputerDAO.getInstance().findById(id).get();
+		else throw new ComputerException("Computer id : " + id + " not found !");
 	}
 	
 
@@ -39,6 +42,27 @@ public class ComputerService {
 			LOG.error(e.getMessage());
 			throw new ValidatorException(e.getMessage());
 		}	
+	}
+	
+	public void update(Computer comp) throws ValidatorException {
+		try {
+			ComputerValidator.isUpdatable(comp);
+			ComputerDAO.getInstance().update(comp);
+		} catch (ValidatorException e) {
+			LOG.error(e.getMessage());
+			throw new ValidatorException(e.getMessage());
+		}
+	}
+	
+	public void deleteById(Long id) throws ValidatorException {
+		// TODO Auto-generated method stub
+		try {
+			ComputerValidator.isDeletable(id);
+			ComputerDAO.getInstance().deleteById(id);
+		} catch (ValidatorException e) {
+			LOG.error(e.getMessage());
+			throw new ValidatorException(e.getMessage());
+		}
 	}
 	
 	public static ComputerService getInstance() {

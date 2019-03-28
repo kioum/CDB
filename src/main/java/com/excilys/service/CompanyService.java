@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import com.excilys.dto.CompanyDTO;
+import com.excilys.exception.CompanyException;
 import com.excilys.mapper.CompanyMapper;
 import com.excilys.model.Company;
 import com.excilys.persistence.CompanyDAO;
@@ -18,8 +19,11 @@ public class CompanyService {
 		return CompanyMapper.mapDTO(CompanyDAO.getInstance().getList());
 	}
 	
-	public Optional<Company> findById(Long id) {
-		return CompanyDAO.getInstance().findById(id);
+	public Company findById(Long id) throws CompanyException {
+		Optional<Company> optionCompany = CompanyDAO.getInstance().findById(id);
+		if(optionCompany.isPresent())
+			return CompanyDAO.getInstance().findById(id).get();
+		else throw new CompanyException("Company id : " + id + " not found !");
 	}
 	
 	public static CompanyService getInstance() {
