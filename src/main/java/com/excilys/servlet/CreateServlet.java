@@ -43,6 +43,7 @@ public class CreateServlet extends HttpServlet {
 		if (discontinued == null) discontinued = "";
 
 		String companyId = req.getParameter("companyId");
+		System.out.println(Long.valueOf(companyId));
 
 		ComputerDTO compDTO = new ComputerDTO(0L, computerName, introduced, discontinued, Long.valueOf(companyId), "unknown");
 

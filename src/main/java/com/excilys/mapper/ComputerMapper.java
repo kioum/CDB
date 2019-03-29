@@ -71,7 +71,7 @@ public abstract class ComputerMapper {
 	public static ComputerDTO computerToDTO(Computer comp) {
 		String introduced = TimestampConverter.formatToString(comp.getIntroduced(), "yyyy-MM-dd");
 		String discontinued = TimestampConverter.formatToString(comp.getDiscontinued(), "yyyy-MM-dd");
-		
+
 		return new ComputerDTO(comp.getId(), comp.getName(), introduced, 
 				discontinued, comp.getManufacturer().getId(), comp.getManufacturer().getName());
 	}
@@ -85,11 +85,8 @@ public abstract class ComputerMapper {
 		introduced = TimestampConverter.valueOf(computerDTO.getIntroduced());
 		discontinued = TimestampConverter.valueOf(computerDTO.getDiscontinued());
 
-		Company company = null;
-
-		if(computerDTO.getId() > 0L)
-			company = new Company.CompanyBuilder().id(computerDTO.getManufacturerId())
-			.name(computerDTO.getManufacturerName()).build();
+		Company company = new Company.CompanyBuilder().id(computerDTO.getManufacturerId())
+				.name(computerDTO.getManufacturerName()).build();
 
 		Computer computer = new Computer.ComputerBuilder().id(id).name(name).introduced(introduced)
 				.discontinued(discontinued).manufacturer(company).build();

@@ -1,6 +1,7 @@
 package com.excilys.servlet;
 
 import java.io.IOException;
+import java.util.Collections;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -25,28 +26,37 @@ public class DashboardServlet extends HttpServlet {
 		Page<ComputerDTO> pageComputer = new Page<ComputerDTO>(ComputerService.getInstance().getAll(), 10);
 
 		String search = req.getParameter("search");
-		if(search != null) {
+		if(search != null && !search.equals("")) {
 			pageComputer.setList(ComputerService.getInstance().findByName(search));
 		}
 
-		String sort = req.getParameter("sortBy");
-		if(sort != null) {
-			pageComputer.setList(ComputerMapper.sortBy(pageComputer.getList(), sort.toUpperCase()));
+		String sortBy = req.getParameter("sortBy");
+		if(sortBy != null && !sortBy.equals("")) {
+			pageComputer.setList(ComputerMapper.sortBy(pageComputer.getList(), sortBy.toUpperCase()));
+		}
+
+		String asc = req.getParameter("asc");
+		if(asc == null) asc = "true";
+		else if(asc != "") {
+			if(!Boolean.valueOf(asc))
+				Collections.reverse(pageComputer.getList());
 		}
 
 		String maxElement = req.getParameter("maxElement");
-		if(maxElement != null) {
+		if(maxElement != null && !maxElement.equals("")) {
 			pageComputer.setMaxElement(Integer.valueOf(maxElement));
 		}
 
 		String numPage = req.getParameter("numPage");
-		if(numPage != null) {
+		if(numPage != null && !numPage.equals("")) {
 			pageComputer.setNumPage(Integer.valueOf(numPage));
 		}
 
 		req.setAttribute("page", pageComputer);
 		req.setAttribute("search", search);
-		req.setAttribute("sortBy", sort);
+		req.setAttribute("sortBy", sortBy);
+		req.setAttribute("asc", asc);
+		
 		RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/views/dashboard.jsp");
 		rd.forward(req, resp);
 	}

@@ -70,20 +70,18 @@
 										class="fa fa-trash-o fa-lg"></i>
 								</a>
 							</span></th>
-							<th
-								onclick="location.href='<c:url value="/Dashboard?sortBy=name&maxElement=${page.maxElement}"/>'">Computer
+							<th onclick="location.href='<c:url value="/Dashboard?numPage=${page.numPage}&maxElement=${page.maxElement}&search=${search}&sortBy=name&asc=${(sortBy == 'name' && asc != null) ? !Boolean.valueOf(asc):true}"/>'">Computer
 								name</th>
 							<th
-								onclick="location.href='<c:url value="/Dashboard?sortBy=introduced&maxElement=${page.maxElement}"/>'">Introduced
+								onclick="location.href='<c:url value="/Dashboard?numPage=${page.numPage}&maxElement=${page.maxElement}&search=${search}&sortBy=introduced&asc=${(sortBy == 'introduced' && asc != null) ? !Boolean.valueOf(asc):true}"/>'">Introduced
 								date</th>
 							<!-- Table header for Discontinued Date -->
 							<th
-								onclick="location.href='<c:url value="/Dashboard?sortBy=discontinued&maxElement=${page.maxElement}"/>'">Discontinued
+								onclick="location.href='<c:url value="/Dashboard?numPage=${page.numPage}&maxElement=${page.maxElement}&search=${search}&sortBy=discontinued&asc=${(sortBy == 'discontinued' && asc != null) ? !Boolean.valueOf(asc):true}"/>'">Discontinued
 								date</th>
 							<!-- Table header for Company -->
 							<th
-								onclick="location.href='<c:url value="/Dashboard?sortBy=companyid&maxElement=${page.maxElement}"/>'">Company</th>
-
+								onclick="location.href='<c:url value="/Dashboard?numPage=${page.numPage}&maxElement=${page.maxElement}&search=${search}&sortBy=companyid&asc=${(sortBy == 'companyid' && asc != null) ? !Boolean.valueOf(asc):true}"/>'">Company</th>
 						</tr>
 					</thead>
 					<!-- Browse attribute computers -->
@@ -113,28 +111,28 @@
 		<div class="container text-center">
 			<ul class="pagination">
 				<li><a
-					href="?numPage=${page.numPage-1}&maxElement=${page.maxElement}"
+					href="?numPage=${page.numPage-1}&maxElement=${page.maxElement}&search=${search}&sortBy=${sortBy}&asc=${asc}"
 					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 				</a></li>
 				<c:forEach begin="${page.startPage()}" end="${page.endPage()}"
 					varStatus="loop">
 					<li><a
-						href="?numPage=${loop.index}&maxElement=${page.maxElement}">${loop.index + 1}</a></li>
+						href="?numPage=${loop.index}&maxElement=${page.maxElement}&search=${search}&sortBy=${sortBy}&asc=${asc}">${loop.index + 1}</a></li>
 				</c:forEach>
 				<li><a
-					href="?numPage=${page.numPage+1}&maxElement=${page.maxElement}"
+					href="?numPage=${page.numPage+1}&maxElement=${page.maxElement}&search=${search}&sortBy=${sortBy}&asc=${asc}"
 					aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 				</a></li>
 			</ul>
 			<div class="btn-group btn-group-sm pull-right" role="group">
 				<button
-					onclick="location.href='<c:url value="/Dashboard?numPage=${page.numPage}&maxElement=10"/>'"
+					onclick="location.href='<c:url value="/Dashboard?numPage=${page.numPage}&maxElement=10&search=${search}&sortBy=${sortBy}&asc=${asc}"/>'"
 					type="button" class="btn btn-default">10</button>
 				<button
-					onclick="location.href='<c:url value="/Dashboard?numPage=${page.numPage}&maxElement=50"/>'"
+					onclick="location.href='<c:url value="/Dashboard?numPage=${page.numPage}&maxElement=50&search=${search}&sortBy=${sortBy}&asc=${asc}"/>'"
 					type="button" class="btn btn-default">50</button>
 				<button
-					onclick="location.href='<c:url value="/Dashboard?numPage=${page.numPage}&maxElement=100"/>'"
+					onclick="location.href='<c:url value="/Dashboard?numPage=${page.numPage}&maxElement=100&search=${search}&sortBy=${sortBy}&asc=${asc}"/>'"
 					type="button" class="btn btn-default">100</button>
 			</div>
 		</div>
