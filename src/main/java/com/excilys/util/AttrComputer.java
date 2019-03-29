@@ -1,5 +1,5 @@
 package com.excilys.util;
 
 public enum AttrComputer {
-	NAME(), INTRODUCED(), DISCONTINUED(), COMPANYID();
+	NAME(), INTRODUCED(), DISCONTINUED(), COMPANYNAME();
 }

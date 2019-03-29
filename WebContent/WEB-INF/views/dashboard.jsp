@@ -8,11 +8,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
 <link rel="stylesheet" href="<c:url value="/css/bootstrap.min.css"/>"
-	media="screen">
+	media="screen"/>
 <link rel="stylesheet" href="<c:url value="/css/font-awesome.css"/>"
-	media="screen">
+	media="screen"/>
 <link rel="stylesheet" href="<c:url value="/css/main.css"/>"
-	media="screen">
+	media="screen"/>
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
@@ -81,7 +81,7 @@
 								date</th>
 							<!-- Table header for Company -->
 							<th
-								onclick="location.href='<c:url value="/Dashboard?numPage=${page.numPage}&maxElement=${page.maxElement}&search=${search}&sortBy=companyid&asc=${(sortBy == 'companyid' && asc != null) ? !Boolean.valueOf(asc):true}"/>'">Company</th>
+								onclick="location.href='<c:url value="/Dashboard?numPage=${page.numPage}&maxElement=${page.maxElement}&search=${search}&sortBy=companyName&asc=${(sortBy == 'companyName' && asc != null) ? !Boolean.valueOf(asc):true}"/>'">Company</th>
 						</tr>
 					</thead>
 					<!-- Browse attribute computers -->

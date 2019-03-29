@@ -3,7 +3,7 @@ package com.excilys.model;
 public class Company{
 	private Long id;
 	private String name;
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -37,14 +37,14 @@ public class Company{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		
+
 		Company other = (Company) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		
+
 		return true;
 	}
 
@@ -56,7 +56,7 @@ public class Company{
 	public static class CompanyBuilder{
 		private Long id;
 		private String name;
-		
+
 		public CompanyBuilder() {
 			id = null;
 			name = null;
@@ -68,15 +68,17 @@ public class Company{
 		}
 
 		public CompanyBuilder name(String name) {
-			this.name = name;
+			if(name != null)
+				this.name = name;
+			else this.name = "";
 			return this;
 		}
-		
+
 		public Company build() {
 			Company comp = new Company();
 			comp.id = id;
 			comp.name = name;
-			
+
 			return comp;
 		}
 	}

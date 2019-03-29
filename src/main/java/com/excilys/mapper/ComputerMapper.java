@@ -105,8 +105,8 @@ public abstract class ComputerMapper {
 					return arg0.getIntroduced().compareTo(arg1.getIntroduced());
 				case DISCONTINUED:
 					return arg0.getDiscontinued().compareTo(arg1.getDiscontinued());
-				case COMPANYID:
-					return arg0.getManufacturerId().compareTo(arg1.getManufacturerId());
+				case COMPANYNAME:
+					return arg0.getManufacturerName().compareTo(arg1.getManufacturerName());
 				}
 				return 0;
 			}
