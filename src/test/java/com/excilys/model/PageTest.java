@@ -90,10 +90,13 @@ public class PageTest extends TestCase{
 		list.add("Page 3");
 		
 		page.setList(list);
+		page.setNumPage(0);
+		assertEquals(0, page.getNumPage());
+		
 		page.setNumPage(-1);
 		assertEquals(0, page.getNumPage());
 		
 		page.setNumPage(1000);
-		assertEquals(0, page.getNumPage());
+		assertEquals(page.getMaxPage(), page.getNumPage());
 	}
 }
