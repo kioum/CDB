@@ -109,7 +109,6 @@ public class ComputerDAO {
 		return -1;
 	}
 
-
 	public int deleteById(Long id){
 		try (PreparedStatement pstmt = getConnection().prepareStatement(QUERY_DELETEBYID);){
 			pstmt.setLong(1, id);

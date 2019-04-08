@@ -25,6 +25,7 @@ public class MainView {
 		System.out.println("4. Create computer");
 		System.out.println("5. Update computer");
 		System.out.println("6. Delete computer");
+		System.out.println("7. Delete company");
 		System.out.println("0. Exit");
 	}
 

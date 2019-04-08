@@ -10,17 +10,20 @@ import java.util.NoSuchElementException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.exception.ComputerException;
+import com.excilys.exception.ValidatorException;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.model.Page;
-import com.excilys.persistence.ComputerDAO;
+import com.excilys.service.CompanyService;
+import com.excilys.service.ComputerService;
 import com.excilys.ui.MainView;
 import com.excilys.util.Order;
 
 public class MainController {
 	private MainView mw;
-	private ComputerDAO computerDao;
-	private ComputerDAO companyDao;
+	private ComputerService computerService;
+	private CompanyService companyService;
 
 	private static final Logger LOG = LoggerFactory.getLogger(MainController.class);
 
@@ -29,8 +32,8 @@ public class MainController {
 	 */
 	public MainController() {
 		this.mw = new MainView();
-		this.computerDao = ComputerDAO.getInstance();
-		this.companyDao = ComputerDAO.getInstance();
+		this.computerService = ComputerService.getInstance();
+		this.companyService = CompanyService.getInstance();
 		mainMenu();
 	}
 
@@ -47,10 +50,10 @@ public class MainController {
 			LOG.info("Exit - Bye");
 			return;
 		case "LISTCOMPUTER":
-			drawList(computerDao.getList());
+			drawList(computerService.getAll());
 			break;
 		case "LISTCOMPANY":
-			drawList(companyDao.getList());
+			drawList(companyService.getAll());
 			break;
 		case "SHOWCOMPUTER":
 			drawComputer();
@@ -64,6 +67,9 @@ public class MainController {
 		case "DELETECOMPUTER":
 			deleteComputer();
 			break;
+		case "DELETECOMPANY":
+			deleteCompany();
+			break;
 		default:
 			break;
 		}
@@ -72,17 +78,30 @@ public class MainController {
 
 	public void drawComputer() {
 		Long id = Long.valueOf(mw.getInputUser("Enter the id : "));
-		
+
 		try {
-			mw.drawComputerDetails(computerDao.findById(id).get());
-		}catch(NoSuchElementException e) {
+			mw.drawComputerDetails(computerService.findById(id));
+		}catch(NoSuchElementException | ComputerException e) {
 			LOG.error("Computer id =" + id + " doesn't exist");
 		}
 	}
 
 	public void deleteComputer() {
 		Long id = Long.valueOf(mw.getInputUser("Enter the id : "));
-		successLog(computerDao.deleteById(id), "delete");
+		try {
+			computerService.deleteById(id);
+		} catch (ValidatorException e) {
+			LOG.error(e.getMessage());
+		}
+	}
+
+	private void deleteCompany() {
+		Long id = Long.valueOf(mw.getInputUser("Enter the id : "));
+		try {
+			companyService.deleteById(id);
+		} catch (ValidatorException e) {
+			LOG.error(e.getMessage());
+		}
 	}
 
 	/**
@@ -117,9 +136,11 @@ public class MainController {
 		Computer computer = null;
 
 		try {
-			computer = computerDao.findById(id).get();
+			computer = computerService.findById(id);
 		}catch(NoSuchElementException e) {
 			LOG.error("Computer id =" + id + " doesn't exist");
+		} catch (ComputerException e) {
+			LOG.error(e.getMessage());
 		}
 
 		String name = mw.getInputUser("Enter the name or just press enter :");
@@ -140,9 +161,14 @@ public class MainController {
 		String idManu = mw.getInputUser("Enter the id of Manufacturer or just press enter :");
 		if (!idManu.equals("")) {
 			computer.getManufacturer().setId(Long.valueOf(idManu));
-
 		}
-		successLog(computerDao.update(computer), "update");
+
+		try {
+			computerService.update(computer);
+		} catch (ValidatorException e) {
+			// TODO Auto-generated catch block
+			LOG.error(e.getMessage());
+		}
 	}
 
 	/**
@@ -162,8 +188,12 @@ public class MainController {
 		Company company = new Company.CompanyBuilder().id(idManu).build();
 		Computer computer = new Computer.ComputerBuilder().name(name).introduced(introduced)
 				.discontinued(discontinued).manufacturer(company).build();
-		
-		successLog(computerDao.create(computer), "create");
+
+		try {
+			computerService.create(computer);
+		} catch (ValidatorException e) {
+			LOG.info(e.getMessage());
+		}
 	}
 
 	/**
@@ -186,13 +216,5 @@ public class MainController {
 		}
 
 		return new Timestamp(newdate.getTime());
-	}
-
-	public void successLog(int success, String cmd) {
-		if (success == 1) {
-			LOG.info("Your computer is " + cmd + "d !\n");
-		} else {
-			LOG.info("Impossible to " + cmd + " your computer\n");
-		}
 	}
 }

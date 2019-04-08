@@ -66,4 +66,9 @@ public class ComputerDTO {
 		this.manufacturerName = manufacturerName;
 	}
 	
+	@Override
+	public String toString() {
+		return "ComputerDTO [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued="
+				+ discontinued + ", manufacturerId=" + manufacturerId + ", manufacturerName=" + manufacturerName + "]";
+	}
 }

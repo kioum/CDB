@@ -24,4 +24,12 @@ public class CompanyValidator {
 			throw new ValidatorException("Impossible to have a company without or with an empty name");
 
 	}
+	
+	public static void isDeletable(Long id) throws ValidatorException {
+		try {
+			CompanyService.getInstance().findById(id);
+		} catch (CompanyException e) { 
+			throw new ValidatorException("Company with id = " + id + " doesn't exist");
+		}	
+	}
 }
