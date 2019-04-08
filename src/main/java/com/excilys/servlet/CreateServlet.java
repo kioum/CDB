@@ -36,7 +36,7 @@ public class CreateServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		String computerName = req.getParameter("computerName");
-		
+
 		String introduced = req.getParameter("introduced");	
 
 		String discontinued = req.getParameter("discontinued");
@@ -54,7 +54,7 @@ public class CreateServlet extends HttpServlet {
 			doGet(req, resp);
 			return;
 		}
-		
+
 		resp.sendRedirect("Dashboard");
 	}
 }

@@ -49,17 +49,16 @@ public class EditServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+
 		String computerId = req.getParameter("id");
-
 		String computerName = req.getParameter("computerName");
-
 		String introduced = req.getParameter("introduced");
-
 		String discontinued = req.getParameter("discontinued");
-		if (discontinued == null) discontinued = "";
+
+		if (discontinued == null) 
+			discontinued = "";
 
 		String companyId = req.getParameter("companyId");
-
 		ComputerDTO compDTO = new ComputerDTO(Long.valueOf(computerId), computerName, introduced, discontinued, Long.valueOf(companyId), "unknown");
 
 		try {

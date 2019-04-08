@@ -7,7 +7,7 @@ import com.excilys.model.Computer;
 
 public class MainView {
 	private Scanner in;
-	
+
 	public MainView() {
 		this.in = new Scanner(System.in);
 	}

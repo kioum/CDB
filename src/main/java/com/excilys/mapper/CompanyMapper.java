@@ -26,7 +26,7 @@ public abstract class CompanyMapper {
 
 		return companies;
 	}
-	
+
 	public static Company map(ResultSet res) {
 		Company company = new Company();
 

@@ -43,6 +43,7 @@ public class DAOFactory {
 		} catch (SQLException e) {
 			LOG.error(e.getMessage());
 		}
+
 		return null;
 	}
 
@@ -54,6 +55,7 @@ public class DAOFactory {
 				}
 			}
 		}
+
 		return instance;
 	}
 }

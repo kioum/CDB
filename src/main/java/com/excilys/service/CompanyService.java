@@ -17,22 +17,22 @@ import com.excilys.validator.CompanyValidator;
 
 public class CompanyService {
 	private static CompanyService instance;
-	
+
 	private static final Logger LOG = LoggerFactory.getLogger(CompanyService.class);
-	
+
 	private CompanyService() {}
-	
+
 	public ArrayList<CompanyDTO> getAll() {
 		return CompanyMapper.mapDTO(CompanyDAO.getInstance().getList());
 	}
-	
+
 	public Company findById(Long id) throws CompanyException {
 		Optional<Company> optionCompany = CompanyDAO.getInstance().findById(id);
 		if(optionCompany.isPresent())
 			return CompanyDAO.getInstance().findById(id).get();
 		else throw new CompanyException("Company id : " + id + " not found !");
 	}
-	
+
 	public void deleteById(Long id) throws ValidatorException {
 		try {
 			CompanyValidator.isDeletable(id);
@@ -42,15 +42,16 @@ public class CompanyService {
 			throw new ValidatorException(e.getMessage());
 		}
 	}
-	
+
 	public static CompanyService getInstance() {
-        if(instance == null) {
-            synchronized (DAOFactory.class) {
-                if(instance == null) {
-                	instance = new CompanyService();
-                }
-            }
-        }
-        return instance;
+		if(instance == null) {
+			synchronized (DAOFactory.class) {
+				if(instance == null) {
+					instance = new CompanyService();
+				}
+			}
+		}
+		
+		return instance;
 	}
 }

@@ -1,10 +1,6 @@
 package com.excilys.model;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-
-import com.excilys.dto.ComputerDTO;
 
 public class Page<T> {
 	private List<T> list;

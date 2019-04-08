@@ -59,7 +59,7 @@ public class CompanyDAO {
 				PreparedStatement delCompany = getConnection().prepareStatement(QUERY_DELETEBYID);){
 			delComputers.setLong(1, id);
 			delComputers.executeUpdate();
-			
+
 			delCompany.setLong(1, id);
 			return delCompany.executeUpdate();
 		} catch (SQLException e) {
@@ -81,6 +81,7 @@ public class CompanyDAO {
 				}
 			}
 		}
+		
 		return instance;
 	}
 }

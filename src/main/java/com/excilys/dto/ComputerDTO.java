@@ -7,7 +7,7 @@ public class ComputerDTO {
 	private String discontinued;
 	private long manufacturerId;
 	private String manufacturerName;
-	
+
 	public ComputerDTO(long id, String name, String introduced, String discontinued, long manufacturerId, String manufacturerName) {
 		super();
 		this.id = id;
@@ -25,7 +25,7 @@ public class ComputerDTO {
 	public void setManufacturerId(Long manufacturer) {
 		this.manufacturerId = manufacturer;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -65,7 +65,7 @@ public class ComputerDTO {
 	public void setManufacturerName(String manufacturerName) {
 		this.manufacturerName = manufacturerName;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "ComputerDTO [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued="

@@ -17,7 +17,7 @@ import com.excilys.validator.ComputerValidator;
 
 public class ComputerService {
 	private static ComputerService instance;
-	
+
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerService.class);
 
 	private ComputerService() {}
@@ -25,14 +25,14 @@ public class ComputerService {
 	public ArrayList<ComputerDTO> getAll() {
 		return ComputerMapper.mapListDTO(ComputerDAO.getInstance().getList());
 	}
-	
+
 	public Computer findById(Long id) throws ComputerException {
 		Optional<Computer> optionComputer = ComputerDAO.getInstance().findById(id);
 		if(optionComputer.isPresent())
 			return ComputerDAO.getInstance().findById(id).get();
 		else throw new ComputerException("Computer id : " + id + " not found !");
 	}
-	
+
 
 	public void create(Computer comp) throws ValidatorException {
 		try {
@@ -43,7 +43,7 @@ public class ComputerService {
 			throw new ValidatorException(e.getMessage());
 		}	
 	}
-	
+
 	public void update(Computer comp) throws ValidatorException {
 		try {
 			ComputerValidator.isUpdatable(comp);
@@ -53,7 +53,7 @@ public class ComputerService {
 			throw new ValidatorException(e.getMessage());
 		}
 	}
-	
+
 	public void deleteById(Long id) throws ValidatorException {
 		// TODO Auto-generated method stub
 		try {
@@ -64,11 +64,11 @@ public class ComputerService {
 			throw new ValidatorException(e.getMessage());
 		}
 	}
-	
+
 	public ArrayList<ComputerDTO> findByName(String search) {
 		return ComputerMapper.mapListDTO(ComputerDAO.getInstance().findByName(search));
 	}
-	
+
 	public static ComputerService getInstance() {
 		if(instance == null) {
 			synchronized (DAOFactory.class) {

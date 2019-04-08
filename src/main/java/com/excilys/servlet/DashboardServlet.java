@@ -56,7 +56,7 @@ public class DashboardServlet extends HttpServlet {
 		req.setAttribute("search", search);
 		req.setAttribute("sortBy", sortBy);
 		req.setAttribute("asc", asc);
-		
+
 		RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/views/dashboard.jsp");
 		rd.forward(req, resp);
 	}

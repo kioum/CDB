@@ -1,10 +1,10 @@
 package com.excilys.dto;
 
 public class CompanyDTO{
-	private Long id;
+	private long id;
 	private String name;
-	
-	public CompanyDTO(Long id, String name) {
+
+	public CompanyDTO(long id, String name) {
 		this.id = id;
 		this.name = name;
 	}
@@ -13,7 +13,7 @@ public class CompanyDTO{
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -24,7 +24,7 @@ public class CompanyDTO{
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "CompagnyDTO [id=" + id + ", name=" + name + "]";

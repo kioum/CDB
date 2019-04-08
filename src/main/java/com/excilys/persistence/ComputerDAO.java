@@ -14,7 +14,7 @@ import com.excilys.model.Computer;
 
 public class ComputerDAO {
 	private static ComputerDAO instance;
-	
+
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerDAO.class);
 
 	private final static String QUERY_GETLIST = "SELECT c1.id, c1.name, c1.introduced, c1.discontinued, c2.id, c2.name " 
@@ -36,7 +36,7 @@ public class ComputerDAO {
 			+ "WHERE id = ?;";
 	private final static String QUERY_DELETEBYID = "DELETE FROM computer "
 			+ "WHERE id = ?;";
-	
+
 	private ComputerDAO() {}
 
 	public ArrayList<Computer> getList(){
@@ -123,15 +123,15 @@ public class ComputerDAO {
 	private Connection getConnection() {
 		return DAOFactory.getInstance().getConnection();
 	}
-	
+
 	public static ComputerDAO getInstance() {
-        if(instance == null) {
-            synchronized (DAOFactory.class) {
-                if(instance == null) {
-                	instance = new ComputerDAO();
-                }
-            }
-        }
-        return instance;
+		if(instance == null) {
+			synchronized (DAOFactory.class) {
+				if(instance == null) {
+					instance = new ComputerDAO();
+				}
+			}
+		}
+		return instance;
 	}
 }

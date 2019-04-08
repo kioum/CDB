@@ -77,7 +77,7 @@ public class Computer {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		
+
 		Computer other = (Computer) obj;
 		if (id == null) {
 			if (other.id != null)
@@ -132,7 +132,7 @@ public class Computer {
 			this.manufacturer = company;
 			return this;
 		}
-		
+
 		public Computer build() {
 			return new Computer(this);
 		}
