@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.excilys.mapper.ComputerMapper;
 import com.excilys.model.Computer;
+import com.zaxxer.hikari.HikariDataSource;
 
 public class ComputerDAO {
 	private static ComputerDAO instance;
@@ -42,7 +43,8 @@ public class ComputerDAO {
 	public ArrayList<Computer> getList(){
 		ArrayList<Computer> computers = new ArrayList<Computer>();
 
-		try (PreparedStatement pstmt = getConnection().prepareStatement(QUERY_GETLIST);){
+		try (Connection conn = getConnection().getConnection();
+				PreparedStatement pstmt = conn.prepareStatement(QUERY_GETLIST);){
 			computers = ComputerMapper.mapList(pstmt.executeQuery());
 		} catch (SQLException e) {
 			LOG.debug(e.getMessage());
@@ -54,7 +56,8 @@ public class ComputerDAO {
 	public Optional<Computer> findById(Long id){
 		Computer computer = null;
 
-		try (PreparedStatement pstmt = getConnection().prepareStatement(QUERY_FINDBYID);){
+		try (Connection conn = getConnection().getConnection();
+				PreparedStatement pstmt = conn.prepareStatement(QUERY_FINDBYID);){
 			pstmt.setLong(1, id);
 			computer = ComputerMapper.map(pstmt.executeQuery());
 		} catch (SQLException e) {
@@ -67,7 +70,8 @@ public class ComputerDAO {
 	public ArrayList<Computer> findByName(String name){
 		ArrayList<Computer> computer = new ArrayList<Computer>();
 
-		try (PreparedStatement pstmt = getConnection().prepareStatement(QUERY_FINDBYNAME);){
+		try (Connection conn = getConnection().getConnection();
+				PreparedStatement pstmt = conn.prepareStatement(QUERY_FINDBYNAME);){
 			pstmt.setString(1, "%" + name + "%");
 			pstmt.setString(2, "%" + name + "%");
 			computer = ComputerMapper.mapList(pstmt.executeQuery());
@@ -79,7 +83,8 @@ public class ComputerDAO {
 	}
 
 	public int create(Computer comp){
-		try (PreparedStatement pstmt = getConnection().prepareStatement(QUERY_CREATE);){
+		try (Connection conn = getConnection().getConnection();
+				PreparedStatement pstmt = conn.prepareStatement(QUERY_CREATE);){
 			pstmt.setString(1, comp.getName());
 			pstmt.setTimestamp(2, comp.getIntroduced());
 			pstmt.setTimestamp(3, comp.getDiscontinued());
@@ -94,7 +99,8 @@ public class ComputerDAO {
 	}
 
 	public int update(Computer comp) {
-		try(PreparedStatement pstmt = getConnection().prepareStatement(QUERY_UPDATEBYID);){
+		try(Connection conn = getConnection().getConnection();
+				PreparedStatement pstmt = conn.prepareStatement(QUERY_UPDATEBYID);){
 			pstmt.setString(1, comp.getName());
 			pstmt.setTimestamp(2, comp.getIntroduced());
 			pstmt.setTimestamp(3, comp.getDiscontinued());
@@ -110,7 +116,8 @@ public class ComputerDAO {
 	}
 
 	public int deleteById(Long id){
-		try (PreparedStatement pstmt = getConnection().prepareStatement(QUERY_DELETEBYID);){
+		try (Connection conn = getConnection().getConnection();
+				PreparedStatement pstmt = conn.prepareStatement(QUERY_DELETEBYID);){
 			pstmt.setLong(1, id);
 			return pstmt.executeUpdate();
 		} catch (SQLException e) {
@@ -120,7 +127,7 @@ public class ComputerDAO {
 		return -1;
 	}
 
-	private Connection getConnection() {
+	private HikariDataSource getConnection() {
 		return DAOFactory.getInstance().getConnection();
 	}
 

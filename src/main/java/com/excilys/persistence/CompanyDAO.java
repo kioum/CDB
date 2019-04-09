@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.excilys.mapper.CompanyMapper;
 import com.excilys.model.Company;
+import com.zaxxer.hikari.HikariDataSource;
 
 public class CompanyDAO {
 	private static CompanyDAO instance;
@@ -32,7 +33,8 @@ public class CompanyDAO {
 	public ArrayList<Company> getList(){
 		ArrayList<Company> companies = new ArrayList<Company>();
 
-		try (PreparedStatement pstmt = getConnection().prepareStatement(QUERY_GETLIST);){
+		try (Connection conn = getConnection().getConnection();
+				PreparedStatement pstmt = conn.prepareStatement(QUERY_GETLIST);){
 			companies = CompanyMapper.mapList(pstmt.executeQuery());
 		} catch (SQLException e) {
 			LOG.error(e.getMessage());
@@ -44,7 +46,8 @@ public class CompanyDAO {
 	public Optional<Company> findById(long id){
 		Company company = null;
 
-		try (PreparedStatement pstmt = getConnection().prepareStatement(QUERY_FINDBYID);){
+		try (Connection conn = getConnection().getConnection();
+				PreparedStatement pstmt = conn.prepareStatement(QUERY_FINDBYID);){
 			pstmt.setLong(1, id);
 			company = CompanyMapper.map(pstmt.executeQuery());
 		} catch (SQLException e) {
@@ -55,8 +58,9 @@ public class CompanyDAO {
 	}
 
 	public int deleteById(Long id){
-		try (PreparedStatement delComputers = getConnection().prepareStatement(QUERY_DELETECOMPUTERS);
-				PreparedStatement delCompany = getConnection().prepareStatement(QUERY_DELETEBYID);){
+		try (Connection conn = getConnection().getConnection();
+				PreparedStatement delComputers = conn.prepareStatement(QUERY_DELETECOMPUTERS);
+				PreparedStatement delCompany = conn.prepareStatement(QUERY_DELETEBYID);){
 			delComputers.setLong(1, id);
 			delComputers.executeUpdate();
 
@@ -69,7 +73,7 @@ public class CompanyDAO {
 		return -1;
 	}
 
-	private Connection getConnection() {
+	private HikariDataSource getConnection() {
 		return DAOFactory.getInstance().getConnection();
 	}
 
@@ -81,7 +85,7 @@ public class CompanyDAO {
 				}
 			}
 		}
-		
+
 		return instance;
 	}
 }

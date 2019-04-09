@@ -3,8 +3,6 @@ package com.excilys.persistence;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Properties;
 
 import org.slf4j.Logger;
@@ -37,14 +35,8 @@ public class DAOFactory {
 		dataSource = new HikariDataSource(hikariCfg);
 	}
 
-	public Connection getConnection() {		
-		try {
-			return dataSource.getConnection();
-		} catch (SQLException e) {
-			LOG.error(e.getMessage());
-		}
-
-		return null;
+	public HikariDataSource getConnection() {		
+		return dataSource;
 	}
 
 	public static DAOFactory getInstance() {
