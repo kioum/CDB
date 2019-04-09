@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.excilys.computerdatabase.AppConfig;
 import com.excilys.dto.CompanyDTO;
 import com.excilys.dto.ComputerDTO;
 import com.excilys.exception.TimestampException;
@@ -20,8 +21,14 @@ import com.excilys.service.ComputerService;
 
 @WebServlet("/CreateServlet")
 public class CreateServlet extends HttpServlet {
+	
+	private ComputerService computerService;
 
 	private static final long serialVersionUID = 1L;
+	
+	public CreateServlet() {
+		computerService = AppConfig.context.getBean(ComputerService.class);
+	}
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -48,7 +55,7 @@ public class CreateServlet extends HttpServlet {
 		ComputerDTO compDTO = new ComputerDTO(0L, computerName, introduced, discontinued, Long.valueOf(companyId), "unknown");
 
 		try {
-			ComputerService.getInstance().create(ComputerMapper.dtoToComputer(compDTO));
+			computerService.create(ComputerMapper.dtoToComputer(compDTO));
 		} catch (ValidatorException | TimestampException e) {
 			req.setAttribute("exception", e.getMessage());
 			doGet(req, resp);

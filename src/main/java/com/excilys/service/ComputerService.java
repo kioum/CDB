@@ -12,7 +12,6 @@ import com.excilys.exception.ValidatorException;
 import com.excilys.mapper.ComputerMapper;
 import com.excilys.model.Computer;
 import com.excilys.persistence.ComputerDAO;
-import com.excilys.persistence.DAOFactory;
 import com.excilys.validator.ComputerValidator;
 
 public class ComputerService {
@@ -20,7 +19,7 @@ public class ComputerService {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerService.class);
 
-	private ComputerService() {}
+	public ComputerService() {}
 
 	public ArrayList<ComputerDTO> getAll() {
 		return ComputerMapper.mapListDTO(ComputerDAO.getInstance().getList());
@@ -32,7 +31,6 @@ public class ComputerService {
 			return ComputerDAO.getInstance().findById(id).get();
 		else throw new ComputerException("Computer id : " + id + " not found !");
 	}
-
 
 	public void create(Computer comp) throws ValidatorException {
 		try {
@@ -71,7 +69,7 @@ public class ComputerService {
 
 	public static ComputerService getInstance() {
 		if(instance == null) {
-			synchronized (DAOFactory.class) {
+			synchronized (ComputerService.class) {
 				if(instance == null) {
 					instance = new ComputerService();
 				}

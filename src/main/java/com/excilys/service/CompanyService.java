@@ -12,7 +12,6 @@ import com.excilys.exception.ValidatorException;
 import com.excilys.mapper.CompanyMapper;
 import com.excilys.model.Company;
 import com.excilys.persistence.CompanyDAO;
-import com.excilys.persistence.DAOFactory;
 import com.excilys.validator.CompanyValidator;
 
 public class CompanyService {
@@ -45,7 +44,7 @@ public class CompanyService {
 
 	public static CompanyService getInstance() {
 		if(instance == null) {
-			synchronized (DAOFactory.class) {
+			synchronized (CompanyService.class) {
 				if(instance == null) {
 					instance = new CompanyService();
 				}

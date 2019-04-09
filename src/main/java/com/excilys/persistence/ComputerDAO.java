@@ -133,7 +133,7 @@ public class ComputerDAO {
 
 	public static ComputerDAO getInstance() {
 		if(instance == null) {
-			synchronized (DAOFactory.class) {
+			synchronized (ComputerDAO.class) {
 				if(instance == null) {
 					instance = new ComputerDAO();
 				}

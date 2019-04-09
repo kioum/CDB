@@ -79,7 +79,7 @@ public class CompanyDAO {
 
 	public static CompanyDAO getInstance() {
 		if(instance == null) {
-			synchronized (DAOFactory.class) {
+			synchronized (CompanyDAO.class) {
 				if(instance == null) {
 					instance = new CompanyDAO();
 				}
