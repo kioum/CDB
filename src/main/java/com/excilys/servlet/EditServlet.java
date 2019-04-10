@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.excilys.computerdatabase.AppConfig;
 import com.excilys.dto.CompanyDTO;
 import com.excilys.dto.ComputerDTO;
 import com.excilys.exception.ComputerException;
@@ -24,17 +25,24 @@ import com.excilys.service.ComputerService;
 public class EditServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -1342895835008890400L;
-
+	private ComputerService computerService;
+	private CompanyService companyService;
+	
+	public EditServlet() {
+		computerService = AppConfig.context.getBean(ComputerService.class);
+		companyService = AppConfig.context.getBean(CompanyService.class);
+	}
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		ArrayList<CompanyDTO> companies = CompanyService.getInstance().getAll();
+		ArrayList<CompanyDTO> companies = companyService.getAll();
 
 		req.setAttribute("companies", companies);
 
 		String id = req.getParameter("id");
 		if(id != null) {
 			try {
-				Computer comp = ComputerService.getInstance().findById(Long.valueOf(id));
+				Computer comp = computerService.findById(Long.valueOf(id));
 				req.setAttribute("computer", ComputerMapper.computerToDTO(comp));
 			}catch (ComputerException e) {
 				resp.sendRedirect("err/404.html");
@@ -62,7 +70,7 @@ public class EditServlet extends HttpServlet {
 		ComputerDTO compDTO = new ComputerDTO(Long.valueOf(computerId), computerName, introduced, discontinued, Long.valueOf(companyId), "unknown");
 
 		try {
-			ComputerService.getInstance().update(ComputerMapper.dtoToComputer(compDTO));
+			computerService.update(ComputerMapper.dtoToComputer(compDTO));
 		} catch (ValidatorException | TimestampException e) {
 			req.setAttribute("exception", e.getMessage());
 			doGet(req, resp);

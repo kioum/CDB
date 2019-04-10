@@ -5,6 +5,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
+import com.excilys.persistence.CompanyDAO;
+import com.excilys.persistence.ComputerDAO;
+import com.excilys.service.CompanyService;
 import com.excilys.service.ComputerService;
 
 @Configuration
@@ -14,6 +17,21 @@ public class AppConfig {
 
 	@Bean
 	public ComputerService computerService() {
-		return new ComputerService();
+		return new ComputerService(computerDAO(), companyService());
+	}
+	
+	@Bean
+	public CompanyService companyService() {
+		return new CompanyService(companyDAO());
+	}
+	
+	@Bean
+	public ComputerDAO computerDAO() {
+		return new ComputerDAO();
+	}
+	
+	@Bean
+	public CompanyDAO companyDAO() {
+		return new CompanyDAO();
 	}
 }

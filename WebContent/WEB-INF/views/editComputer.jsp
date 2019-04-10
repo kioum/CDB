@@ -72,7 +72,7 @@
 						</c:if>
 						<div class="actions pull-right">
 							<input type="submit" value="Edit" class="btn btn-primary">
-							or <a href="/Dashboard" class="btn btn-default">Cancel</a>
+							or <a href="Dashboard" class="btn btn-default">Cancel</a>
 						</div>
 					</form>
 				</div>

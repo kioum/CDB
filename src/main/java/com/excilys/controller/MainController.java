@@ -10,6 +10,7 @@ import java.util.NoSuchElementException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.computerdatabase.AppConfig;
 import com.excilys.exception.ComputerException;
 import com.excilys.exception.ValidatorException;
 import com.excilys.model.Company;
@@ -22,6 +23,7 @@ import com.excilys.util.Order;
 
 public class MainController {
 	private MainView mw;
+	
 	private ComputerService computerService;
 	private CompanyService companyService;
 
@@ -32,8 +34,8 @@ public class MainController {
 	 */
 	public MainController() {
 		this.mw = new MainView();
-		this.computerService = ComputerService.getInstance();
-		this.companyService = CompanyService.getInstance();
+		this.computerService = AppConfig.context.getBean(ComputerService.class);
+		this.companyService = AppConfig.context.getBean(CompanyService.class);
 		mainMenu();
 	}
 

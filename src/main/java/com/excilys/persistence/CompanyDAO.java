@@ -14,8 +14,6 @@ import com.excilys.model.Company;
 import com.zaxxer.hikari.HikariDataSource;
 
 public class CompanyDAO {
-	private static CompanyDAO instance;
-
 	private static final Logger LOG = LoggerFactory.getLogger(CompanyDAO.class);
 
 	private final static String QUERY_GETLIST = "SELECT id, name "
@@ -28,7 +26,7 @@ public class CompanyDAO {
 	private final static String QUERY_DELETEBYID = "DELETE FROM company "
 			+ "WHERE id = ?;";
 
-	private CompanyDAO() {}
+	public CompanyDAO() {}
 
 	public ArrayList<Company> getList(){
 		ArrayList<Company> companies = new ArrayList<Company>();
@@ -75,17 +73,5 @@ public class CompanyDAO {
 
 	private HikariDataSource getConnection() {
 		return DAOFactory.getInstance().getConnection();
-	}
-
-	public static CompanyDAO getInstance() {
-		if(instance == null) {
-			synchronized (CompanyDAO.class) {
-				if(instance == null) {
-					instance = new CompanyDAO();
-				}
-			}
-		}
-
-		return instance;
 	}
 }

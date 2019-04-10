@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.excilys.computerdatabase.AppConfig;
 import com.excilys.dto.ComputerDTO;
 import com.excilys.exception.ValidatorException;
 import com.excilys.mapper.ComputerMapper;
@@ -20,14 +21,19 @@ import com.excilys.service.ComputerService;
 public class DashboardServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -922693522541784648L;
+	private ComputerService computerService;
+	
+	public DashboardServlet() {
+		computerService = AppConfig.context.getBean(ComputerService.class);
+	}
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		Page<ComputerDTO> pageComputer = new Page<ComputerDTO>(ComputerService.getInstance().getAll(), 10);
+		Page<ComputerDTO> pageComputer = new Page<ComputerDTO>(computerService.getAll(), 10);
 
 		String search = req.getParameter("search");
 		if(search != null && !search.equals("")) {
-			pageComputer.setList(ComputerService.getInstance().findByName(search));
+			pageComputer.setList(computerService.findByName(search));
 		}
 
 		String sortBy = req.getParameter("sortBy");
@@ -69,7 +75,7 @@ public class DashboardServlet extends HttpServlet {
 		if(listComputers != null)
 			for(String id: listComputers)
 				try {
-					ComputerService.getInstance().deleteById(Long.valueOf(id));
+					computerService.deleteById(Long.valueOf(id));
 				} catch (ValidatorException e) {
 					req.setAttribute("exception", e.getMessage());
 				}

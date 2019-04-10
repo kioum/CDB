@@ -1,9 +1,7 @@
 package com.excilys.validator;
 
-import com.excilys.exception.ComputerException;
 import com.excilys.exception.ValidatorException;
 import com.excilys.model.Computer;
-import com.excilys.service.ComputerService;
 
 public class ComputerValidator {
 
@@ -14,7 +12,7 @@ public class ComputerValidator {
 		if(comp.getId() < 0L) 
 			throw new ValidatorException("Impossible to create a computer with id negative");
 
-		if(comp.getName() == null || comp.getName().equals("")) 
+		if("".equals(comp.getName())) 
 			throw new ValidatorException("Impossible to create a computer without or with an empty name");
 
 		if(comp.getIntroduced() == null && comp.getDiscontinued() != null) 
@@ -25,34 +23,7 @@ public class ComputerValidator {
 			if(comp.getIntroduced().after(comp.getDiscontinued())) 
 				throw new ValidatorException("Impossible to create a computer with a Introduced Date"
 						+ " after the Discontinued Date");
-
-		CompanyValidator.exist(comp.getManufacturer());
-	}
-
-	public static void isCreatable(Computer comp) throws ValidatorException {
-		isWellFormed(comp);
-
-		try {
-			ComputerService.getInstance().findById(comp.getId());
-			throw new ValidatorException("Computer with id = " + comp.getId() + " already exist");
-		} catch (ComputerException e) { }	
-	}
-
-	public static void isUpdatable(Computer comp) throws ValidatorException {
-		isWellFormed(comp);
-
-		try {
-			ComputerService.getInstance().findById(comp.getId());
-		} catch (ComputerException e) { 
-			throw new ValidatorException("Computer with id = " + comp.getId() + " doesn't exist");
-		}	
-	}
-
-	public static void isDeletable(Long id) throws ValidatorException {
-		try {
-			ComputerService.getInstance().findById(id);
-		} catch (ComputerException e) { 
-			throw new ValidatorException("Computer with id = " + id + " doesn't exist");
-		}	
+		
+		CompanyValidator.isWellFormed(comp.getManufacturer());
 	}
 }

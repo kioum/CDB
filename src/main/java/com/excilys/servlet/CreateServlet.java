@@ -23,16 +23,18 @@ import com.excilys.service.ComputerService;
 public class CreateServlet extends HttpServlet {
 	
 	private ComputerService computerService;
+	private CompanyService companyService;
 
 	private static final long serialVersionUID = 1L;
 	
 	public CreateServlet() {
 		computerService = AppConfig.context.getBean(ComputerService.class);
+		companyService = AppConfig.context.getBean(CompanyService.class);
 	}
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		ArrayList<CompanyDTO> companies = CompanyService.getInstance().getAll();
+		ArrayList<CompanyDTO> companies = companyService.getAll();
 
 		req.setAttribute("companies", companies);
 		RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/views/addComputer.jsp");

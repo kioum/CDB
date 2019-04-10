@@ -12,45 +12,34 @@ import com.excilys.exception.ValidatorException;
 import com.excilys.mapper.CompanyMapper;
 import com.excilys.model.Company;
 import com.excilys.persistence.CompanyDAO;
-import com.excilys.validator.CompanyValidator;
 
 public class CompanyService {
-	private static CompanyService instance;
+	private CompanyDAO companyDAO;
 
 	private static final Logger LOG = LoggerFactory.getLogger(CompanyService.class);
 
-	private CompanyService() {}
+	public CompanyService(CompanyDAO companyDAO) {
+		this.companyDAO = companyDAO;
+	}
 
 	public ArrayList<CompanyDTO> getAll() {
-		return CompanyMapper.mapDTO(CompanyDAO.getInstance().getList());
+		return CompanyMapper.mapDTO(companyDAO.getList());
 	}
 
 	public Company findById(Long id) throws CompanyException {
-		Optional<Company> optionCompany = CompanyDAO.getInstance().findById(id);
+		Optional<Company> optionCompany = companyDAO.findById(id);
 		if(optionCompany.isPresent())
-			return CompanyDAO.getInstance().findById(id).get();
+			return companyDAO.findById(id).get();
 		else throw new CompanyException("Company id : " + id + " not found !");
 	}
 
 	public void deleteById(Long id) throws ValidatorException {
 		try {
-			CompanyValidator.isDeletable(id);
-			CompanyDAO.getInstance().deleteById(id);
-		} catch (ValidatorException e) {
+			findById(id);
+		} catch (CompanyException e) { 
 			LOG.error(e.getMessage());
-			throw new ValidatorException(e.getMessage());
-		}
-	}
-
-	public static CompanyService getInstance() {
-		if(instance == null) {
-			synchronized (CompanyService.class) {
-				if(instance == null) {
-					instance = new CompanyService();
-				}
-			}
-		}
-		
-		return instance;
+			throw new ValidatorException("Company with id = " + id + " doesn't exist");
+		}	
+		companyDAO.deleteById(id);
 	}
 }

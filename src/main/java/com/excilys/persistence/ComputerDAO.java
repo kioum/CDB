@@ -14,8 +14,6 @@ import com.excilys.model.Computer;
 import com.zaxxer.hikari.HikariDataSource;
 
 public class ComputerDAO {
-	private static ComputerDAO instance;
-
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerDAO.class);
 
 	private final static String QUERY_GETLIST = "SELECT c1.id, c1.name, c1.introduced, c1.discontinued, c2.id, c2.name " 
@@ -38,7 +36,7 @@ public class ComputerDAO {
 	private final static String QUERY_DELETEBYID = "DELETE FROM computer "
 			+ "WHERE id = ?;";
 
-	private ComputerDAO() {}
+	public ComputerDAO() {}
 
 	public ArrayList<Computer> getList(){
 		ArrayList<Computer> computers = new ArrayList<Computer>();
@@ -129,16 +127,5 @@ public class ComputerDAO {
 
 	private HikariDataSource getConnection() {
 		return DAOFactory.getInstance().getConnection();
-	}
-
-	public static ComputerDAO getInstance() {
-		if(instance == null) {
-			synchronized (ComputerDAO.class) {
-				if(instance == null) {
-					instance = new ComputerDAO();
-				}
-			}
-		}
-		return instance;
 	}
 }
