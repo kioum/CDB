@@ -25,13 +25,17 @@ public class CompanyDAO {
 			+ "WHERE company_id = ?;";
 	private final static String QUERY_DELETEBYID = "DELETE FROM company "
 			+ "WHERE id = ?;";
+	
+	private HikariDataSource dataSource;
 
-	public CompanyDAO() {}
+	public CompanyDAO(HikariDataSource dataSource) {
+		this.dataSource = dataSource;
+	}
 
 	public ArrayList<Company> getList(){
 		ArrayList<Company> companies = new ArrayList<Company>();
 
-		try (Connection conn = getConnection().getConnection();
+		try (Connection conn = dataSource.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement(QUERY_GETLIST);){
 			companies = CompanyMapper.mapList(pstmt.executeQuery());
 		} catch (SQLException e) {
@@ -44,7 +48,7 @@ public class CompanyDAO {
 	public Optional<Company> findById(long id){
 		Company company = null;
 
-		try (Connection conn = getConnection().getConnection();
+		try (Connection conn = dataSource.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement(QUERY_FINDBYID);){
 			pstmt.setLong(1, id);
 			company = CompanyMapper.map(pstmt.executeQuery());
@@ -56,7 +60,7 @@ public class CompanyDAO {
 	}
 
 	public int deleteById(Long id){
-		try (Connection conn = getConnection().getConnection();
+		try (Connection conn = dataSource.getConnection();
 				PreparedStatement delComputers = conn.prepareStatement(QUERY_DELETECOMPUTERS);
 				PreparedStatement delCompany = conn.prepareStatement(QUERY_DELETEBYID);){
 			delComputers.setLong(1, id);
@@ -69,9 +73,5 @@ public class CompanyDAO {
 		}
 
 		return -1;
-	}
-
-	private HikariDataSource getConnection() {
-		return DAOFactory.getInstance().getConnection();
 	}
 }

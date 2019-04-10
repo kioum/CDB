@@ -25,6 +25,7 @@ import com.excilys.service.ComputerService;
 public class EditServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -1342895835008890400L;
+	private static final String VIEW_EDIT = "WEB-INF/views/editComputer.jsp";
 	private ComputerService computerService;
 	private CompanyService companyService;
 	
@@ -50,7 +51,7 @@ public class EditServlet extends HttpServlet {
 			}
 		}
 
-		RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/views/editComputer.jsp");
+		RequestDispatcher rd = req.getRequestDispatcher(VIEW_EDIT);
 		rd.forward(req, resp);
 	}
 

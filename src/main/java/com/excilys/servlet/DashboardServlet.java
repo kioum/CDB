@@ -21,6 +21,7 @@ import com.excilys.service.ComputerService;
 public class DashboardServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -922693522541784648L;
+	private static final String VIEW_DASHBOARD = "WEB-INF/views/dashboard.jsp";
 	private ComputerService computerService;
 	
 	public DashboardServlet() {
@@ -63,7 +64,7 @@ public class DashboardServlet extends HttpServlet {
 		req.setAttribute("sortBy", sortBy);
 		req.setAttribute("asc", asc);
 
-		RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/views/dashboard.jsp");
+		RequestDispatcher rd = req.getRequestDispatcher(VIEW_DASHBOARD);
 		rd.forward(req, resp);
 	}
 

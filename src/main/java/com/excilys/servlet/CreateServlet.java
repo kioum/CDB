@@ -26,6 +26,7 @@ public class CreateServlet extends HttpServlet {
 	private CompanyService companyService;
 
 	private static final long serialVersionUID = 1L;
+	private static final String VIEW_ADDCOMPUTER = "WEB-INF/views/addComputer.jsp";
 	
 	public CreateServlet() {
 		computerService = AppConfig.context.getBean(ComputerService.class);
@@ -37,7 +38,7 @@ public class CreateServlet extends HttpServlet {
 		ArrayList<CompanyDTO> companies = companyService.getAll();
 
 		req.setAttribute("companies", companies);
-		RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/views/addComputer.jsp");
+		RequestDispatcher rd = req.getRequestDispatcher(VIEW_ADDCOMPUTER);
 		rd.forward(req, resp);
 	}
 

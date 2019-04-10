@@ -35,13 +35,17 @@ public class ComputerDAO {
 			+ "WHERE id = ?;";
 	private final static String QUERY_DELETEBYID = "DELETE FROM computer "
 			+ "WHERE id = ?;";
+	
+	private HikariDataSource dataSource;
 
-	public ComputerDAO() {}
+	public ComputerDAO(HikariDataSource dataSource) {
+		this.dataSource = dataSource;
+	}
 
 	public ArrayList<Computer> getList(){
 		ArrayList<Computer> computers = new ArrayList<Computer>();
 
-		try (Connection conn = getConnection().getConnection();
+		try (Connection conn = dataSource.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement(QUERY_GETLIST);){
 			computers = ComputerMapper.mapList(pstmt.executeQuery());
 		} catch (SQLException e) {
@@ -54,7 +58,7 @@ public class ComputerDAO {
 	public Optional<Computer> findById(Long id){
 		Computer computer = null;
 
-		try (Connection conn = getConnection().getConnection();
+		try (Connection conn = dataSource.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement(QUERY_FINDBYID);){
 			pstmt.setLong(1, id);
 			computer = ComputerMapper.map(pstmt.executeQuery());
@@ -68,7 +72,7 @@ public class ComputerDAO {
 	public ArrayList<Computer> findByName(String name){
 		ArrayList<Computer> computer = new ArrayList<Computer>();
 
-		try (Connection conn = getConnection().getConnection();
+		try (Connection conn = dataSource.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement(QUERY_FINDBYNAME);){
 			pstmt.setString(1, "%" + name + "%");
 			pstmt.setString(2, "%" + name + "%");
@@ -81,7 +85,7 @@ public class ComputerDAO {
 	}
 
 	public int create(Computer comp){
-		try (Connection conn = getConnection().getConnection();
+		try (Connection conn = dataSource.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement(QUERY_CREATE);){
 			pstmt.setString(1, comp.getName());
 			pstmt.setTimestamp(2, comp.getIntroduced());
@@ -97,7 +101,7 @@ public class ComputerDAO {
 	}
 
 	public int update(Computer comp) {
-		try(Connection conn = getConnection().getConnection();
+		try(Connection conn = dataSource.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement(QUERY_UPDATEBYID);){
 			pstmt.setString(1, comp.getName());
 			pstmt.setTimestamp(2, comp.getIntroduced());
@@ -114,7 +118,7 @@ public class ComputerDAO {
 	}
 
 	public int deleteById(Long id){
-		try (Connection conn = getConnection().getConnection();
+		try (Connection conn = dataSource.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement(QUERY_DELETEBYID);){
 			pstmt.setLong(1, id);
 			return pstmt.executeUpdate();
@@ -123,9 +127,5 @@ public class ComputerDAO {
 		}
 
 		return -1;
-	}
-
-	private HikariDataSource getConnection() {
-		return DAOFactory.getInstance().getConnection();
 	}
 }

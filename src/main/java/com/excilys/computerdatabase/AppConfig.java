@@ -9,29 +9,44 @@ import com.excilys.persistence.CompanyDAO;
 import com.excilys.persistence.ComputerDAO;
 import com.excilys.service.CompanyService;
 import com.excilys.service.ComputerService;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
 @ComponentScan({"com.excilys"})
 public class AppConfig {
 	public static AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 
+	private static final String FICHIER_PROPERTIES = "/home/excilys/eclipse-workspace/computer-database/"
+			+ "WebContent/WEB-INF/dao.properties";
+	
+	@Bean
+	public HikariConfig HikariConfig() {
+		return new HikariConfig(FICHIER_PROPERTIES);
+	}
+
+	@Bean
+	public HikariDataSource hikariDataSource() {
+		return new HikariDataSource(HikariConfig());
+	}
+
 	@Bean
 	public ComputerService computerService() {
 		return new ComputerService(computerDAO(), companyService());
 	}
-	
+
 	@Bean
 	public CompanyService companyService() {
 		return new CompanyService(companyDAO());
 	}
-	
+
 	@Bean
 	public ComputerDAO computerDAO() {
-		return new ComputerDAO();
+		return new ComputerDAO(hikariDataSource());
 	}
-	
+
 	@Bean
 	public CompanyDAO companyDAO() {
-		return new CompanyDAO();
+		return new CompanyDAO(hikariDataSource());
 	}
 }
