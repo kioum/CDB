@@ -1,6 +1,6 @@
 ### Eclipse ###
 
-dao.properties
+*.properties
 
 .metadata
 bin/
