@@ -11,6 +11,7 @@ public class TimestampConverter {
 		if(timestamp == null) return "";
 		
 		String timeToString = "";
+
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
 		
 		Date date = new Date(timestamp.getTime());

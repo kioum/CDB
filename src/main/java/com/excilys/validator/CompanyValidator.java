@@ -9,8 +9,8 @@ public class CompanyValidator {
 		if(comp == null) 
 			throw new ValidatorException("Impossible to have a company with null");
 
-		if(comp.getId() < 0L) 
-			throw new ValidatorException("Impossible to have a company with id negative");
+		if(comp.getId() != null && comp.getId() < 0L) 
+			throw new ValidatorException("Impossible to have a company with id negative or null");
 		
 		if("".equals(comp.getName()))
 			throw new ValidatorException("Impossible to have a company without or with an empty name");

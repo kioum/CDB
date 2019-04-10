@@ -16,7 +16,6 @@ import com.zaxxer.hikari.HikariDataSource;
 @ComponentScan({"com.excilys"})
 public class AppConfig {
 	public static AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-
 	private static final String FICHIER_PROPERTIES = "/home/excilys/eclipse-workspace/computer-database/"
 			+ "WebContent/WEB-INF/dao.properties";
 	

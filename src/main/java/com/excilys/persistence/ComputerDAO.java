@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.TimeZone;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +40,8 @@ public class ComputerDAO {
 	private HikariDataSource dataSource;
 
 	public ComputerDAO(HikariDataSource dataSource) {
+		System.setProperty("user.timezone", "UTC");
+		TimeZone.setDefault(null);
 		this.dataSource = dataSource;
 	}
 
