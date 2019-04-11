@@ -4,13 +4,16 @@ import java.io.IOException;
 import java.util.Collections;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.computerdatabase.AppConfig;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
 import com.excilys.dto.ComputerDTO;
 import com.excilys.exception.ValidatorException;
 import com.excilys.mapper.ComputerMapper;
@@ -22,11 +25,18 @@ public class DashboardServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -922693522541784648L;
 	private static final String VIEW_DASHBOARD = "WEB-INF/views/dashboard.jsp";
+	
+	@Autowired
 	private ComputerService computerService;
 	
-	public DashboardServlet() {
-		computerService = AppConfig.context.getBean(ComputerService.class);
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		super.init(config);
+
+		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,
+				config.getServletContext());
 	}
+	
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

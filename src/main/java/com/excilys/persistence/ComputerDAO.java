@@ -10,14 +10,12 @@ import java.util.TimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 
 import com.excilys.mapper.ComputerMapper;
 import com.excilys.model.Computer;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Component
-@Repository
 public class ComputerDAO {
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerDAO.class);
 

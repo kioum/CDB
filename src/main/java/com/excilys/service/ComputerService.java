@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.excilys.dto.ComputerDTO;
@@ -17,18 +17,15 @@ import com.excilys.model.Computer;
 import com.excilys.persistence.ComputerDAO;
 import com.excilys.validator.ComputerValidator;
 
-@Component
 @Service
 public class ComputerService {
+	@Autowired
 	private ComputerDAO computerDAO;
+	
+	@Autowired
 	private CompanyService companyService;
 
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerService.class);
-
-	public ComputerService(ComputerDAO computerDAO, CompanyService companyService) {
-		this.computerDAO = computerDAO;
-		this.companyService = companyService;
-	}
 
 	public ArrayList<ComputerDTO> getAll() {
 		return ComputerMapper.mapListDTO(computerDAO.getList());

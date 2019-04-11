@@ -4,13 +4,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.computerdatabase.AppConfig;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
 import com.excilys.dto.CompanyDTO;
 import com.excilys.dto.ComputerDTO;
 import com.excilys.exception.ComputerException;
@@ -26,12 +29,19 @@ public class EditServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -1342895835008890400L;
 	private static final String VIEW_EDIT = "WEB-INF/views/editComputer.jsp";
+	
+	@Autowired
 	private ComputerService computerService;
+	
+	@Autowired
 	private CompanyService companyService;
 	
-	public EditServlet() {
-		computerService = AppConfig.context.getBean(ComputerService.class);
-		companyService = AppConfig.context.getBean(CompanyService.class);
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		super.init(config);
+
+		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,
+				config.getServletContext());
 	}
 	
 	@Override
