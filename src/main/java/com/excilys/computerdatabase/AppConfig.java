@@ -5,10 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-import com.excilys.persistence.CompanyDAO;
-import com.excilys.persistence.ComputerDAO;
-import com.excilys.service.CompanyService;
-import com.excilys.service.ComputerService;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -27,25 +23,5 @@ public class AppConfig {
 	@Bean
 	public HikariDataSource hikariDataSource() {
 		return new HikariDataSource(HikariConfig());
-	}
-
-	@Bean
-	public ComputerService computerService() {
-		return new ComputerService(computerDAO(), companyService());
-	}
-
-	@Bean
-	public CompanyService companyService() {
-		return new CompanyService(companyDAO());
-	}
-
-	@Bean
-	public ComputerDAO computerDAO() {
-		return new ComputerDAO(hikariDataSource());
-	}
-
-	@Bean
-	public CompanyDAO companyDAO() {
-		return new CompanyDAO(hikariDataSource());
 	}
 }

@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.excilys.dto.CompanyDTO;
 import com.excilys.exception.CompanyException;
@@ -13,6 +15,8 @@ import com.excilys.mapper.CompanyMapper;
 import com.excilys.model.Company;
 import com.excilys.persistence.CompanyDAO;
 
+@Component
+@Service
 public class CompanyService {
 	private CompanyDAO companyDAO;
 
