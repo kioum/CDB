@@ -10,6 +10,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.mapper.CompanyMapper;
 import com.excilys.model.Company;
@@ -58,6 +59,7 @@ public class CompanyDAO {
 		return Optional.ofNullable(company);
 	}
 
+	@Transactional(rollbackFor = {DataAccessException.class})
 	public int deleteById(Long id){
 		try {
 			jdbc.update(QUERY_DELETECOMPUTERS, new Object[]{id});
