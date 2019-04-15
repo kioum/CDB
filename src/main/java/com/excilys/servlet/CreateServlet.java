@@ -29,10 +29,10 @@ public class CreateServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	private static final String VIEW_ADDCOMPUTER = "WEB-INF/views/addComputer.jsp";
-	
+
 	@Autowired
 	private ComputerService computerService;
-	
+
 	@Autowired
 	private CompanyService companyService;
 
@@ -43,7 +43,7 @@ public class CreateServlet extends HttpServlet {
 		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,
 				config.getServletContext());
 	}
-	
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		ArrayList<CompanyDTO> companies = companyService.getAll();

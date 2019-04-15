@@ -9,15 +9,11 @@ import com.excilys.exception.TimestampException;
 public class TimestampConverter {
 	public static String formatToString(Timestamp timestamp, String format) {
 		if(timestamp == null) return "";
-		
-		String timeToString = "";
-
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
-		
+	
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);		
 		Date date = new Date(timestamp.getTime());
-		timeToString = formatter.format(formatter.parse(date.toString()));
 		
-		return timeToString;
+		return formatter.format(formatter.parse(date.toString()));
 	}
 	
 	public static Timestamp valueOf(String timestamp) throws TimestampException {

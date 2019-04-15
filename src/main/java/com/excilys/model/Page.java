@@ -5,7 +5,6 @@ import java.util.List;
 public class Page<T> {
 	private List<T> list;
 	private int maxElement;
-
 	private int numPage;
 
 	public Page(List<T> list, int maxElement){
