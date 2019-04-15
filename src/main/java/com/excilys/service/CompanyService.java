@@ -1,6 +1,6 @@
 package com.excilys.service;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -24,7 +24,7 @@ public class CompanyService {
 		this.companyDAO = companyDAO;
 	}
 
-	public ArrayList<CompanyDTO> getAll() {
+	public List<CompanyDTO> getAll() {
 		return CompanyMapper.mapDTO(companyDAO.getList());
 	}
 

@@ -7,8 +7,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.RowMapper;
 
 import com.excilys.dto.ComputerDTO;
 import com.excilys.exception.TimestampException;
@@ -17,43 +16,25 @@ import com.excilys.model.Computer;
 import com.excilys.util.AttrComputer;
 import com.excilys.util.TimestampConverter;
 
-public abstract class ComputerMapper {
-	private static final Logger LOG = LoggerFactory.getLogger(ComputerMapper.class);
+public class ComputerMapper implements RowMapper<Computer>{
+	public static Computer map(ResultSet res) throws SQLException {
+		Computer comp = new Computer();
 
-	public static Computer map(ResultSet res) {
-		Computer comp = null;
-		try {
-			if(res.next()) {
-				Company company = new Company.CompanyBuilder().id(res.getLong("c2.id")).name(res.getString("c2.name")).build();
-				comp = new Computer.ComputerBuilder().id(res.getLong("c1.id")).name(res.getString("c1.name"))
-						.introduced(res.getTimestamp("c1.introduced")).discontinued(res.getTimestamp("c1.discontinued")) 
-						.manufacturer(company).build();
-			}
-		} catch (SQLException e) {
-			LOG.error(e.getMessage());
-		}
-
+		Company company = new Company.CompanyBuilder()
+				.id(res.getLong("c2.id"))
+				.name(res.getString("c2.name")).build();
+		
+		comp = new Computer.ComputerBuilder()
+				.id(res.getLong("c1.id"))
+				.name(res.getString("c1.name"))
+				.introduced(res.getTimestamp("c1.introduced"))
+				.discontinued(res.getTimestamp("c1.discontinued")) 
+				.manufacturer(company).build();
+		
 		return comp;
 	}
 
-	public static ArrayList<Computer> mapList(ResultSet res) {
-		ArrayList<Computer> computers = new ArrayList<Computer>();
-
-		try {
-			while(res.next()) {
-				Company company = new Company.CompanyBuilder().id(res.getLong("c2.id")).name(res.getString("c2.name")).build();
-				computers.add(new Computer.ComputerBuilder().id(res.getLong("c1.id")).name(res.getString("c1.name"))
-						.introduced(res.getTimestamp("c1.introduced")).discontinued(res.getTimestamp("c1.discontinued")) 
-						.manufacturer(company).build());
-			}
-		} catch (SQLException e) {
-			LOG.error(e.getMessage());
-		}
-
-		return computers;
-	}
-
-	public static ArrayList<ComputerDTO> mapListDTO(ArrayList<Computer> list) {
+	public static ArrayList<ComputerDTO> mapListDTO(List<Computer> list) {
 		ArrayList<ComputerDTO> computers = new ArrayList<ComputerDTO>();
 
 		for(Computer comp:list) {
@@ -79,11 +60,9 @@ public abstract class ComputerMapper {
 	public static Computer dtoToComputer(ComputerDTO computerDTO) throws TimestampException {
 		Long id = computerDTO.getId();
 		String name = computerDTO.getName();
-		Timestamp introduced = null;
-		Timestamp discontinued = null;
 
-		introduced = TimestampConverter.valueOf(computerDTO.getIntroduced());
-		discontinued = TimestampConverter.valueOf(computerDTO.getDiscontinued());
+		Timestamp introduced = TimestampConverter.valueOf(computerDTO.getIntroduced());
+		Timestamp discontinued = TimestampConverter.valueOf(computerDTO.getDiscontinued());
 
 		Company company = new Company.CompanyBuilder().id(computerDTO.getManufacturerId())
 				.name(computerDTO.getManufacturerName()).build();
@@ -112,5 +91,10 @@ public abstract class ComputerMapper {
 			}
 		});
 		return list;
+	}
+
+	@Override
+	public Computer mapRow(ResultSet rs, int rowNum) throws SQLException {
+		return map(rs);
 	}
 }

@@ -3,45 +3,25 @@ package com.excilys.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.RowMapper;
 
 import com.excilys.dto.CompanyDTO;
 import com.excilys.model.Company;
 
-public abstract class CompanyMapper {
-	private static final Logger LOG = LoggerFactory.getLogger(CompanyMapper.class);
-
-	public static ArrayList<Company> mapList(ResultSet res) {
-		ArrayList<Company> companies = new ArrayList<Company>();
-
-		try {
-			while(res.next()) {
-				companies.add(new Company.CompanyBuilder().id(res.getLong("id")).name(res.getString("name")).build());
-			}
-		} catch (SQLException e) {
-			LOG.error(e.getMessage());
-		}
-
-		return companies;
-	}
-
-	public static Company map(ResultSet res) {
+public class CompanyMapper implements RowMapper<Company> {
+	public static Company map(ResultSet res) throws SQLException {
 		Company company = new Company();
 
-		try {
-			if(res.next()) {
-				company = new Company.CompanyBuilder().id(res.getLong("id")).name(res.getString("name")).build();
-			}
-		} catch (SQLException e) {
-			LOG.error(e.getMessage());
-		}
+		company = new Company.CompanyBuilder()
+				.id(res.getLong("id"))
+				.name(res.getString("name")).build();
 
 		return company;
 	}
 
-	public static ArrayList<CompanyDTO> mapDTO(ArrayList<Company> list) {
+	public static ArrayList<CompanyDTO> mapDTO(List<Company> list) {
 		ArrayList<CompanyDTO> companies = new ArrayList<CompanyDTO>();
 
 		for(Company comp:list)
@@ -50,4 +30,8 @@ public abstract class CompanyMapper {
 		return companies;
 	}
 
+	@Override
+	public Company mapRow(ResultSet rs, int rowNum) throws SQLException {
+		return map(rs);
+	}
 }

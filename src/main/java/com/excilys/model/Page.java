@@ -7,8 +7,8 @@ public class Page<T> {
 	private int maxElement;
 	private int numPage;
 
-	public Page(List<T> list, int maxElement){
-		this.list = list;
+	public Page(List<T> list2, int maxElement){
+		this.list = list2;
 		this.maxElement = maxElement;
 		this.numPage = 0;
 	}

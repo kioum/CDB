@@ -1,19 +1,18 @@
 package com.excilys.persistence;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.TimeZone;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.excilys.mapper.ComputerMapper;
 import com.excilys.model.Computer;
-import com.zaxxer.hikari.HikariDataSource;
 
 @Component
 public class ComputerDAO {
@@ -32,29 +31,28 @@ public class ComputerDAO {
 			+ "WHERE c1.name LIKE ? "
 			+ "OR c2.name LIKE ?;";
 	private final static String QUERY_CREATE = "INSERT INTO computer (name,introduced,discontinued,company_id) "
-			+ "VALUES (?, ?, ?, ?); ";
+			+ "VALUES (?, ?, ?, ?);";
 	private final static String QUERY_UPDATEBYID = "UPDATE computer "
 			+ "SET name = ?, introduced = ?, discontinued = ?, company_id = ? "
 			+ "WHERE id = ?;";
 	private final static String QUERY_DELETEBYID = "DELETE FROM computer "
 			+ "WHERE id = ?;";
-	
-	private HikariDataSource dataSource;
 
-	public ComputerDAO(HikariDataSource dataSource) {
+	private JdbcTemplate jdbc;
+
+	public ComputerDAO(JdbcTemplate jdbc) {
 		System.setProperty("user.timezone", "UTC");
 		TimeZone.setDefault(null);
-		this.dataSource = dataSource;
+		this.jdbc = jdbc;
 	}
 
-	public ArrayList<Computer> getList(){
-		ArrayList<Computer> computers = new ArrayList<Computer>();
+	public List<Computer> getList(){
+		List<Computer> computers = new ArrayList<Computer>();
 
-		try (Connection conn = dataSource.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement(QUERY_GETLIST);){
-			computers = ComputerMapper.mapList(pstmt.executeQuery());
-		} catch (SQLException e) {
-			LOG.debug(e.getMessage());
+		try {
+			computers = jdbc.query(QUERY_GETLIST, new ComputerMapper());
+		} catch (DataAccessException e) {
+			LOG.error(e.getMessage());
 		}
 
 		return computers;
@@ -63,26 +61,21 @@ public class ComputerDAO {
 	public Optional<Computer> findById(Long id){
 		Computer computer = null;
 
-		try (Connection conn = dataSource.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement(QUERY_FINDBYID);){
-			pstmt.setLong(1, id);
-			computer = ComputerMapper.map(pstmt.executeQuery());
-		} catch (SQLException e) {
+		try {
+			computer = jdbc.queryForObject(QUERY_FINDBYID, new Object[] {id}, new ComputerMapper());
+		} catch (DataAccessException e) {
 			LOG.error(e.getMessage());
 		}
 
 		return Optional.ofNullable(computer);
 	}
 
-	public ArrayList<Computer> findByName(String name){
-		ArrayList<Computer> computer = new ArrayList<Computer>();
+	public List<Computer> findByName(String name){
+		List<Computer> computer = new ArrayList<Computer>();
 
-		try (Connection conn = dataSource.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement(QUERY_FINDBYNAME);){
-			pstmt.setString(1, "%" + name + "%");
-			pstmt.setString(2, "%" + name + "%");
-			computer = ComputerMapper.mapList(pstmt.executeQuery());
-		} catch (SQLException e) {
+		try {
+			computer = jdbc.query(QUERY_FINDBYNAME, new Object[] {"%"+name+"%", "%"+name+"%"}, new ComputerMapper());
+		} catch (DataAccessException e) {
 			LOG.error(e.getMessage());
 		}
 
@@ -90,15 +83,10 @@ public class ComputerDAO {
 	}
 
 	public int create(Computer comp){
-		try (Connection conn = dataSource.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement(QUERY_CREATE);){
-			pstmt.setString(1, comp.getName());
-			pstmt.setTimestamp(2, comp.getIntroduced());
-			pstmt.setTimestamp(3, comp.getDiscontinued());
-			pstmt.setLong(4, comp.getManufacturer().getId());
-			return pstmt.executeUpdate();
-
-		} catch (SQLException e) {
+		try {
+			return jdbc.update(QUERY_CREATE, new Object[] {comp.getName(), comp.getIntroduced(),
+					comp.getDiscontinued(), comp.getManufacturer().getId()});
+		} catch (DataAccessException e) {
 			LOG.error(e.getMessage());
 		}
 
@@ -106,16 +94,10 @@ public class ComputerDAO {
 	}
 
 	public int update(Computer comp) {
-		try(Connection conn = dataSource.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement(QUERY_UPDATEBYID);){
-			pstmt.setString(1, comp.getName());
-			pstmt.setTimestamp(2, comp.getIntroduced());
-			pstmt.setTimestamp(3, comp.getDiscontinued());
-			pstmt.setLong(4, comp.getManufacturer().getId());
-			pstmt.setLong(5, comp.getId());
-
-			return pstmt.executeUpdate();
-		} catch (SQLException e) {
+		try {
+			return jdbc.update(QUERY_UPDATEBYID, new Object[] {comp.getName(), comp.getIntroduced(),
+					comp.getDiscontinued(), comp.getManufacturer().getId(), comp.getId()});
+		} catch (DataAccessException e) {
 			LOG.error(e.getMessage());
 		}
 
@@ -123,11 +105,9 @@ public class ComputerDAO {
 	}
 
 	public int deleteById(Long id){
-		try (Connection conn = dataSource.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement(QUERY_DELETEBYID);){
-			pstmt.setLong(1, id);
-			return pstmt.executeUpdate();
-		} catch (SQLException e) {
+		try {
+			return jdbc.update(QUERY_DELETEBYID, new Object[] {id});
+		} catch (DataAccessException e) {
 			LOG.error(e.getMessage());
 		}
 

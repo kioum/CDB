@@ -3,8 +3,8 @@ package com.excilys.controller;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.slf4j.Logger;
@@ -113,7 +113,7 @@ public class MainController {
 	 * with p (Prec), n (next) or q (quit)
 	 * @param list
 	 */
-	public <T> void drawList(ArrayList<T> list) {
+	public <T> void drawList(List<T> list) {
 		int nbElement = Integer.parseInt(mw.getInputUser("How many by page ? "));
 
 		Page<T> page = new Page<T>(list, nbElement);

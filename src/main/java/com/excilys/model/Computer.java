@@ -9,14 +9,6 @@ public class Computer {
 	private Timestamp discontinued;
 	private Company manufacturer;
 
-	public Computer(ComputerBuilder builder) {
-		this.id = builder.id;
-		this.name = builder.name;
-		this.introduced = builder.introduced;
-		this.discontinued = builder.discontinued;
-		this.manufacturer = builder.manufacturer;
-	}
-
 	public Company getManufacturer() {
 		return manufacturer;
 	}
@@ -134,7 +126,14 @@ public class Computer {
 		}
 
 		public Computer build() {
-			return new Computer(this);
+			Computer comp = new Computer();
+			comp.id = id;
+			comp.name = name;
+			comp.introduced = introduced;
+			comp.discontinued = discontinued;
+			comp.manufacturer = manufacturer;
+			
+			return comp;
 		}
 	}
 }

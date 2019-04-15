@@ -1,7 +1,7 @@
 package com.excilys.servlet;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -46,7 +46,7 @@ public class CreateServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		ArrayList<CompanyDTO> companies = companyService.getAll();
+		List<CompanyDTO> companies = companyService.getAll();
 
 		req.setAttribute("companies", companies);
 		RequestDispatcher rd = req.getRequestDispatcher(VIEW_ADDCOMPUTER);

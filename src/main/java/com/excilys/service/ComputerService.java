@@ -1,6 +1,7 @@
 package com.excilys.service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -27,7 +28,7 @@ public class ComputerService {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerService.class);
 
-	public ArrayList<ComputerDTO> getAll() {
+	public List<ComputerDTO> getAll() {
 		return ComputerMapper.mapListDTO(computerDAO.getList());
 	}
 
