@@ -23,11 +23,11 @@ import com.excilys.service.ComputerService;
 public class ComputerController {
 	private ComputerService computerService;
 	private CompanyService companyService;
-	
-	private final String VIEW_DASHBOARD = "WEB-INF/views/dashboard.jsp";
-	private final String VIEW_ADDCOMPUTER = "WEB-INF/views/addComputer.jsp";
-	private final String VIEW_EDITCOMPUTER = "WEB-INF/views/editComputer.jsp";
-	
+
+	private final String VIEW_DASHBOARD = "dashboard";
+	private final String VIEW_ADDCOMPUTER = "addComputer";
+	private final String VIEW_EDITCOMPUTER = "editComputer";
+
 	public ComputerController(ComputerService computerService, CompanyService companyService) {
 		this.computerService = computerService;
 		this.companyService = companyService;
@@ -68,13 +68,13 @@ public class ComputerController {
 		model.addAttribute("search", search);
 		model.addAttribute("sortBy", sortBy);
 		model.addAttribute("asc", asc);
-		
+
 		return VIEW_DASHBOARD;
 	}
 
 	@PostMapping({ "/", "/dashboard", "/dashBoard", "/Dashboard", "/DashBoard" })
 	public String postDashBoard(@RequestParam(value = "cb", required = false) String listComputers, Model model) {
-		
+
 		if(listComputers != null)
 			for(String id: listComputers.split(","))
 				try {
@@ -82,15 +82,14 @@ public class ComputerController {
 				} catch (ValidatorException e) {
 					model.addAttribute("exception", e.getMessage());
 				}
-		
-		
+
 		return getDashBoard(Map.of(), model);
 	}
-	
+
 	@GetMapping({ "/AddServlet", "/addServlet", "/addservlet" })
 	public String getAddServlet(@RequestParam(required = false) Map<String, String> paths, Model model) {
 		model.addAttribute("companies", companyService.getAll());
-		
+
 		return VIEW_ADDCOMPUTER;
 	}
 
@@ -115,7 +114,7 @@ public class ComputerController {
 		}
 		return VIEW_DASHBOARD;
 	}
-	
+
 	@GetMapping({ "/editservlet", "/editServlet", "/EditServlet" })
 	public String getEditServlet(@RequestParam(required = false) Map<String, String> paths, Model model) {
 		model.addAttribute("companies", companyService.getAll());
