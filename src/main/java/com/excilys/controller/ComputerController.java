@@ -86,14 +86,14 @@ public class ComputerController {
 		return getDashBoard(Map.of(), model);
 	}
 
-	@GetMapping({ "/AddServlet", "/addServlet", "/addservlet" })
+	@GetMapping({ "/AddComputer", "/addComputer", "/addcomputer" })
 	public String getAddServlet(@RequestParam(required = false) Map<String, String> paths, Model model) {
 		model.addAttribute("companies", companyService.getAll());
 
 		return VIEW_ADDCOMPUTER;
 	}
 
-	@PostMapping({ "/AddServlet", "/addServlet", "/addservlet" })
+	@PostMapping({ "/AddComputer", "/addComputer", "/addcomputer" })
 	public String postAddServlet(@RequestParam(required = false) Map<String, String> paths, Model model) {
 		String computerName = paths.get("computerName");
 
@@ -112,7 +112,8 @@ public class ComputerController {
 			model.addAttribute("exception", e.getMessage());
 			return getAddServlet(paths, model);
 		}
-		return VIEW_DASHBOARD;
+		
+		return getDashBoard(Map.of(), model);
 	}
 
 	@GetMapping({ "/editservlet", "/editServlet", "/EditServlet" })
@@ -151,6 +152,6 @@ public class ComputerController {
 			return getEditServlet(paths, model);
 		}
 
-		return VIEW_DASHBOARD;
+		return getDashBoard(Map.of(), model);
 	}
 }

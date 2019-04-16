@@ -1,6 +1,6 @@
 ### Eclipse ###
 
-dao.properties
+
 
 .metadata
 bin/
@@ -13,6 +13,8 @@ local.properties
 .settings/
 .loadpath
 .recommenders
+
+*.properties
 
 # External tool builders
 .externalToolBuilders/

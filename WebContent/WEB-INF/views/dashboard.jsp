@@ -1,4 +1,5 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -8,17 +9,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
 <link rel="stylesheet" href="<c:url value="/css/bootstrap.min.css"/>"
-	media="screen"/>
+	media="screen" />
 <link rel="stylesheet" href="<c:url value="/css/font-awesome.css"/>"
-	media="screen"/>
+	media="screen" />
 <link rel="stylesheet" href="<c:url value="/css/main.css"/>"
-	media="screen"/>
+	media="screen" />
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="<c:url value="/Dashboard"/>">
-				Application - Computer Database </a>
+			<a class="navbar-brand" href="<c:url value="/Dashboard"/>"> <spring:message
+					code="title" />
+			</a>
 		</div>
 	</header>
 
@@ -26,7 +28,7 @@
 		<div class="container">
 			<h1 id="homeTitle">
 				<c:out value="${page.getList().size()}" />
-				Computers found
+				<spring:message code="dashboard.found" />
 			</h1>
 			<c:if test="${not empty exception}">
 				<p style="color: red">
@@ -38,16 +40,21 @@
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
 						<input type="search" id="searchbox" name="search"
-							class="form-control" placeholder="Search name" /> <input
-							type="submit" id="searchsubmit" value="Filter by name"
+							class="form-control"
+							placeholder="<spring:message
+									code="dashboard.search" />" />
+						<input type="submit" id="searchsubmit"
+							value="<spring:message
+									code="dashboard.filter" />"
 							class="btn btn-primary" />
 					</form>
 				</div>
 				<div class="pull-right">
 					<a class="btn btn-success" id="addComputer"
-						href="<c:url value="/CreateServlet"/>">Add Computer</a> <a
-						class="btn btn-default" id="editComputer" href="#"
-						onclick="$.fn.toggleEditMode();">Edit</a>
+						href="<c:url value="/AddComputer"/>"><spring:message
+							code="addComputer" /></a> <a class="btn btn-default"
+						id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><spring:message
+							code="edit" /></a>
 				</div>
 			</div>
 		</div>
@@ -70,18 +77,20 @@
 										class="fa fa-trash-o fa-lg"></i>
 								</a>
 							</span></th>
-							<th onclick="location.href='<c:url value="/Dashboard?numPage=${page.numPage}&maxElement=${page.maxElement}&search=${search}&sortBy=name&asc=${(sortBy == 'name' && asc != null) ? !Boolean.valueOf(asc):true}"/>'">Computer
-								name</th>
 							<th
-								onclick="location.href='<c:url value="/Dashboard?numPage=${page.numPage}&maxElement=${page.maxElement}&search=${search}&sortBy=introduced&asc=${(sortBy == 'introduced' && asc != null) ? !Boolean.valueOf(asc):true}"/>'">Introduced
-								date</th>
+								onclick="location.href='<c:url value="/Dashboard?numPage=${page.numPage}&maxElement=${page.maxElement}&search=${search}&sortBy=name&asc=${(sortBy == 'name' && asc != null) ? !Boolean.valueOf(asc):true}"/>'"><spring:message
+									code="computerName" /></th>
+							<th
+								onclick="location.href='<c:url value="/Dashboard?numPage=${page.numPage}&maxElement=${page.maxElement}&search=${search}&sortBy=introduced&asc=${(sortBy == 'introduced' && asc != null) ? !Boolean.valueOf(asc):true}"/>'"><spring:message
+									code="introduced" /></th>
 							<!-- Table header for Discontinued Date -->
 							<th
-								onclick="location.href='<c:url value="/Dashboard?numPage=${page.numPage}&maxElement=${page.maxElement}&search=${search}&sortBy=discontinued&asc=${(sortBy == 'discontinued' && asc != null) ? !Boolean.valueOf(asc):true}"/>'">Discontinued
-								date</th>
+								onclick="location.href='<c:url value="/Dashboard?numPage=${page.numPage}&maxElement=${page.maxElement}&search=${search}&sortBy=discontinued&asc=${(sortBy == 'discontinued' && asc != null) ? !Boolean.valueOf(asc):true}"/>'"><spring:message
+									code="discontinued" /></th>
 							<!-- Table header for Company -->
 							<th
-								onclick="location.href='<c:url value="/Dashboard?numPage=${page.numPage}&maxElement=${page.maxElement}&search=${search}&sortBy=companyName&asc=${(sortBy == 'companyName' && asc != null) ? !Boolean.valueOf(asc):true}"/>'">Company</th>
+								onclick="location.href='<c:url value="/Dashboard?numPage=${page.numPage}&maxElement=${page.maxElement}&search=${search}&sortBy=companyName&asc=${(sortBy == 'companyName' && asc != null) ? !Boolean.valueOf(asc):true}"/>'"><spring:message
+									code="company" /></th>
 						</tr>
 					</thead>
 					<!-- Browse attribute computers -->
