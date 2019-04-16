@@ -53,7 +53,7 @@ public class SpringMvcConfig implements WebMvcConfigurer {
 	public MessageSource messageSource() {
 		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
 		messageSource.setBasename("/WEB-INF/lang/lang");
-		messageSource.setDefaultEncoding("UTF-8");
+		messageSource.setDefaultEncoding("ISO-8859-1");
 		return messageSource;
 	} 
 

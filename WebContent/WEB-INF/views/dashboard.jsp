@@ -28,7 +28,15 @@
 		<div class="container">
 			<h1 id="homeTitle">
 				<c:out value="${page.getList().size()}" />
-				<spring:message code="dashboard.found" />
+				<c:choose>
+					<c:when test="${page.getList().size() == 1 || page.getList().size() == 0}">
+						<spring:message code="dashboard.found" />
+					</c:when>
+					<c:otherwise>
+						<spring:message code="dashboard.founds" />
+					</c:otherwise>
+				</c:choose>
+				
 			</h1>
 			<c:if test="${not empty exception}">
 				<p style="color: red">
