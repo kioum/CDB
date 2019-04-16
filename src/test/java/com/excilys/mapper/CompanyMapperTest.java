@@ -32,10 +32,6 @@ public class CompanyMapperTest extends TestCase{
 		
 		assertEquals(comp.getId(), Long.valueOf(1));
 		assertEquals(comp.getName(), "Test Company");
-		
-		Mockito.when(rs.next()).thenReturn(false);
-		comp = CompanyMapper.map(rs);
-		assertNull(comp.getId());
 	}
 
 	@Test

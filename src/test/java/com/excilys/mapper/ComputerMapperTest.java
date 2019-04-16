@@ -46,10 +46,6 @@ public class ComputerMapperTest extends TestCase{
 		assertEquals(comp.getIntroduced(), Timestamp.valueOf("1960-09-11 00:11:22"));
 		assertEquals(comp.getDiscontinued(), Timestamp.valueOf("2020-09-11 00:11:22"));
 		assertEquals(comp.getManufacturer(), new Company.CompanyBuilder().id(1L).name("Company").build());
-	
-		Mockito.when(rs.next()).thenReturn(false);
-		comp = ComputerMapper.map(rs);
-		assertNull(comp);
 	}
 	
 	@Test
