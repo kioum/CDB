@@ -107,7 +107,7 @@
 							<tr>
 								<td class="editMode"><input type="checkbox" name="cb"
 									class="cb" value="${comp.id}"></td>
-								<td><a href="<c:url value="/EditServlet?id=${comp.id}"/>"
+								<td><a href="<c:url value="/EditComputer?id=${comp.id}"/>"
 									onclick=""><c:out value="${comp.name}" /></a></td>
 								<td><c:if test="${comp.introduced != ''}">
 										<c:out value="${comp.introduced}" />
@@ -128,16 +128,16 @@
 		<div class="container text-center">
 			<ul class="pagination">
 				<li><a
-					href="?numPage=${page.numPage-1}&maxElement=${page.maxElement}&search=${search}&sortBy=${sortBy}&asc=${asc}"
+					href="Dashboard?numPage=${page.numPage-1}&maxElement=${page.maxElement}&search=${search}&sortBy=${sortBy}&asc=${asc}"
 					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 				</a></li>
 				<c:forEach begin="${page.startPage()}" end="${page.endPage()}"
 					varStatus="loop">
 					<li><a
-						href="?numPage=${loop.index}&maxElement=${page.maxElement}&search=${search}&sortBy=${sortBy}&asc=${asc}">${loop.index + 1}</a></li>
+						href="Dashboard?numPage=${loop.index}&maxElement=${page.maxElement}&search=${search}&sortBy=${sortBy}&asc=${asc}">${loop.index + 1}</a></li>
 				</c:forEach>
 				<li><a
-					href="?numPage=${page.numPage+1}&maxElement=${page.maxElement}&search=${search}&sortBy=${sortBy}&asc=${asc}"
+					href="Dashboard?numPage=${page.numPage+1}&maxElement=${page.maxElement}&search=${search}&sortBy=${sortBy}&asc=${asc}"
 					aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 				</a></li>
 			</ul>

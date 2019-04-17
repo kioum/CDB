@@ -1,11 +1,15 @@
 package com.excilys.controller;
 
+
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -68,6 +72,7 @@ public class ComputerController {
 		model.addAttribute("search", search);
 		model.addAttribute("sortBy", sortBy);
 		model.addAttribute("asc", asc);
+		model.addAttribute("computer", new Computer());
 
 		return VIEW_DASHBOARD;
 	}
@@ -82,41 +87,32 @@ public class ComputerController {
 				} catch (ValidatorException e) {
 					model.addAttribute("exception", e.getMessage());
 				}
-
+		
 		return getDashBoard(Map.of(), model);
 	}
 
 	@GetMapping({ "/AddComputer", "/addComputer", "/addcomputer" })
-	public String getAddServlet(@RequestParam(required = false) Map<String, String> paths, Model model) {
+	public String getAddServlet(Model model) {
 		model.addAttribute("companies", companyService.getAll());
+		model.addAttribute("computer", new ComputerDTO());
 
 		return VIEW_ADDCOMPUTER;
 	}
 
 	@PostMapping({ "/AddComputer", "/addComputer", "/addcomputer" })
-	public String postAddServlet(@RequestParam(required = false) Map<String, String> paths, Model model) {
-		String computerName = paths.get("computerName");
-
-		String introduced = paths.get("introduced");	
-
-		String discontinued = paths.get("discontinued");
-		if (discontinued == null) discontinued = "";
-
-		String companyId = paths.get("companyId");
-
-		ComputerDTO compDTO = new ComputerDTO(0L, computerName, introduced, discontinued, Long.valueOf(companyId), "unknown");
-
+	public String postAddServlet(@Validated @ModelAttribute("computer")ComputerDTO computer, Model model) {
 		try {
-			computerService.create(ComputerMapper.dtoToComputer(compDTO));
+			computer.setManufacturerName("unknown");
+			computerService.create(ComputerMapper.dtoToComputer(computer));
 		} catch (ValidatorException | TimestampException e) {
 			model.addAttribute("exception", e.getMessage());
-			return getAddServlet(paths, model);
+			return getAddServlet(model);
 		}
-		
-		return getDashBoard(Map.of(), model);
+
+		return "redirect:/"+getDashBoard(Map.of(), model);
 	}
 
-	@GetMapping({ "/editservlet", "/editServlet", "/EditServlet" })
+	@GetMapping({ "/editcomputer", "/editComputer", "/EditComputer" })
 	public String getEditServlet(@RequestParam(required = false) Map<String, String> paths, Model model) {
 		model.addAttribute("companies", companyService.getAll());
 
@@ -128,30 +124,24 @@ public class ComputerController {
 			}catch (ComputerException e) {
 				return "404";
 			}
-		}
+		} 
+		 
 		return VIEW_EDITCOMPUTER;
 	}
 
-	@PostMapping({ "/editservlet", "/editServlet", "/EditServlet" })
-	public String postEditServlet(@RequestParam(required = false) Map<String, String> paths, Model model) {
-		String computerId = paths.get("id");
-		String computerName = paths.get("computerName");
-		String introduced = paths.get("introduced");
-		String discontinued = paths.get("discontinued");
-
-		if (discontinued == null) 
-			discontinued = "";
-
-		String companyId = paths.get("companyId");
-		ComputerDTO compDTO = new ComputerDTO(Long.valueOf(computerId), computerName, introduced, discontinued, Long.valueOf(companyId), "unknown");
+	@PostMapping({ "/editcomputer", "/editComputer", "/EditComputer" })
+	public String postEditServlet(@Validated @ModelAttribute("computer")ComputerDTO computer, Model model) {
 
 		try {
-			computerService.update(ComputerMapper.dtoToComputer(compDTO));
+			computer.setManufacturerName("unknown");
+			computerService.update(ComputerMapper.dtoToComputer(computer));
 		} catch (ValidatorException | TimestampException e) {
 			model.addAttribute("exception", e.getMessage());
+			Map<String, String> paths = new HashMap<String, String>();
+			paths.put("id", String.valueOf(computer.getId()));
 			return getEditServlet(paths, model);
 		}
 
-		return getDashBoard(Map.of(), model);
+		return "redirect:/"+getDashBoard(Map.of(), model);
 	}
 }

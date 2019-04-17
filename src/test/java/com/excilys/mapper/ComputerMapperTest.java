@@ -54,11 +54,11 @@ public class ComputerMapperTest extends TestCase{
 		ComputerDTO compDTO = ComputerMapper.computerToDTO(comp);
 
 		assertNotNull(compDTO);
-		assertEquals(compDTO.getId(), comp.getId());
+		assertEquals(compDTO.getId(), comp.getId().intValue());
 		assertEquals(compDTO.getName(), comp.getName());
 		assertEquals(compDTO.getIntroduced(), "1960-09-11");
 		assertEquals(compDTO.getDiscontinued(), "2020-09-11");
-		assertEquals(compDTO.getManufacturerId(), comp.getManufacturer().getId());
+		assertEquals(compDTO.getManufacturerId(), comp.getManufacturer().getId().longValue());
 		assertEquals(compDTO.getManufacturerName(), comp.getManufacturer().getName());
 	}
 
@@ -68,9 +68,9 @@ public class ComputerMapperTest extends TestCase{
 		Computer comp = ComputerMapper.dtoToComputer(compDTO);
 
 		assertNotNull(comp);
-		assertEquals(compDTO.getId(), comp.getId());
+		assertEquals(compDTO.getId(), comp.getId().intValue());
 		assertEquals(compDTO.getName(), comp.getName());
-		assertEquals(compDTO.getManufacturerId(), comp.getManufacturer().getId());
+		assertEquals(compDTO.getManufacturerId(), comp.getManufacturer().getId().longValue());
 		assertEquals(compDTO.getManufacturerName(), comp.getManufacturer().getName());
 	}
 	

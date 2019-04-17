@@ -15,22 +15,32 @@ public class ComputerDTO {
 		this.introduced = introduced;
 		this.discontinued = discontinued;
 		this.manufacturerId = manufacturerId;
-		this.setManufacturerName(manufacturerName);
+		this.manufacturerName = manufacturerName;
 	}
 
-	public Long getManufacturerId() {
+	public ComputerDTO() {
+		super();
+		this.id = 0L;
+		this.name = "";
+		this.introduced = "";
+		this.discontinued = "";
+		this.manufacturerId = 0L;
+		this.manufacturerName = "";
+	}
+
+	public long getManufacturerId() {
 		return manufacturerId;
 	}
 
-	public void setManufacturerId(Long manufacturer) {
-		this.manufacturerId = manufacturer;
+	public void setManufacturerId(long manufacturerId) {
+		this.manufacturerId = manufacturerId;
 	}
 
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
