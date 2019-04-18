@@ -26,7 +26,7 @@ public class CompanyValidatorTest {
 		try {
 			CompanyValidator.isWellFormed(compBuild.name("Test").build());
 			assertTrue(true);
-		}catch(ValidatorException e) { }
+		}catch(ValidatorException e) { assertTrue(false); }
 	}
 	
 	public void testExceptionIsWellFormed(Company comp) {

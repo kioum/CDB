@@ -21,6 +21,14 @@
 		<div class="container">
 			<a class="navbar-brand" href="<c:url value="/Dashboard"/>"><spring:message
 					code="title" /></a>
+			<div class="navbar-brand navbar-right">
+				<button
+					onclick="location.href='<c:url value="/editComputer?id=${computer.id}&lang=fr"/>'"
+					type="button" class="btn btn-default">FR</button>
+				<button
+					onclick="location.href='<c:url value="/editComputer?id=${computer.id}&lang=en"/>'"
+					type="button" class="btn btn-default">EN</button>
+			</div>
 		</div>
 	</header>
 <body>
@@ -67,7 +75,8 @@
 								<form:label path="manufacturerId" for="manufacturerId">
 									<spring:message code="company" />
 								</form:label>
-								<form:select path="manufacturerId" class="form-control" id="manufacturerId" >
+								<form:select path="manufacturerId" class="form-control"
+									id="manufacturerId">
 									<c:forEach var="comp" items="${companies}">
 										<form:option value="${comp.id}">${comp.name}</form:option>
 									</c:forEach>

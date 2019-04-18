@@ -1,6 +1,5 @@
 package com.excilys.controller;
-
-
+ 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -118,10 +117,12 @@ public class ComputerController {
 
 		String id = paths.get("id");
 		if(id != null) {
+			Computer comp = new Computer();
 			try {
-				Computer comp = computerService.findById(Long.valueOf(id));
+				comp = computerService.findById(Long.valueOf(id));
 				model.addAttribute("computer", ComputerMapper.computerToDTO(comp));
 			}catch (ComputerException e) {
+				model.addAttribute("id", id);
 				return "404";
 			}
 		} 

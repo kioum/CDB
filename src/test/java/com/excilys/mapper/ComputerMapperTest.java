@@ -3,6 +3,7 @@ package com.excilys.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +26,7 @@ public class ComputerMapperTest extends TestCase{
 	@Before
 	public void setUp() throws SQLException {
 		rs = Mockito.mock(ResultSet.class);
-		
+
 		Mockito.when(rs.next()).thenReturn(true).thenReturn(false);
 		Mockito.when(rs.getLong("c1.id")).thenReturn(Long.valueOf(1));
 		Mockito.when(rs.getString("c1.name")).thenReturn("Test computer");
@@ -40,14 +41,14 @@ public class ComputerMapperTest extends TestCase{
 	@Test
 	public void testMap() throws SQLException {
 		Computer comp = ComputerMapper.map(rs);
-		
+
 		assertEquals(comp.getId(), Long.valueOf(1));
 		assertEquals(comp.getName(), "Test computer");
 		assertEquals(comp.getIntroduced(), Timestamp.valueOf("1960-09-11 00:11:22"));
 		assertEquals(comp.getDiscontinued(), Timestamp.valueOf("2020-09-11 00:11:22"));
 		assertEquals(comp.getManufacturer(), new Company.CompanyBuilder().id(1L).name("Company").build());
 	}
-	
+
 	@Test
 	public void testComputerToDTO() throws SQLException {
 		Computer comp = ComputerMapper.map(rs);
@@ -73,18 +74,20 @@ public class ComputerMapperTest extends TestCase{
 		assertEquals(compDTO.getManufacturerId(), comp.getManufacturer().getId().longValue());
 		assertEquals(compDTO.getManufacturerName(), comp.getManufacturer().getName());
 	}
-	
+
 	@Test
-	public void testMapListDTO() {
-		/*ArrayList<Computer> comp = ComputerMapper.mapList(rs);
+	public void testMapListDTO() throws SQLException {
+		ArrayList<Computer> comp = new ArrayList<Computer>();
+		comp.add(ComputerMapper.map(rs));
+		
 		ArrayList<ComputerDTO> compDTO = ComputerMapper.mapListDTO(new ArrayList<Computer>());
 		assertEquals(compDTO.size(), 0);
-		
+
 		compDTO = ComputerMapper.mapListDTO(comp);
 		assertEquals(comp.size(), compDTO.size());
-		assertEquals(comp.get(0).getId(), compDTO.get(0).getId());
+		assertEquals(comp.get(0).getId().longValue(), compDTO.get(0).getId());
 		assertEquals(comp.get(0).getName(), compDTO.get(0).getName());
-		assertEquals(comp.get(0).getManufacturer().getId(), compDTO.get(0).getManufacturerId());
-		assertEquals(comp.get(0).getManufacturer().getName(), compDTO.get(0).getManufacturerName());*/
+		assertEquals(comp.get(0).getManufacturer().getId().longValue(), compDTO.get(0).getManufacturerId());
+		assertEquals(comp.get(0).getManufacturer().getName(), compDTO.get(0).getManufacturerName());
 	}
 }

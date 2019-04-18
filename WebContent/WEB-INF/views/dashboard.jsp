@@ -21,6 +21,14 @@
 			<a class="navbar-brand" href="<c:url value="/Dashboard"/>"> <spring:message
 					code="title" />
 			</a>
+			<div class="navbar-brand navbar-right">
+				<button
+					onclick="location.href='<c:url value="/Dashboard?numPage=${page.numPage}&maxElement=${page.maxElement}&search=${search}&sortBy=${sortBy}&asc=${asc}&lang=fr"/>'"
+					type="button" class="btn btn-default">FR</button>
+				<button
+					onclick="location.href='<c:url value="/Dashboard?numPage=${page.numPage}&maxElement=${page.maxElement}&search=${search}&sortBy=${sortBy}&asc=${asc}&lang=en"/>'"
+					type="button" class="btn btn-default">EN</button>
+			</div>
 		</div>
 	</header>
 
@@ -29,14 +37,15 @@
 			<h1 id="homeTitle">
 				<c:out value="${page.getList().size()}" />
 				<c:choose>
-					<c:when test="${page.getList().size() == 1 || page.getList().size() == 0}">
+					<c:when
+						test="${page.getList().size() == 1 || page.getList().size() == 0}">
 						<spring:message code="dashboard.found" />
 					</c:when>
 					<c:otherwise>
 						<spring:message code="dashboard.founds" />
 					</c:otherwise>
 				</c:choose>
-				
+
 			</h1>
 			<c:if test="${not empty exception}">
 				<p style="color: red">

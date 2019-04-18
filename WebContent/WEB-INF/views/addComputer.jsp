@@ -21,6 +21,14 @@
 		<div class="container">
 			<a class="navbar-brand" href="<c:url value="/Dashboard"/>"><spring:message
 					code="title" /></a>
+			<div class="navbar-brand navbar-right">
+				<button
+					onclick="location.href='<c:url value="/addComputer?lang=fr"/>'"
+					type="button" class="btn btn-default">FR</button>
+				<button
+					onclick="location.href='<c:url value="/addComputer?lang=en"/>'"
+					type="button" class="btn btn-default">EN</button>
+			</div>
 		</div>
 	</header>
 
