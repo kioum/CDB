@@ -9,6 +9,7 @@ public class ComputerException extends Exception{
 		this.exceptionMessage = message;
 	}
 
+	@Override
 	public String getMessage() {
 		return exceptionMessage;
 	}

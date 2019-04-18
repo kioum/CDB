@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.excilys.dto.ComputerDTO;
@@ -21,12 +23,17 @@ import com.excilys.validator.ComputerValidator;
 public class ComputerService {
 	private ComputerDAO computerDAO;
 	private CompanyService companyService;
+	private ComputerValidator computerValidator;
+	private MessageSource messageSource;
 
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerService.class);
 
-	public ComputerService(ComputerDAO computerDAO, CompanyService companyService) {
+	public ComputerService(ComputerDAO computerDAO, CompanyService companyService, 
+			ComputerValidator computerValidator, MessageSource messageSource) {
 		this.companyService = companyService;
 		this.computerDAO = computerDAO;
+		this.computerValidator = computerValidator;
+		this.messageSource = messageSource;
 	}
 
 	public List<ComputerDTO> getAll() {
@@ -37,7 +44,10 @@ public class ComputerService {
 		Optional<Computer> optionComputer = computerDAO.findById(id);
 		if(optionComputer.isPresent())
 			return computerDAO.findById(id).get();
-		else throw new ComputerException("Computer id : " + id + " not found !");
+		else {
+			throw new ComputerException(messageSource.getMessage("computer.id", null, LocaleContextHolder.getLocale()) +
+					id + messageSource.getMessage("notfound", null, LocaleContextHolder.getLocale()));
+		}
 	}
 
 	public void create(Computer comp) throws ValidatorException {
@@ -45,13 +55,16 @@ public class ComputerService {
 			try {
 				findById(comp.getId());
 				companyService.findById(comp.getManufacturer().getId());
-				throw new ValidatorException("Computer with id = " + comp.getId() + " already exist");
+				throw new ValidatorException(messageSource.getMessage("computer.id", null, LocaleContextHolder.getLocale()) 
+						+ comp.getId() + messageSource.getMessage("alreadyexist", null, LocaleContextHolder.getLocale()));
 			}catch(CompanyException e) {
-				throw new ValidatorException("Company with id = " + comp.getId() + " doesn't exist");
-			} catch (ComputerException e) { } 
+				throw new ValidatorException(messageSource.getMessage("computer.id", null, LocaleContextHolder.getLocale()) 
+						+ comp.getId() + messageSource.getMessage("notexist", null, LocaleContextHolder.getLocale()));
+			} catch (ComputerException e) {			
+				computerValidator.isWellFormed(comp);
+				computerDAO.create(comp); 
+			} 
 
-			ComputerValidator.isWellFormed(comp);
-			computerDAO.create(comp);
 		} catch (ValidatorException e) {
 			LOG.error(e.getMessage());
 			throw new ValidatorException(e.getMessage());
@@ -62,14 +75,15 @@ public class ComputerService {
 		try {
 			findById(comp.getId());
 
-			ComputerValidator.isWellFormed(comp);
+			computerValidator.isWellFormed(comp);
 			computerDAO.update(comp);
 		} catch (ValidatorException e) {
 			LOG.error(e.getMessage());
 			throw new ValidatorException(e.getMessage());
 		}catch (ComputerException e) { 
 			LOG.error(e.getMessage());
-			throw new ValidatorException("Computer with id = " + comp.getId() + " doesn't exist");
+			throw new ValidatorException(messageSource.getMessage("computer.id", null, LocaleContextHolder.getLocale()) 
+					+ comp.getId() + messageSource.getMessage("notexist", null, LocaleContextHolder.getLocale()));
 		}	
 	}
 
@@ -79,7 +93,8 @@ public class ComputerService {
 			computerDAO.deleteById(id);
 		} catch (ComputerException e) {
 			LOG.error(e.getMessage());
-			throw new ValidatorException("Computer with id = " + id + " doesn't exist");
+			throw new ValidatorException(messageSource.getMessage("computer.id", null, LocaleContextHolder.getLocale()) 
+					+ id + messageSource.getMessage("notexist", null, LocaleContextHolder.getLocale()));
 		}
 	}
 

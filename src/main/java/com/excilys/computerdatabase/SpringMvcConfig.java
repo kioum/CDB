@@ -57,6 +57,7 @@ public class SpringMvcConfig implements WebMvcConfigurer {
 		return messageSource;
 	} 
 
+	@Override
 	public void addResourceHandlers(final ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/ressources/**").addResourceLocations("/ressources/");
 	}

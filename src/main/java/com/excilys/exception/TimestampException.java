@@ -9,6 +9,7 @@ public class TimestampException extends Exception {
 		this.exceptionMessage = message;
 	}
 
+	@Override
 	public String getMessage() {
 		return exceptionMessage;
 	}

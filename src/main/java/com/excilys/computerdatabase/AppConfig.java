@@ -9,7 +9,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
-@ComponentScan(basePackages = {"com.excilys.persistence", 
+@ComponentScan(basePackages = {"com.excilys.persistence", "com.excilys.validator", 
 		"com.excilys.service", "com.excilys.controller"})
 public class AppConfig {
 	private static final String FICHIER_PROPERTIES = "/home/excilys/eclipse-workspace/computer-database/"
