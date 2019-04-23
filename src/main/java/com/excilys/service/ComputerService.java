@@ -17,22 +17,19 @@ import com.excilys.exception.ValidatorException;
 import com.excilys.mapper.ComputerMapper;
 import com.excilys.model.Computer;
 import com.excilys.persistence.ComputerDAO;
-import com.excilys.validator.ComputerValidator;
 
 @Service
 public class ComputerService {
 	private ComputerDAO computerDAO;
 	private CompanyService companyService;
-	private ComputerValidator computerValidator;
 	private MessageSource messageSource;
 
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerService.class);
 
 	public ComputerService(ComputerDAO computerDAO, CompanyService companyService, 
-			ComputerValidator computerValidator, MessageSource messageSource) {
+			MessageSource messageSource) {
 		this.companyService = companyService;
 		this.computerDAO = computerDAO;
-		this.computerValidator = computerValidator;
 		this.messageSource = messageSource;
 	}
 
@@ -60,8 +57,7 @@ public class ComputerService {
 			}catch(CompanyException e) {
 				throw new ValidatorException(messageSource.getMessage("computer.id", null, LocaleContextHolder.getLocale()) 
 						+ comp.getId() + messageSource.getMessage("notexist", null, LocaleContextHolder.getLocale()));
-			} catch (ComputerException e) {			
-				computerValidator.isWellFormed(comp);
+			} catch (ComputerException e) {
 				computerDAO.create(comp); 
 			} 
 
@@ -74,12 +70,7 @@ public class ComputerService {
 	public void update(Computer comp) throws ValidatorException {
 		try {
 			findById(comp.getId());
-
-			computerValidator.isWellFormed(comp);
 			computerDAO.update(comp);
-		} catch (ValidatorException e) {
-			LOG.error(e.getMessage());
-			throw new ValidatorException(e.getMessage());
 		}catch (ComputerException e) { 
 			LOG.error(e.getMessage());
 			throw new ValidatorException(messageSource.getMessage("computer.id", null, LocaleContextHolder.getLocale()) 

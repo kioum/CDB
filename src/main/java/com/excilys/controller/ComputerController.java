@@ -1,13 +1,16 @@
 package com.excilys.controller;
- 
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,19 +24,29 @@ import com.excilys.model.Computer;
 import com.excilys.model.Page;
 import com.excilys.service.CompanyService;
 import com.excilys.service.ComputerService;
-
+import com.excilys.validator.CompanyDTOValidator;
+import com.excilys.validator.ComputerDTOValidator;
+ 
 @Controller
 public class ComputerController {
 	private ComputerService computerService;
 	private CompanyService companyService;
+	private MessageSource messageSource;
 
 	private final String VIEW_DASHBOARD = "dashboard";
 	private final String VIEW_ADDCOMPUTER = "addComputer";
 	private final String VIEW_EDITCOMPUTER = "editComputer";
 
-	public ComputerController(ComputerService computerService, CompanyService companyService) {
+	public ComputerController(ComputerService computerService, CompanyService companyService, 
+			MessageSource message) {
 		this.computerService = computerService;
 		this.companyService = companyService;
+		this.messageSource = message;
+	}
+
+	@InitBinder("computer")
+	protected void initBinder(WebDataBinder binder) {
+		binder.setValidator(new ComputerDTOValidator(new CompanyDTOValidator(messageSource), messageSource));
 	}
 
 	@GetMapping({ "/", "/dashboard", "/dashBoard", "/Dashboard", "/DashBoard" })
@@ -71,14 +84,13 @@ public class ComputerController {
 		model.addAttribute("search", search);
 		model.addAttribute("sortBy", sortBy);
 		model.addAttribute("asc", asc);
-		model.addAttribute("computer", new Computer());
+		model.addAttribute("computer", new ComputerDTO());
 
 		return VIEW_DASHBOARD;
 	}
 
 	@PostMapping({ "/", "/dashboard", "/dashBoard", "/Dashboard", "/DashBoard" })
 	public String postDashBoard(@RequestParam(value = "cb", required = false) String listComputers, Model model) {
-
 		if(listComputers != null)
 			for(String id: listComputers.split(","))
 				try {
@@ -89,12 +101,12 @@ public class ComputerController {
 		
 		return getDashBoard(Map.of(), model);
 	}
-
+ 
 	@GetMapping({ "/AddComputer", "/addComputer", "/addcomputer" })
 	public String getAddServlet(Model model) {
 		model.addAttribute("companies", companyService.getAll());
 		model.addAttribute("computer", new ComputerDTO());
-
+		
 		return VIEW_ADDCOMPUTER;
 	}
 

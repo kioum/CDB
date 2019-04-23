@@ -48,7 +48,7 @@
 								</form:label>
 								<spring:message code="computerName" var="computerName" />
 								<form:input type="text" class="form-control" id="name"
-									path="name" placeholder="${computerName}" />
+									path="name" placeholder="${computerName}" required="required"/>
 							</div>
 							<div class="form-group">
 								<form:label path="introduced" for="introduced">
