@@ -48,7 +48,7 @@ public class CompanyDAO {
 	}
 
 	public Optional<Company> findById(long id){
-		Company company = null;
+		Company company = new Company();
 		
 		try {
 			company = jdbc.queryForObject(QUERY_FINDBYID, new Object[]{id}, new CompanyMapper());

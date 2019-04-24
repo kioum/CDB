@@ -2,8 +2,8 @@ package com.excilys.model;
 
 import java.util.ArrayList;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 
 import junit.framework.TestCase;
 
@@ -12,7 +12,8 @@ public class PageTest extends TestCase{
 	private ArrayList<String> list;
 	private Page<String> page;
 	
-	@BeforeEach
+	@Override
+	@Before
 	public void setUp() {
 		list = new ArrayList<String>();
 		maxElement = 2;

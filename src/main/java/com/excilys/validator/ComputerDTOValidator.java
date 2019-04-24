@@ -1,7 +1,6 @@
 package com.excilys.validator;
 
 import java.sql.Timestamp;
-import java.util.regex.Pattern;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -14,7 +13,6 @@ import com.excilys.dto.CompanyDTO;
 import com.excilys.dto.ComputerDTO;
 import com.excilys.exception.TimestampException;
 import com.excilys.util.TimestampConverter;
-
 
 @Component
 public class ComputerDTOValidator implements Validator{
@@ -54,8 +52,7 @@ public class ComputerDTOValidator implements Validator{
 				if(introduced.after(discontinued))
 					errors.reject(messageSource.getMessage("computerValidator.introAfterDisc", null, LocaleContextHolder.getLocale()));
 			} catch (TimestampException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				errors.reject(e.getMessage());
 			}
 		}
 

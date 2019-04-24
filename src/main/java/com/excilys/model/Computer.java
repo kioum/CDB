@@ -2,6 +2,18 @@ package com.excilys.model;
 
 import java.sql.Timestamp;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+@Entity
+@Table(name = "Computer")
 public class Computer {
 	private Long id;
 	private String name;
@@ -9,6 +21,8 @@ public class Computer {
 	private Timestamp discontinued;
 	private Company manufacturer;
 
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="company_id")
 	public Company getManufacturer() {
 		return manufacturer;
 	}
@@ -17,6 +31,8 @@ public class Computer {
 		this.manufacturer = manufacturer;
 	}
 
+	@Id
+	@Column(name="id", unique=true, nullable=false)
 	public Long getId() {
 		return id;
 	}
@@ -25,6 +41,7 @@ public class Computer {
 		this.id = id;
 	}
 
+	@Column(name="name")
 	public String getName() {
 		return name;
 	}
@@ -33,6 +50,7 @@ public class Computer {
 		this.name = name;
 	}
 
+	@Column(name="introduced")
 	public Timestamp getIntroduced() {
 		return introduced;
 	}
@@ -41,6 +59,7 @@ public class Computer {
 		this.introduced = introduced;
 	}
 
+	@Column(name="discontinued")
 	public Timestamp getDiscontinued() {
 		return discontinued;
 	}
@@ -132,7 +151,7 @@ public class Computer {
 			comp.introduced = introduced;
 			comp.discontinued = discontinued;
 			comp.manufacturer = manufacturer;
-			
+
 			return comp;
 		}
 	}

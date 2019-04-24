@@ -19,7 +19,6 @@ public class CompanyDTOValidator implements Validator {
 	
 	@Override
 	public boolean supports(Class<?> clazz) {
-		// TODO Auto-generated method stub
 		return CompanyDTO.class.isAssignableFrom(clazz);
 	}
 

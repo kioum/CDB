@@ -59,7 +59,7 @@ public class ComputerDAO {
 	}
 
 	public Optional<Computer> findById(Long id){
-		Computer computer = null;
+		Computer computer = new Computer();
 
 		try {
 			computer = jdbc.queryForObject(QUERY_FINDBYID, new Object[] {id}, new ComputerMapper());
