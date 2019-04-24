@@ -40,7 +40,10 @@ public class ComputerMapper implements RowMapper<Computer>{
 		for(Computer comp:list) {
 			String introduced = TimestampConverter.formatToString(comp.getIntroduced(), "yyyy-MM-dd");
 			String discontinued = TimestampConverter.formatToString(comp.getDiscontinued(), "yyyy-MM-dd");
-
+			
+			if(comp.getManufacturer() == null)
+				comp.setManufacturer(new Company.CompanyBuilder().id(0).build());
+			
 			computers.add(new ComputerDTO(comp.getId(), comp.getName(), introduced, 
 					discontinued, comp.getManufacturer().getId(), comp.getManufacturer().getName()));
 
@@ -58,7 +61,7 @@ public class ComputerMapper implements RowMapper<Computer>{
 	}
 
 	public static Computer dtoToComputer(ComputerDTO computerDTO) throws TimestampException {
-		Long id = computerDTO.getId();
+		Long id = computerDTO.getId() == 0 ? null :computerDTO.getId();
 		String name = computerDTO.getName();
 
 		Timestamp introduced = TimestampConverter.valueOf(computerDTO.getIntroduced());

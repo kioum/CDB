@@ -11,7 +11,6 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.excilys.dto.ComputerDTO;
-import com.excilys.exception.CompanyException;
 import com.excilys.exception.ComputerException;
 import com.excilys.exception.ValidatorException;
 import com.excilys.mapper.ComputerMapper;
@@ -21,14 +20,11 @@ import com.excilys.persistence.ComputerDAO;
 @Service
 public class ComputerService {
 	private ComputerDAO computerDAO;
-	private CompanyService companyService;
 	private MessageSource messageSource;
 
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerService.class);
 
-	public ComputerService(ComputerDAO computerDAO, CompanyService companyService, 
-			MessageSource messageSource) {
-		this.companyService = companyService;
+	public ComputerService(ComputerDAO computerDAO, MessageSource messageSource) {
 		this.computerDAO = computerDAO;
 		this.messageSource = messageSource;
 	}
@@ -47,30 +43,14 @@ public class ComputerService {
 		}
 	}
 
-	public void create(Computer comp) throws ValidatorException {
-		try {
-			try {
-				findById(comp.getId());
-				companyService.findById(comp.getManufacturer().getId());
-				throw new ValidatorException(messageSource.getMessage("computer.id", null, LocaleContextHolder.getLocale()) 
-						+ comp.getId() + messageSource.getMessage("alreadyexist", null, LocaleContextHolder.getLocale()));
-			}catch(CompanyException e) {
-				throw new ValidatorException(messageSource.getMessage("computer.id", null, LocaleContextHolder.getLocale()) 
-						+ comp.getId() + messageSource.getMessage("notexist", null, LocaleContextHolder.getLocale()));
-			} catch (ComputerException e) {
-				computerDAO.create(comp); 
-			} 
-
-		} catch (ValidatorException e) {
-			LOG.error(e.getMessage());
-			throw new ValidatorException(e.getMessage());
-		}	
+	public void create(Computer comp) {
+		computerDAO.createOrUpdate(comp); 
 	}
 
 	public void update(Computer comp) throws ValidatorException {
 		try {
 			findById(comp.getId());
-			computerDAO.update(comp);
+			computerDAO.createOrUpdate(comp);
 		}catch (ComputerException e) { 
 			LOG.error(e.getMessage());
 			throw new ValidatorException(messageSource.getMessage("computer.id", null, LocaleContextHolder.getLocale()) 

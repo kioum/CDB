@@ -115,7 +115,7 @@ public class ComputerController {
 		try {
 			computer.setManufacturerName("unknown");
 			computerService.create(ComputerMapper.dtoToComputer(computer));
-		} catch (ValidatorException | TimestampException e) {
+		} catch (TimestampException e) {
 			model.addAttribute("exception", e.getMessage());
 			return getAddServlet(model);
 		}

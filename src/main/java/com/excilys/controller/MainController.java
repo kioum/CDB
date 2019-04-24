@@ -193,11 +193,7 @@ public class MainController {
 		Computer computer = new Computer.ComputerBuilder().name(name).introduced(introduced)
 				.discontinued(discontinued).manufacturer(company).build();
 
-		try {
-			computerService.create(computer);
-		} catch (ValidatorException e) {
-			LOG.info(e.getMessage());
-		}
+		computerService.create(computer);
 	}
 
 	/**
