@@ -42,7 +42,7 @@ public class ComputerMapperTest extends TestCase{
 	public void testMap() throws SQLException {
 		Computer comp = ComputerMapper.map(rs);
 
-		assertEquals(comp.getId(), Long.valueOf(1));
+		assertEquals(comp.getId(), 1L);
 		assertEquals(comp.getName(), "Test computer");
 		assertEquals(comp.getIntroduced(), Timestamp.valueOf("1960-09-11 00:11:22"));
 		assertEquals(comp.getDiscontinued(), Timestamp.valueOf("2020-09-11 00:11:22"));
@@ -55,11 +55,11 @@ public class ComputerMapperTest extends TestCase{
 		ComputerDTO compDTO = ComputerMapper.computerToDTO(comp);
 
 		assertNotNull(compDTO);
-		assertEquals(compDTO.getId(), comp.getId().intValue());
+		assertEquals(compDTO.getId(), comp.getId());
 		assertEquals(compDTO.getName(), comp.getName());
 		assertEquals(compDTO.getIntroduced(), "1960-09-11");
 		assertEquals(compDTO.getDiscontinued(), "2020-09-11");
-		assertEquals(compDTO.getManufacturerId(), comp.getManufacturer().getId().longValue());
+		assertEquals(compDTO.getManufacturerId(), comp.getManufacturer().getId());
 		assertEquals(compDTO.getManufacturerName(), comp.getManufacturer().getName());
 	}
 
@@ -69,9 +69,9 @@ public class ComputerMapperTest extends TestCase{
 		Computer comp = ComputerMapper.dtoToComputer(compDTO);
 
 		assertNotNull(comp);
-		assertEquals(compDTO.getId(), comp.getId().intValue());
+		assertEquals(compDTO.getId(), comp.getId());
 		assertEquals(compDTO.getName(), comp.getName());
-		assertEquals(compDTO.getManufacturerId(), comp.getManufacturer().getId().longValue());
+		assertEquals(compDTO.getManufacturerId(), comp.getManufacturer().getId());
 		assertEquals(compDTO.getManufacturerName(), comp.getManufacturer().getName());
 	}
 
@@ -85,9 +85,9 @@ public class ComputerMapperTest extends TestCase{
 
 		compDTO = ComputerMapper.mapListDTO(comp);
 		assertEquals(comp.size(), compDTO.size());
-		assertEquals(comp.get(0).getId().longValue(), compDTO.get(0).getId());
+		assertEquals(comp.get(0).getId(), compDTO.get(0).getId());
 		assertEquals(comp.get(0).getName(), compDTO.get(0).getName());
-		assertEquals(comp.get(0).getManufacturer().getId().longValue(), compDTO.get(0).getManufacturerId());
+		assertEquals(comp.get(0).getManufacturer().getId(), compDTO.get(0).getManufacturerId());
 		assertEquals(comp.get(0).getManufacturer().getName(), compDTO.get(0).getManufacturerName());
 	}
 }

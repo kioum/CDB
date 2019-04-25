@@ -32,7 +32,7 @@ public class CompanyMapperTest extends TestCase{
 	public void testMap() throws SQLException {
 		Company comp = CompanyMapper.map(rs);
 
-		assertEquals(comp.getId(), Long.valueOf(1));
+		assertEquals(comp.getId(), 1L);
 		assertEquals(comp.getName(), "Test Company");
 	}
 

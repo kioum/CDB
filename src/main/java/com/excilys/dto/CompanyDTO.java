@@ -9,7 +9,7 @@ public class CompanyDTO{
 		this.name = name;
 	}
 
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 

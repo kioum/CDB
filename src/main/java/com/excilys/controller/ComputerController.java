@@ -113,7 +113,6 @@ public class ComputerController {
 	@PostMapping({ "/AddComputer", "/addComputer", "/addcomputer" })
 	public String postAddServlet(@Validated @ModelAttribute("computer")ComputerDTO computer, Model model) {
 		try {
-			computer.setManufacturerName("unknown");
 			computerService.create(ComputerMapper.dtoToComputer(computer));
 		} catch (TimestampException e) {
 			model.addAttribute("exception", e.getMessage());
@@ -146,7 +145,6 @@ public class ComputerController {
 	public String postEditServlet(@Validated @ModelAttribute("computer")ComputerDTO computer, Model model) {
 
 		try {
-			computer.setManufacturerName("unknown");
 			computerService.update(ComputerMapper.dtoToComputer(computer));
 		} catch (ValidatorException | TimestampException e) {
 			model.addAttribute("exception", e.getMessage());

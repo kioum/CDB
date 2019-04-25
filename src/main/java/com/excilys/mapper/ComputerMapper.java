@@ -61,7 +61,6 @@ public class ComputerMapper implements RowMapper<Computer>{
 	}
 
 	public static Computer dtoToComputer(ComputerDTO computerDTO) throws TimestampException {
-		Long id = computerDTO.getId() == 0 ? null :computerDTO.getId();
 		String name = computerDTO.getName();
 
 		Timestamp introduced = TimestampConverter.valueOf(computerDTO.getIntroduced());
@@ -70,7 +69,7 @@ public class ComputerMapper implements RowMapper<Computer>{
 		Company company = new Company.CompanyBuilder().id(computerDTO.getManufacturerId())
 				.name(computerDTO.getManufacturerName()).build();
 
-		Computer computer = new Computer.ComputerBuilder().id(id).name(name).introduced(introduced)
+		Computer computer = new Computer.ComputerBuilder().id(computerDTO.getId()).name(name).introduced(introduced)
 				.discontinued(discontinued).manufacturer(company).build();
 
 		return computer;

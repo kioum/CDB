@@ -5,23 +5,37 @@ import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 @Entity
 @Table(name = "computer")
 public class Computer {
-	private Long id;
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="id", unique=true, nullable=false)
+	private long id;
+	
+	@Column(name="name")
 	private String name;
+	
+	@Column(name="introduced")
 	private Timestamp introduced;
+	@Column(name="discontinued")
 	private Timestamp discontinued;
-	private Company manufacturer;
-
+	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="company_id")
+	private Company manufacturer;
+
 	public Company getManufacturer() {
 		return manufacturer;
 	}
@@ -30,18 +44,14 @@ public class Computer {
 		this.manufacturer = manufacturer;
 	}
 
-	@Id
-	@GeneratedValue
-	@Column(name="id", unique=true, nullable=false)
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
-	@Column(name="name")
 	public String getName() {
 		return name;
 	}
@@ -50,7 +60,6 @@ public class Computer {
 		this.name = name;
 	}
 
-	@Column(name="introduced")
 	public Timestamp getIntroduced() {
 		return introduced;
 	}
@@ -59,7 +68,6 @@ public class Computer {
 		this.introduced = introduced;
 	}
 
-	@Column(name="discontinued")
 	public Timestamp getDiscontinued() {
 		return discontinued;
 	}
@@ -72,10 +80,7 @@ public class Computer {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((discontinued == null) ? 0 : discontinued.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((introduced == null) ? 0 : introduced.hashCode());
-		result = prime * result + ((manufacturer == null) ? 0 : manufacturer.hashCode());
+		result = prime * result + (int) (id ^ (id >>> 32));
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
@@ -88,12 +93,13 @@ public class Computer {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-
 		Computer other = (Computer) obj;
-		if (id == null) {
-			if (other.id != null)
+		if (id != other.id)
+			return false;
+		if (name == null) {
+			if (other.name != null)
 				return false;
-		} else if (!id.equals(other.id))
+		} else if (!name.equals(other.name))
 			return false;
 		return true;
 	}
@@ -105,21 +111,21 @@ public class Computer {
 	}
 
 	public static class ComputerBuilder{
-		private Long id;
+		private long id;
 		private String name;
 		private Timestamp introduced;
 		private Timestamp discontinued;
 		private Company manufacturer;
 
 		public ComputerBuilder() {
-			this.id = null;
+			this.id = 0L;
 			this.name = null;
 			this.introduced = null;
 			this.discontinued = null;
 			this.manufacturer = null;
 		}
 
-		public ComputerBuilder id(Long id) {
+		public ComputerBuilder id(long id) {
 			this.id = id;
 			return this;
 		}
