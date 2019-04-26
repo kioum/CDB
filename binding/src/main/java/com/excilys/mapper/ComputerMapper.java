@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import org.springframework.jdbc.core.RowMapper;
-
 import com.excilys.dto.ComputerDTO;
 import com.excilys.exception.TimestampException;
 import com.excilys.model.Company;

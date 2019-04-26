@@ -12,7 +12,7 @@
 	<artifactId>webapp</artifactId>
 	<name>webapp</name>
 	<version>${module.version}</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<dependencies>
 		<dependency>

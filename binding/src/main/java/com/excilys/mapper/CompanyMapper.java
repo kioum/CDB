@@ -5,8 +5,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.jdbc.core.RowMapper;
-
 import com.excilys.dto.CompanyDTO;
 import com.excilys.model.Company;
 

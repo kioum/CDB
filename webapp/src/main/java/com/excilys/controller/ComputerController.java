@@ -1,5 +1,5 @@
 package com.excilys.controller;
-
+ 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +26,7 @@ import com.excilys.service.CompanyService;
 import com.excilys.service.ComputerService;
 import com.excilys.validator.CompanyDTOValidator;
 import com.excilys.validator.ComputerDTOValidator;
- 
+
 @Controller
 public class ComputerController {
 	private ComputerService computerService;
@@ -69,7 +69,7 @@ public class ComputerController {
 			if(!Boolean.valueOf(asc))
 				Collections.reverse(pageComputer.getList());
 		}
-
+ 
 		String maxElement = paths.get("maxElement");
 		if(maxElement != null && !maxElement.equals("")) {
 			pageComputer.setMaxElement(Integer.valueOf(maxElement));
@@ -99,7 +99,7 @@ public class ComputerController {
 					model.addAttribute("exception", e.getMessage());
 				}
 		
-		return getDashBoard(Map.of(), model);
+		return getDashBoard(new HashMap<String, String>(), model);
 	}
  
 	@GetMapping({ "/AddComputer", "/addComputer", "/addcomputer" })
@@ -119,7 +119,7 @@ public class ComputerController {
 			return getAddServlet(model);
 		}
 
-		return "redirect:/"+getDashBoard(Map.of(), model);
+		return "redirect:/"+getDashBoard(new HashMap<String, String>(), model);
 	}
 
 	@GetMapping({ "/editcomputer", "/editComputer", "/EditComputer" })
@@ -153,6 +153,6 @@ public class ComputerController {
 			return getEditServlet(paths, model);
 		}
 
-		return "redirect:/"+getDashBoard(Map.of(), model);
+		return "redirect:/"+getDashBoard(new HashMap<String, String>(), model);
 	}
 }
