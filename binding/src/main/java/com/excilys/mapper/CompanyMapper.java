@@ -15,7 +15,7 @@ public class CompanyMapper {
 		company = new Company.CompanyBuilder()
 				.id(res.getLong("id"))
 				.name(res.getString("name")).build();
-
+		
 		return company;
 	}
 

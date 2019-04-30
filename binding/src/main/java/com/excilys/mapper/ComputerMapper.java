@@ -85,7 +85,9 @@ public class ComputerMapper {
 				case DISCONTINUED:
 					return arg0.getDiscontinued().compareTo(arg1.getDiscontinued());
 				case COMPANYNAME:
-					return arg0.getManufacturerName().compareTo(arg1.getManufacturerName());
+					String str1 = arg0.getManufacturerName() == null ? "" : arg0.getManufacturerName();
+					String str2 = arg1.getManufacturerName() == null ? "" : arg1.getManufacturerName();
+					return str1.compareTo(str2);
 				}
 				return 0;
 			}

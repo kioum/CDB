@@ -90,7 +90,7 @@ public class ComputerController {
 	}
 
 	@PostMapping({ "/", "/dashboard", "/dashBoard", "/Dashboard", "/DashBoard" })
-	public String postDashBoard(@RequestParam(value = "cb", required = false) String listComputers, Model model) {
+	public String deleteComputer(@RequestParam(value = "cb", required = false) String listComputers, Model model) {
 		if(listComputers != null)
 			for(String id: listComputers.split(","))
 				try {
