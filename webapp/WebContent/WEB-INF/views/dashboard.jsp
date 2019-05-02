@@ -28,6 +28,9 @@
 				<button
 					onclick="location.href='<c:url value="/Dashboard?numPage=${page.numPage}&maxElement=${page.maxElement}&search=${search}&sortBy=${sortBy}&asc=${asc}&lang=en"/>'"
 					type="button" class="btn btn-default">EN</button>
+				<span><a href="logoutProcess" id="logout"> <i
+						class="glyphicon glyphicon-off"></i></a></span>
+
 			</div>
 		</div>
 	</header>

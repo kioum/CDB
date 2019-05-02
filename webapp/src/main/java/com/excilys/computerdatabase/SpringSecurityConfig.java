@@ -23,7 +23,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.jdbcAuthentication().dataSource(dataSource)
 		.usersByUsernameQuery(
-				"select username,password, enabled from user where username = ?")
+				"select username,password, enabled from users where username = ?")
 		.authoritiesByUsernameQuery(
 				"select username, role from user_roles where username=?")
 		.passwordEncoder(new BCryptPasswordEncoder());
@@ -35,8 +35,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 		.authorizeRequests()
 		.antMatchers("/AddComputer", "/addComputer", "/addcomputer" ).hasAuthority("ADMIN")
 		.antMatchers("/editcomputer", "/editComputer", "/EditComputer").hasAuthority("ADMIN")
+		.antMatchers("/deleteComputer", "/deletecomputer", "/Deletecomputer").hasAuthority("ADMIN")
 		.antMatchers("/", "/dashboard", "/dashBoard", "/Dashboard", "/DashBoard").authenticated()
-		.antMatchers("/login", "/loginProcess").permitAll()
+		.antMatchers("/loginProcess").permitAll()
 		.and()
 		.formLogin()
 		.loginPage("/login")

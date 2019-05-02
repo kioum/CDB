@@ -28,6 +28,8 @@
 				<button
 					onclick="location.href='<c:url value="/addComputer?lang=en"/>'"
 					type="button" class="btn btn-default">EN</button>
+				<span><a href="logoutProcess" id="logout"> <i
+						class="glyphicon glyphicon-off"></i></a></span>
 			</div>
 		</div>
 	</header>
@@ -48,7 +50,7 @@
 								</form:label>
 								<spring:message code="computerName" var="computerName" />
 								<form:input type="text" class="form-control" id="name"
-									path="name" placeholder="${computerName}" required="required"/>
+									path="name" placeholder="${computerName}" required="required" />
 							</div>
 							<div class="form-group">
 								<form:label path="introduced" for="introduced">

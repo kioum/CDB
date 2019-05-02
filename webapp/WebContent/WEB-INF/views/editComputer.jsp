@@ -28,6 +28,8 @@
 				<button
 					onclick="location.href='<c:url value="/editComputer?id=${computer.id}&lang=en"/>'"
 					type="button" class="btn btn-default">EN</button>
+				<span><a href="logoutProcess" id="logout"> <i
+						class="glyphicon glyphicon-off"></i></a></span>
 			</div>
 		</div>
 	</header>

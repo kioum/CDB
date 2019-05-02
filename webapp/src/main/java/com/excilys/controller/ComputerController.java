@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.dto.ComputerDTO;
@@ -28,6 +29,7 @@ import com.excilys.validator.CompanyDTOValidator;
 import com.excilys.validator.ComputerDTOValidator;
 
 @Controller
+@RequestMapping(value = "/")
 public class ComputerController {
 	private ComputerService computerService;
 	private CompanyService companyService;
@@ -89,7 +91,7 @@ public class ComputerController {
 		return VIEW_DASHBOARD;
 	}
 
-	@PostMapping({ "/", "/dashboard", "/dashBoard", "/Dashboard", "/DashBoard" })
+	@PostMapping({"/", "/dashboard", "/dashBoard", "/Dashboard", "/DashBoard"})
 	public String deleteComputer(@RequestParam(value = "cb", required = false) String listComputers, Model model) {
 		if(listComputers != null)
 			for(String id: listComputers.split(","))

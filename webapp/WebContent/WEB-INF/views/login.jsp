@@ -1,6 +1,5 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
-<%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -22,11 +21,9 @@
 			<a class="navbar-brand" href="<c:url value="/Dashboard"/>"><spring:message
 					code="title" /></a>
 			<div class="navbar-brand navbar-right">
-				<button
-					onclick="location.href='<c:url value="/login?lang=fr"/>'"
+				<button onclick="location.href='<c:url value="/login?lang=fr"/>'"
 					type="button" class="btn btn-default">FR</button>
-				<button
-					onclick="location.href='<c:url value="/login?lang=en"/>'"
+				<button onclick="location.href='<c:url value="/login?lang=en"/>'"
 					type="button" class="btn btn-default">EN</button>
 			</div>
 		</div>
@@ -39,27 +36,29 @@
 					<h1>
 						<spring:message code="signin" />
 					</h1>
-					<form name="login" id="login" action="LoginProcess" method="POST">
+					<form action="loginProcess" method="POST">
 						<fieldset>
 							<div class="form-group">
-								<label for="userName"> <spring:message code="userName" />
+								<label for="username"> <spring:message code="userName" />
 								</label>
-								<spring:message code="userName" var="userName" />
-								<input type="text" class="form-control" id="userName"
+								<input type="text" class="form-control" id="username" name ="username"
 									required="required" />
 							</div>
 							<div class="form-group">
 								<label for="password"> <spring:message code="password" />
 								</label>
-								<spring:message code="password" var="password" />
-								<input type="password" class="form-control" id="password"
+								<input type="password" class="form-control" id="password" name="password"
 									required="required" />
 							</div>
 						</fieldset>
-						<c:if test="${not empty exception}">
+						<c:if test="${error}">
 							<p style="color: red">
-								Exception :
-								<c:out value="${exception}" />
+								<spring:message code="badcredantial" />
+							</p>
+						</c:if>
+							<c:if test="${logout}">
+							<p style="color: red">
+								<spring:message code="logoutMessage" />
 							</p>
 						</c:if>
 						<div class="actions pull-right">
