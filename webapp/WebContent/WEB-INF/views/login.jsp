@@ -36,31 +36,29 @@
 					<h1>
 						<spring:message code="signin" />
 					</h1>
+					<c:if test="${param.error}">
+						<p class="alert alert-danger">
+							<spring:message code="badcredential" />
+						</p>
+					</c:if>
+					<c:if test="${param.logout}">
+						<p class="alert alert-info">
+							<spring:message code="logoutMessage" />
+						</p>
+					</c:if>
 					<form action="loginProcess" method="POST">
 						<fieldset>
 							<div class="form-group">
 								<label for="username"> <spring:message code="userName" />
-								</label>
-								<input type="text" class="form-control" id="username" name ="username"
-									required="required" />
+								</label> <input type="text" class="form-control" id="username"
+									name="username" required="required" />
 							</div>
 							<div class="form-group">
 								<label for="password"> <spring:message code="password" />
-								</label>
-								<input type="password" class="form-control" id="password" name="password"
-									required="required" />
+								</label> <input type="password" class="form-control" id="password"
+									name="password" required="required" />
 							</div>
 						</fieldset>
-						<c:if test="${error}">
-							<p style="color: red">
-								<spring:message code="badcredantial" />
-							</p>
-						</c:if>
-							<c:if test="${logout}">
-							<p style="color: red">
-								<spring:message code="logoutMessage" />
-							</p>
-						</c:if>
 						<div class="actions pull-right">
 							<input id="btnSubmit" type="submit"
 								value="<spring:message

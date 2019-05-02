@@ -2,6 +2,8 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -51,7 +53,7 @@
 
 			</h1>
 			<c:if test="${not empty exception}">
-				<p style="color: red">
+				<p class="alert alert-danger">
 					Exception :
 					<c:out value="${exception}" />
 				</p>
@@ -69,17 +71,20 @@
 							class="btn btn-primary" />
 					</form>
 				</div>
-				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer"
-						href="<c:url value="/AddComputer"/>"><spring:message
-							code="addComputer" /></a> <a class="btn btn-default"
-						id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><spring:message
-							code="edit" /></a>
-				</div>
+
+				<sec:authorize access="hasAuthority('ADMIN')">
+					<div class="pull-right">
+						<a class="btn btn-success" id="addComputer"
+							href="<c:url value="/AddComputer"/>"><spring:message
+								code="addComputer" /></a> <a class="btn btn-default"
+							id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><spring:message
+								code="edit" /></a>
+					</div>
+				</sec:authorize>
 			</div>
 		</div>
 
-		<form id="deleteForm" action="#" method="POST">
+		<form id="deleteForm" action="deleteComputer" method="POST">
 			<input type="hidden" name="selection" value="">
 
 
@@ -119,8 +124,13 @@
 							<tr>
 								<td class="editMode"><input type="checkbox" name="cb"
 									class="cb" value="${comp.id}"></td>
-								<td><a href="<c:url value="/EditComputer?id=${comp.id}"/>"
-									onclick=""><c:out value="${comp.name}" /></a></td>
+								<td><sec:authorize access="hasAuthority('ADMIN')">
+										<a href="<c:url value="/EditComputer?id=${comp.id}"/>"
+											onclick=""> <c:out value="${comp.name}" />
+										</a>
+									</sec:authorize> <sec:authorize access="hasAuthority('USER')">
+										<c:out value="${comp.name}" />
+									</sec:authorize></td>
 								<td><c:if test="${comp.introduced != ''}">
 										<c:out value="${comp.introduced}" />
 									</c:if></td>
