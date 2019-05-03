@@ -84,6 +84,7 @@
 			</div>
 		</div>
 
+
 		<form id="deleteForm" action="deleteComputer" method="POST">
 			<input type="hidden" name="selection" value="">
 
@@ -95,13 +96,15 @@
 							<!-- Variable declarations for passing labels as parameters -->
 							<!-- Table header for Computer Name -->
 
-							<th class="editMode" style="width: 60px; height: 22px;"><input
-								type="checkbox" id="selectall" /> <span
-								style="vertical-align: top;"> - <a href="#"
-									id="deleteSelected" onclick="$.fn.deleteSelected();"> <i
-										class="fa fa-trash-o fa-lg"></i>
-								</a>
-							</span></th>
+							<sec:authorize access="hasAuthority('ADMIN')">
+								<th class="editMode" style="width: 60px; height: 22px;"><input
+									type="checkbox" id="selectall" /> <span
+									style="vertical-align: top;"> - <a href="#"
+										id="deleteSelected" onclick="$.fn.deleteSelected();"> <i
+											class="fa fa-trash-o fa-lg"></i>
+									</a>
+								</span></th>
+							</sec:authorize>
 							<th
 								onclick="location.href='<c:url value="/Dashboard?numPage=${page.numPage}&maxElement=${page.maxElement}&search=${search}&sortBy=name&asc=${(sortBy == 'name' && asc != null) ? !Boolean.valueOf(asc):true}"/>'"><spring:message
 									code="computerName" /></th>
@@ -122,8 +125,10 @@
 					<tbody id="results">
 						<c:forEach var="comp" items="${page.currentPage()}">
 							<tr>
-								<td class="editMode"><input type="checkbox" name="cb"
-									class="cb" value="${comp.id}"></td>
+								<sec:authorize access="hasAuthority('ADMIN')">
+									<td class="editMode"><input type="checkbox" name="cb"
+										class="cb" value="${comp.id}"></td>
+								</sec:authorize>
 								<td><sec:authorize access="hasAuthority('ADMIN')">
 										<a href="<c:url value="/EditComputer?id=${comp.id}"/>"
 											onclick=""> <c:out value="${comp.name}" />
