@@ -49,6 +49,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 		.and()
 		.logout()
 		.logoutSuccessUrl("/login?logout=true")
-		.logoutUrl("/logoutProcess");
+		.logoutUrl("/logoutProcess")
+		.and()
+	      .exceptionHandling().accessDeniedPage("/403");
 	}
 }
