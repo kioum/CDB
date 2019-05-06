@@ -9,7 +9,6 @@ import java.util.NoSuchElementException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.excilys.exception.ComputerException;
@@ -17,27 +16,29 @@ import com.excilys.exception.ValidatorException;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.model.Page;
+import com.excilys.model.User;
 import com.excilys.service.CompanyService;
 import com.excilys.service.ComputerService;
+import com.excilys.service.UserService;
 import com.excilys.ui.MainView;
 import com.excilys.util.Order;
 
 @Component
 public class MainController {
 	private MainView mw;
-	
-	@Autowired
 	private ComputerService computerService;
-	
-	@Autowired
 	private CompanyService companyService;
+	private UserService userService;
 
 	private static final Logger LOG = LoggerFactory.getLogger(MainController.class);
 
 	/** 
 	 * Constructor
 	 */
-	public MainController() {
+	public MainController(ComputerService computerService, CompanyService companyService, UserService userService) {
+		this.computerService = computerService;
+		this.companyService = companyService;
+		this.userService = userService;
 		this.mw = new MainView();
 	}
 
@@ -74,6 +75,9 @@ public class MainController {
 		case "DELETECOMPANY":
 			deleteCompany();
 			break;
+		case "CREATEUSER":
+			createUser();
+			break;
 		default:
 			break;
 		}
@@ -90,6 +94,13 @@ public class MainController {
 		}
 	}
 
+	public void createUser() {
+		String name = mw.getInputUser("Enter the username : ");
+		String password = mw.getInputUser("Enter the password : ");
+
+		userService.create(new User(name, password, true));
+	}
+	
 	public void deleteComputer() {
 		Long id = Long.valueOf(mw.getInputUser("Enter the id : "));
 		try {

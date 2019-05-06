@@ -93,7 +93,6 @@ public class ComputerController {
 
 	@PostMapping({"/deleteComputer", "/deletecomputer", "/Deletecomputer"})
 	public String deleteComputer(@RequestParam(value = "cb", required = false) String listComputers, Model model) {
-		System.out.println(listComputers.toString());
 		if(listComputers != null)
 			for(String id: listComputers.split(","))
 				try {
