@@ -7,12 +7,20 @@ import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.core.MediaType;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import com.excilys.dto.ComputerDTO;
 import com.excilys.exception.ComputerException;
+import com.excilys.exception.TimestampException;
 import com.excilys.exception.ValidatorException;
+import com.excilys.mapper.ComputerMapper;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.model.Page;
@@ -29,16 +37,16 @@ public class MainController {
 	private ComputerService computerService;
 	private CompanyService companyService;
 	private UserService userService;
+	Client client;
 
 	private static final Logger LOG = LoggerFactory.getLogger(MainController.class);
+	private final String URL_API = "http://localhost:8080/webapp/computers";
 
 	/** 
 	 * Constructor
 	 */
-	public MainController(ComputerService computerService, CompanyService companyService, UserService userService) {
-		this.computerService = computerService;
-		this.companyService = companyService;
-		this.userService = userService;
+	public MainController() {
+		client = ClientBuilder.newClient();
 		this.mw = new MainView();
 	}
 
@@ -47,15 +55,17 @@ public class MainController {
 	 */
 	public void mainMenu() {
 		mw.drawMenu();
-
+		
 		int cmd = Integer.parseInt(mw.getInputUser("").toUpperCase());
+		Invocation.Builder invocationBuilder;
 
 		switch (Order.values()[cmd].name()) {
 		case "EXIT" :
 			LOG.info("Exit - Bye");
 			return;
 		case "LISTCOMPUTER":
-			drawList(computerService.getAll());
+			invocationBuilder = client.target(URL_API).path("").request(MediaType.APPLICATION_JSON);
+			drawList(invocationBuilder.get().readEntity(List.class));
 			break;
 		case "LISTCOMPANY":
 			drawList(companyService.getAll());
@@ -87,10 +97,11 @@ public class MainController {
 	public void drawComputer() {
 		Long id = Long.valueOf(mw.getInputUser("Enter the id : "));
 
+		Invocation.Builder invocationBuilder = client.target(URL_API).path("/"+id).request(MediaType.APPLICATION_JSON);
 		try {
-			mw.drawComputerDetails(computerService.findById(id));
-		}catch(NoSuchElementException | ComputerException e) {
-			LOG.error("Computer id =" + id + " doesn't exist");
+			mw.drawComputerDetails(ComputerMapper.dtoToComputer(invocationBuilder.get().readEntity(ComputerDTO.class)));
+		} catch (TimestampException e) {
+			LOG.error(e.getMessage());
 		}
 	}
 
