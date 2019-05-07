@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,6 +31,7 @@ import com.excilys.service.ComputerService;
 @RequestMapping(path = "/computers", produces = "application/json")
 public class ComputerRestController {
 	private ComputerService computerService;
+	private static final Logger LOG = LoggerFactory.getLogger(ComputerRestController.class);
 
 	public ComputerRestController(ComputerService computerService) {
 		this.computerService = computerService;
@@ -54,7 +57,7 @@ public class ComputerRestController {
 			if(!Boolean.valueOf(asc))
 				Collections.reverse(pageComputer.getList());
 		}
- 
+
 		String maxElement = paths.get("maxElement");
 		if(maxElement != null && !maxElement.equals("")) {
 			pageComputer.setMaxElement(Integer.valueOf(maxElement));
@@ -75,26 +78,45 @@ public class ComputerRestController {
 			compDTO = ComputerMapper.computerToDTO(computerService.findById(id));
 			return new ResponseEntity<ComputerDTO>(compDTO, HttpStatus.OK);
 		} catch (ComputerException e) {
+			LOG.error(e.getMessage());
 			return new ResponseEntity<ComputerDTO>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@PostMapping
-	public ComputerDTO createComputer(@RequestBody ComputerDTO newComputer) throws TimestampException {
-		Computer comp = ComputerMapper.dtoToComputer(newComputer);		
-		computerService.create(comp);
-		return newComputer;
+	public ResponseEntity<ComputerDTO> createComputer(@RequestBody ComputerDTO computer){
+		Computer comp = new Computer();
+		try {
+			comp = ComputerMapper.dtoToComputer(computer);
+			computerService.create(comp);
+			return new ResponseEntity<ComputerDTO>(computer, HttpStatus.OK);
+		} catch (TimestampException e) {
+			LOG.error(e.getMessage());
+			return new ResponseEntity<ComputerDTO>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}			
 	}
-	
+
 	@PutMapping("/{id}")
-	public ComputerDTO updateComputer(@RequestBody ComputerDTO newComputer, @PathVariable Long id) throws TimestampException, ValidatorException {
-		Computer comp = ComputerMapper.dtoToComputer(newComputer);
-		computerService.update(comp);
-		return newComputer;
+	public ResponseEntity<ComputerDTO> updateComputer(@RequestBody ComputerDTO computer, @PathVariable Long id) {
+		Computer comp = new Computer();
+		try {
+			comp = ComputerMapper.dtoToComputer(computer);
+			computerService.update(comp);
+			return new ResponseEntity<ComputerDTO>(computer, HttpStatus.OK);
+		} catch (ValidatorException | TimestampException e) {
+			LOG.error(e.getMessage());
+			return new ResponseEntity<ComputerDTO>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 	@DeleteMapping("/{id}")
-	public void deleteById(@PathVariable Long id) throws ValidatorException {
-		computerService.deleteById(id);
+	public ResponseEntity<?> deleteById(@PathVariable Long id) {
+		try {
+			computerService.deleteById(id);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (ValidatorException e) {
+			LOG.error(e.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 }
