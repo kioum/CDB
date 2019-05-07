@@ -126,8 +126,8 @@
 						<c:forEach var="comp" items="${page.currentPage()}">
 							<tr>
 								<sec:authorize access="hasAuthority('ADMIN')">
-									<td class="editMode"><input type="checkbox" name="cb"
-										class="cb" value="${comp.id}"></td>
+									<td style="display: none" class="editMode"><input
+										type="checkbox" name="cb" class="cb" value="${comp.id}"></td>
 								</sec:authorize>
 								<td><sec:authorize access="hasAuthority('ADMIN')">
 										<a href="<c:url value="/EditComputer?id=${comp.id}"/>"

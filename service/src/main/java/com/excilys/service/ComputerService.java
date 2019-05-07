@@ -65,7 +65,7 @@ public class ComputerService {
 		} catch (ComputerException e) {
 			LOG.error(e.getMessage());
 			throw new ValidatorException(messageSource.getMessage("computer.id", null, LocaleContextHolder.getLocale()) 
-					+ id + messageSource.getMessage("notexist", null, LocaleContextHolder.getLocale()));
+					+ id + " " + messageSource.getMessage("notexist", null, LocaleContextHolder.getLocale()));
 		}
 	}
 
