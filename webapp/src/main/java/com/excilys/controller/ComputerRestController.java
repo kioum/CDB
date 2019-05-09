@@ -6,18 +6,15 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,29 +27,20 @@ import com.excilys.mapper.ComputerMapper;
 import com.excilys.model.Computer;
 import com.excilys.model.Page;
 import com.excilys.service.ComputerService;
-import com.excilys.validator.CompanyDTOValidator;
-import com.excilys.validator.ComputerDTOValidator;
 
 @RestController
 @RequestMapping(path = "/computers", produces = "application/json")
 public class ComputerRestController {
 	private ComputerService computerService;
-	private MessageSource messageSource;
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerRestController.class);
 
-	public ComputerRestController(ComputerService computerService, MessageSource messageSource) {
+	public ComputerRestController(ComputerService computerService) {
 		this.computerService = computerService;
-		this.messageSource = messageSource;
-	}
-
-	@InitBinder("computer")
-	protected void initBinder(WebDataBinder binder) {
-		binder.setValidator(new ComputerDTOValidator(new CompanyDTOValidator(messageSource), messageSource));
 	}
 	
 	@GetMapping
 	public ResponseEntity<List<ComputerDTO>> getAll(@RequestParam Map<String, String> paths) {
-		Page<ComputerDTO> pageComputer = new Page<ComputerDTO>(computerService.getAll(), 10);
+		Page<ComputerDTO> pageComputer = new Page<ComputerDTO>(computerService.getAll(), computerService.getAll().size());
 
 		String search = paths.get("search");
 		if(search != null && !search.equals("")) {
@@ -97,8 +85,9 @@ public class ComputerRestController {
 	}
 
 	@PostMapping
-	public ResponseEntity<ComputerDTO> createComputer(@Validated @ModelAttribute("computer") ComputerDTO computer){
+	public ResponseEntity<ComputerDTO> createComputer(@Validated @RequestBody ComputerDTO computer){
 		Computer comp = new Computer();
+		
 		try {
 			comp = ComputerMapper.dtoToComputer(computer);
 			computerService.create(comp);
@@ -106,11 +95,11 @@ public class ComputerRestController {
 		} catch (TimestampException e) {
 			LOG.error(e.getMessage());
 			return new ResponseEntity<ComputerDTO>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}			
+		}	
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<ComputerDTO> updateComputer(@Validated @ModelAttribute("computer")ComputerDTO computer, @PathVariable Long id) {
+	public ResponseEntity<ComputerDTO> updateComputer(@Validated @RequestBody ComputerDTO computer, @PathVariable Long id) {
 		Computer comp = new Computer();
 		try {
 			comp = ComputerMapper.dtoToComputer(computer);

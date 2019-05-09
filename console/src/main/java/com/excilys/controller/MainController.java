@@ -1,5 +1,5 @@
 package com.excilys.controller;
- 
+
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,6 +9,7 @@ import java.util.NoSuchElementException;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.core.MediaType;
 
@@ -55,7 +56,7 @@ public class MainController {
 	 */
 	public void mainMenu() {
 		mw.drawMenu();
-		
+
 		int cmd = Integer.parseInt(mw.getInputUser("").toUpperCase());
 		Invocation.Builder invocationBuilder;
 
@@ -93,43 +94,7 @@ public class MainController {
 		}
 		mainMenu();
 	}
-
-	public void drawComputer() {
-		Long id = Long.valueOf(mw.getInputUser("Enter the id : "));
-
-		Invocation.Builder invocationBuilder = client.target(URL_API).path("/"+id).request(MediaType.APPLICATION_JSON);
-		try {
-			mw.drawComputerDetails(ComputerMapper.dtoToComputer(invocationBuilder.get().readEntity(ComputerDTO.class)));
-		} catch (TimestampException e) {
-			LOG.error(e.getMessage());
-		}
-	}
-
-	public void createUser() {
-		String name = mw.getInputUser("Enter the username : ");
-		String password = mw.getInputUser("Enter the password : ");
-
-		userService.create(new User(name, password, true));
-	}
 	
-	public void deleteComputer() {
-		Long id = Long.valueOf(mw.getInputUser("Enter the id : "));
-		try {
-			computerService.deleteById(id);
-		} catch (ValidatorException e) {
-			LOG.error(e.getMessage());
-		}
-	}
-
-	private void deleteCompany() {
-		Long id = Long.valueOf(mw.getInputUser("Enter the id : "));
-		try {
-			companyService.deleteById(id);
-		} catch (ValidatorException e) {
-			LOG.error(e.getMessage());
-		}
-	}
-
 	/**
 	 * Ask to user the number element by page and control the pagination
 	 * with p (Prec), n (next) or q (quit)
@@ -153,6 +118,38 @@ public class MainController {
 		}
 	}
 
+	public void drawComputer() {
+		Long id = Long.valueOf(mw.getInputUser("Enter the id : "));
+
+		Invocation.Builder invocationBuilder = client.target(URL_API).path("/"+id).request(MediaType.APPLICATION_JSON);
+		try {
+			mw.drawComputerDetails(ComputerMapper.dtoToComputer(invocationBuilder.get().readEntity(ComputerDTO.class)));
+		} catch (TimestampException e) {
+			LOG.error(e.getMessage());
+		}
+	}
+
+	public void createUser() {
+		String name = mw.getInputUser("Enter the username : ");
+		String password = mw.getInputUser("Enter the password : ");
+
+		userService.create(new User(name, password, true));
+	}
+
+	public void deleteComputer() {
+		Long id = Long.valueOf(mw.getInputUser("Enter the id : "));
+		client.target(URL_API).path("/"+id).request(MediaType.APPLICATION_JSON);
+	}
+
+	private void deleteCompany() {
+		Long id = Long.valueOf(mw.getInputUser("Enter the id : "));
+		try {
+			companyService.deleteById(id);
+		} catch (ValidatorException e) {
+			LOG.error(e.getMessage());
+		}
+	}
+	
 	/**
 	 * Ask to user a id. For each element ask if user want changes that.
 	 * Update computer in the DB
@@ -189,12 +186,10 @@ public class MainController {
 			computer.getManufacturer().setId(Long.valueOf(idManu));
 		}
 
-		try {
-			computerService.update(computer);
-		} catch (ValidatorException e) {
-			// TODO Auto-generated catch block
-			LOG.error(e.getMessage());
-		}
+		ComputerDTO compDTO = ComputerMapper.computerToDTO(computer);
+
+		client.target(URL_API).path("/"+id).request(MediaType.APPLICATION_JSON)
+		.post(Entity.json(compDTO), ComputerDTO.class);
 	}
 
 	/**
@@ -206,8 +201,11 @@ public class MainController {
 		mw.drawMessage("Enter the date of introduced :");
 		Timestamp introduced = getInputTimestamp();
 
-		mw.drawMessage("Enter the date of discontinued :");
-		Timestamp discontinued = getInputTimestamp();
+		Timestamp discontinued;
+		if(introduced != null) {
+			mw.drawMessage("Enter the date of discontinued :");
+			discontinued = getInputTimestamp();
+		}else discontinued = null;
 
 		Long idManu = Long.valueOf(mw.getInputUser("Enter the id of Manufacturer : "));
 
@@ -215,7 +213,11 @@ public class MainController {
 		Computer computer = new Computer.ComputerBuilder().name(name).introduced(introduced)
 				.discontinued(discontinued).manufacturer(company).build();
 
-		computerService.create(computer);
+		ComputerDTO compDTO = ComputerMapper.computerToDTO(computer);
+
+		client.target(URL_API).request(MediaType.APPLICATION_JSON)
+		.post(Entity.json(compDTO), ComputerDTO.class);
+
 	}
 
 	/**
