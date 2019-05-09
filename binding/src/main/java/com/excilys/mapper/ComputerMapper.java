@@ -53,9 +53,11 @@ public class ComputerMapper {
 	public static ComputerDTO computerToDTO(Computer comp) {
 		String introduced = TimestampConverter.formatToString(comp.getIntroduced(), "yyyy-MM-dd");
 		String discontinued = TimestampConverter.formatToString(comp.getDiscontinued(), "yyyy-MM-dd");
-
-		return new ComputerDTO(comp.getId(), comp.getName(), introduced, 
+		
+		if(comp.getManufacturer() != null)
+			return new ComputerDTO(comp.getId(), comp.getName(), introduced, 
 				discontinued, comp.getManufacturer().getId(), comp.getManufacturer().getName());
+		else return new ComputerDTO(comp.getId(), comp.getName(), introduced, discontinued, 0L, null);
 	}
 
 	public static Computer dtoToComputer(ComputerDTO computerDTO) throws TimestampException {

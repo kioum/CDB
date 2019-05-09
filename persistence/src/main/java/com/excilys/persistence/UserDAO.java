@@ -1,5 +1,7 @@
 package com.excilys.persistence;
 
+import java.util.Optional;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Component;
@@ -25,6 +27,11 @@ public class UserDAO {
 		session.save(role);
 		session.getTransaction().commit();
 		session.close();
+	}
+	
+	public Optional<User> findByName(String name) {
+		isOpenSession();
+		return Optional.ofNullable(session.get(User.class, name));
 	}
 
 	public void isOpenSession() {

@@ -35,8 +35,9 @@ public class ComputerService {
 
 	public Computer findById(Long id) throws ComputerException {
 		Optional<Computer> optionComputer = computerDAO.findById(id);
-		if(optionComputer.isPresent())
-			return computerDAO.findById(id).get();
+		if(optionComputer.isPresent()) {
+			return computerDAO.findById(id).get();			
+		}
 		else {
 			throw new ComputerException(messageSource.getMessage("computer.id", null, LocaleContextHolder.getLocale()) +
 					id + messageSource.getMessage("notfound", null, LocaleContextHolder.getLocale()));

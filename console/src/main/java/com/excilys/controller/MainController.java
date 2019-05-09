@@ -17,17 +17,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import com.excilys.dto.CompanyDTO;
 import com.excilys.dto.ComputerDTO;
-import com.excilys.exception.ComputerException;
 import com.excilys.exception.TimestampException;
-import com.excilys.exception.ValidatorException;
 import com.excilys.mapper.ComputerMapper;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.model.Page;
 import com.excilys.model.User;
-import com.excilys.service.CompanyService;
-import com.excilys.service.ComputerService;
 import com.excilys.service.UserService;
 import com.excilys.ui.MainView;
 import com.excilys.util.Order;
@@ -35,13 +32,13 @@ import com.excilys.util.Order;
 @Component
 public class MainController {
 	private MainView mw;
-	private ComputerService computerService;
-	private CompanyService companyService;
 	private UserService userService;
 	Client client;
 
 	private static final Logger LOG = LoggerFactory.getLogger(MainController.class);
-	private final String URL_API = "http://localhost:8080/webapp/computers";
+	private final String URL_API_COMPUTERS = "http://localhost:8080/webapp/computers";
+	private final String URL_API_COMPANY = "http://localhost:8080/webapp/company";
+	private final String URL_API_USERS = "http://localhost:8080/webapp/users";
 
 	/** 
 	 * Constructor
@@ -65,11 +62,12 @@ public class MainController {
 			LOG.info("Exit - Bye");
 			return;
 		case "LISTCOMPUTER":
-			invocationBuilder = client.target(URL_API).path("").request(MediaType.APPLICATION_JSON);
+			invocationBuilder = client.target(URL_API_COMPUTERS).path("").request(MediaType.APPLICATION_JSON);
 			drawList(invocationBuilder.get().readEntity(List.class));
 			break;
 		case "LISTCOMPANY":
-			drawList(companyService.getAll());
+			invocationBuilder = client.target(URL_API_COMPANY).path("").request(MediaType.APPLICATION_JSON);
+			drawList(invocationBuilder.get().readEntity(List.class));
 			break;
 		case "SHOWCOMPUTER":
 			drawComputer();
@@ -94,7 +92,7 @@ public class MainController {
 		}
 		mainMenu();
 	}
-	
+
 	/**
 	 * Ask to user the number element by page and control the pagination
 	 * with p (Prec), n (next) or q (quit)
@@ -121,7 +119,7 @@ public class MainController {
 	public void drawComputer() {
 		Long id = Long.valueOf(mw.getInputUser("Enter the id : "));
 
-		Invocation.Builder invocationBuilder = client.target(URL_API).path("/"+id).request(MediaType.APPLICATION_JSON);
+		Invocation.Builder invocationBuilder = client.target(URL_API_COMPUTERS).path("/"+id).request(MediaType.APPLICATION_JSON);
 		try {
 			mw.drawComputerDetails(ComputerMapper.dtoToComputer(invocationBuilder.get().readEntity(ComputerDTO.class)));
 		} catch (TimestampException e) {
@@ -133,36 +131,34 @@ public class MainController {
 		String name = mw.getInputUser("Enter the username : ");
 		String password = mw.getInputUser("Enter the password : ");
 
-		userService.create(new User(name, password, true));
+		client.target(URL_API_USERS).request(MediaType.APPLICATION_JSON)
+		.post(Entity.json(new User(name, password, true)), User.class);
 	}
 
 	public void deleteComputer() {
 		Long id = Long.valueOf(mw.getInputUser("Enter the id : "));
-		client.target(URL_API).path("/"+id).request(MediaType.APPLICATION_JSON);
+		client.target(URL_API_COMPUTERS).path("/"+id).request(MediaType.APPLICATION_JSON).delete(ComputerDTO.class);
 	}
 
 	private void deleteCompany() {
 		Long id = Long.valueOf(mw.getInputUser("Enter the id : "));
-		try {
-			companyService.deleteById(id);
-		} catch (ValidatorException e) {
-			LOG.error(e.getMessage());
-		}
+		client.target(URL_API_COMPANY).path("/"+id).request(MediaType.APPLICATION_JSON).delete(CompanyDTO.class);
 	}
-	
+
 	/**
 	 * Ask to user a id. For each element ask if user want changes that.
 	 * Update computer in the DB
 	 */
 	public void updateComputer() {
 		Long id = Long.valueOf(mw.getInputUser("Enter the id : "));
-		Computer computer = null;
+		Computer computer = new Computer();
 
+		Invocation.Builder invocationBuilder = client.target(URL_API_COMPUTERS).path("/"+id).request(MediaType.APPLICATION_JSON);
 		try {
-			computer = computerService.findById(id);
+			computer = ComputerMapper.dtoToComputer(invocationBuilder.get().readEntity(ComputerDTO.class));
 		}catch(NoSuchElementException e) {
 			LOG.error("Computer id =" + id + " doesn't exist");
-		} catch (ComputerException e) {
+		} catch (TimestampException e) {
 			LOG.error(e.getMessage());
 		}
 
@@ -176,9 +172,12 @@ public class MainController {
 			computer.setIntroduced(getInputTimestamp());
 		}
 
-		String discontinued = mw.getInputUser("Change the date of discontinued ? (y or any key) :");
-		if (discontinued.toUpperCase().equals("Y")) {
-			computer.setDiscontinued(getInputTimestamp());
+		String discontinued = null;
+		if(computer.getIntroduced() == null) {
+			discontinued = mw.getInputUser("Change the date of discontinued ? (y or any key) :");
+			if (discontinued.toUpperCase().equals("Y")) {
+				computer.setDiscontinued(getInputTimestamp());
+			}
 		}
 
 		String idManu = mw.getInputUser("Enter the id of Manufacturer or just press enter :");
@@ -188,8 +187,8 @@ public class MainController {
 
 		ComputerDTO compDTO = ComputerMapper.computerToDTO(computer);
 
-		client.target(URL_API).path("/"+id).request(MediaType.APPLICATION_JSON)
-		.post(Entity.json(compDTO), ComputerDTO.class);
+		client.target(URL_API_COMPUTERS).path("/"+id).request(MediaType.APPLICATION_JSON)
+		.put(Entity.json(compDTO), ComputerDTO.class);
 	}
 
 	/**
@@ -215,7 +214,7 @@ public class MainController {
 
 		ComputerDTO compDTO = ComputerMapper.computerToDTO(computer);
 
-		client.target(URL_API).request(MediaType.APPLICATION_JSON)
+		client.target(URL_API_COMPUTERS).request(MediaType.APPLICATION_JSON)
 		.post(Entity.json(compDTO), ComputerDTO.class);
 
 	}
