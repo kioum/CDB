@@ -67,7 +67,7 @@ public class ComputerMapper {
 						(long)json.get("manufacturerId"), (String)json.get("manufacturerName")));
 			}catch(ClassCastException e ) {
 				LOG.error("Response of list Computers isn't a list of computerDTO");
-				return null;
+				return new ArrayList<>();
 			}
 		return computers;
 	}

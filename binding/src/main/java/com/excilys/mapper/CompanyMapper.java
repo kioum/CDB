@@ -42,7 +42,7 @@ public class CompanyMapper {
 				companies.add(new CompanyDTO((long)json.get("id"), (String)json.get("name")));
 			}catch(ClassCastException e ) {
 				LOG.error("Response of list Companies isn't a list of companyDTO");
-				return null;
+				return new ArrayList<>();
 			}
 		return companies;
 	}
