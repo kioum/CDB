@@ -5,7 +5,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -19,27 +18,28 @@ import org.springframework.stereotype.Component;
 
 import com.excilys.dto.CompanyDTO;
 import com.excilys.dto.ComputerDTO;
+import com.excilys.exception.ComputerException;
 import com.excilys.exception.TimestampException;
 import com.excilys.mapper.ComputerMapper;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.model.Page;
 import com.excilys.model.User;
-import com.excilys.service.UserService;
 import com.excilys.ui.MainView;
 import com.excilys.util.Order;
 
 @Component
 public class MainController {
 	private MainView mw;
-	private UserService userService;
 	Client client;
 
 	private static final Logger LOG = LoggerFactory.getLogger(MainController.class);
-	private final String URL_API_COMPUTERS = "http://localhost:8080/webapp/computers";
-	private final String URL_API_COMPANY = "http://localhost:8080/webapp/company";
-	private final String URL_API_USERS = "http://localhost:8080/webapp/users";
+	private static final String URL_API_COMPUTERS = "http://localhost:8080/webapp/computers";
+	private static final String URL_API_COMPANIES = "http://localhost:8080/webapp/companies";
+	private static final String URL_API_USERS = "http://localhost:8080/webapp/users";
 
+	private static final String ENTERID = "Enter the id :";
+	
 	/** 
 	 * Constructor
 	 */
@@ -66,7 +66,7 @@ public class MainController {
 			drawList(invocationBuilder.get().readEntity(List.class));
 			break;
 		case "LISTCOMPANY":
-			invocationBuilder = client.target(URL_API_COMPANY).path("").request(MediaType.APPLICATION_JSON);
+			invocationBuilder = client.target(URL_API_COMPANIES).path("").request(MediaType.APPLICATION_JSON);
 			drawList(invocationBuilder.get().readEntity(List.class));
 			break;
 		case "SHOWCOMPUTER":
@@ -101,7 +101,7 @@ public class MainController {
 	public <T> void drawList(List<T> list) {
 		int nbElement = Integer.parseInt(mw.getInputUser("How many by page ? "));
 
-		Page<T> page = new Page<T>(list, nbElement);
+		Page<T> page = new Page<>(list, nbElement);
 		mw.drawList(page.currentPage(), page.getNumPage());
 
 		String cmd = "";
@@ -117,12 +117,15 @@ public class MainController {
 	}
 
 	public void drawComputer() {
-		Long id = Long.valueOf(mw.getInputUser("Enter the id : "));
+		Long id = Long.valueOf(mw.getInputUser(ENTERID));
 
 		Invocation.Builder invocationBuilder = client.target(URL_API_COMPUTERS).path("/"+id).request(MediaType.APPLICATION_JSON);
 		try {
-			mw.drawComputerDetails(ComputerMapper.dtoToComputer(invocationBuilder.get().readEntity(ComputerDTO.class)));
-		} catch (TimestampException e) {
+			ComputerDTO compDTO = invocationBuilder.get().readEntity(ComputerDTO.class);
+			if(compDTO == null)
+				throw new ComputerException(String.format("Computer n°%d not found", id));
+			mw.drawComputerDetails(ComputerMapper.dtoToComputer(compDTO));
+		} catch (TimestampException | ComputerException e) {
 			LOG.error(e.getMessage());
 		}
 	}
@@ -136,13 +139,13 @@ public class MainController {
 	}
 
 	public void deleteComputer() {
-		Long id = Long.valueOf(mw.getInputUser("Enter the id : "));
+		Long id = Long.valueOf(mw.getInputUser(ENTERID));
 		client.target(URL_API_COMPUTERS).path("/"+id).request(MediaType.APPLICATION_JSON).delete(ComputerDTO.class);
 	}
 
 	private void deleteCompany() {
-		Long id = Long.valueOf(mw.getInputUser("Enter the id : "));
-		client.target(URL_API_COMPANY).path("/"+id).request(MediaType.APPLICATION_JSON).delete(CompanyDTO.class);
+		Long id = Long.valueOf(mw.getInputUser(ENTERID));
+		client.target(URL_API_COMPANIES).path("/"+id).request(MediaType.APPLICATION_JSON).delete(CompanyDTO.class);
 	}
 
 	/**
@@ -155,11 +158,13 @@ public class MainController {
 
 		Invocation.Builder invocationBuilder = client.target(URL_API_COMPUTERS).path("/"+id).request(MediaType.APPLICATION_JSON);
 		try {
-			computer = ComputerMapper.dtoToComputer(invocationBuilder.get().readEntity(ComputerDTO.class));
-		}catch(NoSuchElementException e) {
-			LOG.error("Computer id =" + id + " doesn't exist");
-		} catch (TimestampException e) {
+			ComputerDTO compDTO = invocationBuilder.get().readEntity(ComputerDTO.class);
+			if(compDTO == null)
+				throw new ComputerException(String.format("Computer n°%d not found", id));
+			computer = ComputerMapper.dtoToComputer(compDTO);
+		}catch(ComputerException | TimestampException e) {
 			LOG.error(e.getMessage());
+			return;
 		}
 
 		String name = mw.getInputUser("Enter the name or just press enter :");
@@ -168,14 +173,14 @@ public class MainController {
 		}
 
 		String introduced = mw.getInputUser("Change the date of introduced ? (y or any key) :");
-		if (introduced.toUpperCase().equals("Y")) {
+		if (introduced.equalsIgnoreCase("Y")) {
 			computer.setIntroduced(getInputTimestamp());
 		}
 
 		String discontinued = null;
 		if(computer.getIntroduced() == null) {
 			discontinued = mw.getInputUser("Change the date of discontinued ? (y or any key) :");
-			if (discontinued.toUpperCase().equals("Y")) {
+			if (discontinued.equalsIgnoreCase("Y")) {
 				computer.setDiscontinued(getInputTimestamp());
 			}
 		}

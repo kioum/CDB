@@ -1,6 +1,7 @@
 package com.excilys.model;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,15 +20,15 @@ public class Computer {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id", unique=true, nullable=false)
 	private long id;
-	
+
 	@Column(name="name")
 	private String name;
-	
+
 	@Column(name="introduced")
 	private Timestamp introduced;
 	@Column(name="discontinued")
 	private Timestamp discontinued;
-	
+
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="company_id")
 	private Company manufacturer;
@@ -71,14 +72,10 @@ public class Computer {
 	public void setDiscontinued(Timestamp discontinued) {
 		this.discontinued = discontinued;
 	}
-
+	
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (int) (id ^ (id >>> 32));
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
+		return Objects.hash(id);
 	}
 
 	@Override
@@ -90,9 +87,7 @@ public class Computer {
 		if (getClass() != obj.getClass())
 			return false;
 		Computer other = (Computer) obj;
-		if (id != other.id)
-			return false;
-		return true;
+		return id == other.id;
 	}
 
 	@Override

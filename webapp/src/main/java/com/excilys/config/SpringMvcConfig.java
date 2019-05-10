@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase;
+package com.excilys.config;
 
 import java.util.Locale;
 

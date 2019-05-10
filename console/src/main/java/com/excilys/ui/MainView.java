@@ -3,10 +3,14 @@ package com.excilys.ui;
 import java.util.List;
 import java.util.Scanner;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.model.Computer;
 
 public class MainView {
 	private Scanner in;
+	private static final Logger LOG = LoggerFactory.getLogger(MainView.class);
 
 	public MainView() {
 		this.in = new Scanner(System.in);
@@ -16,18 +20,18 @@ public class MainView {
 	 * Draw the menu for the user
 	 */
 	public void drawMenu() {
-		System.out.println("|---------------------|\t");
-		System.out.println("|  Computer Database  |\t");
-		System.out.println("|---------------------|\t\n");
-		System.out.println("1. Show list computers");
-		System.out.println("2. Show list companies");
-		System.out.println("3. Show computer details");
-		System.out.println("4. Create computer");
-		System.out.println("5. Update computer");
-		System.out.println("6. Delete computer");
-		System.out.println("7. Delete company");
-		System.out.println("8. Create User");
-		System.out.println("0. Exit");
+		LOG.info("|---------------------|\t");
+		LOG.info("|  Computer Database  |\t");
+		LOG.info("|---------------------|\t\n");
+		LOG.info("1. Show list computers");
+		LOG.info("2. Show list companies");
+		LOG.info("3. Show computer details");
+		LOG.info("4. Create computer");
+		LOG.info("5. Update computer");
+		LOG.info("6. Delete computer");
+		LOG.info("7. Delete company");
+		LOG.info("8. Create User");
+		LOG.info("0. Exit");
 	}
 
 	/**
@@ -36,7 +40,7 @@ public class MainView {
 	 * @return String
 	 */
 	public String getInputUser(String message) {
-		System.out.println(message);
+		LOG.info(message);
 		return in.nextLine();
 	}
 
@@ -45,7 +49,7 @@ public class MainView {
 	 * @param message
 	 */
 	public void drawMessage(String message) {
-		System.out.println(message);
+		LOG.info(message);
 	}
 
 	/**
@@ -54,9 +58,10 @@ public class MainView {
 	 * @param page
 	 */
 	public <T> void drawList(List<T> list, int page) {
-		System.out.println("Page " + page + " of list computers  : ");
-		for(T comp :list)
-			System.out.println("\t" + comp);
+		LOG.info("Page {} of list computers  : ", page);
+		for(T comp :list) {
+			LOG.info("\t {}", comp);
+		}
 	}
 
 	/**
@@ -64,6 +69,6 @@ public class MainView {
 	 * @param computer
 	 */
 	public void drawComputerDetails(Computer computer) {
-		System.out.println("\n" + computer + "\n");
+		LOG.info("\n {} \n", computer);
 	}
 }

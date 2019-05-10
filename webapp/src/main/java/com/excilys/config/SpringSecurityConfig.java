@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase;
+package com.excilys.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -6,14 +6,15 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
 @EnableWebSecurity
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
-
-	HikariDataSource dataSource;
+	private static final String ADMIN = "ADMIN";
+	private HikariDataSource dataSource;
 
 	public SpringSecurityConfig(HikariDataSource dataSource) {
 		this.dataSource = dataSource;
@@ -31,11 +32,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable()
-		.authorizeRequests()
-		.antMatchers("/AddComputer", "/addComputer", "/addcomputer" ).hasAuthority("ADMIN")
-		.antMatchers("/editcomputer", "/editComputer", "/EditComputer").hasAuthority("ADMIN")
-		.antMatchers("/deleteComputer", "/deletecomputer", "/Deletecomputer").hasAuthority("ADMIN")
+		http.authorizeRequests()
+		.antMatchers("/AddComputer", "/addComputer", "/addcomputer" ).hasAuthority(ADMIN)
+		.antMatchers("/editcomputer", "/editComputer", "/EditComputer").hasAuthority(ADMIN)
+		.antMatchers("/deleteComputer", "/deletecomputer", "/Deletecomputer").hasAuthority(ADMIN)
 		.antMatchers("/", "/dashboard", "/dashBoard", "/Dashboard", "/DashBoard").authenticated()
 		.antMatchers("/loginProcess").permitAll()
 		.and()
@@ -49,8 +49,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 		.and()
 		.logout()
 		.logoutSuccessUrl("/login?logout=true")
-		.logoutUrl("/logoutProcess")
+		.logoutRequestMatcher(new AntPathRequestMatcher("/logoutProcess"))
 		.and()
-	      .exceptionHandling().accessDeniedPage("/403");
+		.exceptionHandling().accessDeniedPage("/403");
 	}
 }

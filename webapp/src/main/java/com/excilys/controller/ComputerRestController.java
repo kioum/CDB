@@ -37,10 +37,10 @@ public class ComputerRestController {
 	public ComputerRestController(ComputerService computerService) {
 		this.computerService = computerService;
 	}
-	
+
 	@GetMapping
 	public ResponseEntity<List<ComputerDTO>> getAll(@RequestParam Map<String, String> paths) {
-		Page<ComputerDTO> pageComputer = new Page<ComputerDTO>(computerService.getAll(), computerService.getAll().size());
+		Page<ComputerDTO> pageComputer = new Page<>(computerService.getAll(), computerService.getAll().size());
 
 		String search = paths.get("search");
 		if(search != null && !search.equals("")) {
@@ -53,11 +53,11 @@ public class ComputerRestController {
 		}
 
 		String asc = paths.get("asc");
-		if(asc == null) asc = "true";
-		else if(asc != "") {
-			if(!Boolean.valueOf(asc))
-				Collections.reverse(pageComputer.getList());
-		}
+		if(asc == null) 
+			asc = "true";
+		
+		if("".equals(asc) && !Boolean.valueOf(asc))
+			Collections.reverse(pageComputer.getList());
 
 		String maxElement = paths.get("maxElement");
 		if(maxElement != null && !maxElement.equals("")) {
@@ -69,7 +69,7 @@ public class ComputerRestController {
 			pageComputer.setNumPage(Integer.valueOf(numPage));
 		}
 
-		return new ResponseEntity<List<ComputerDTO>>(pageComputer.currentPage(), HttpStatus.OK);
+		return new ResponseEntity<>(pageComputer.currentPage(), HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")
@@ -77,24 +77,24 @@ public class ComputerRestController {
 		ComputerDTO compDTO;
 		try {
 			compDTO = ComputerMapper.computerToDTO(computerService.findById(id));
-			return new ResponseEntity<ComputerDTO>(compDTO, HttpStatus.OK);
+			return new ResponseEntity<>(compDTO, HttpStatus.OK);
 		} catch (ComputerException e) {
 			LOG.error(e.getMessage());
-			return new ResponseEntity<ComputerDTO>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	@PostMapping
 	public ResponseEntity<ComputerDTO> createComputer(@Validated @RequestBody ComputerDTO computer){
 		Computer comp = new Computer();
-		
+
 		try {
 			comp = ComputerMapper.dtoToComputer(computer);
 			computerService.create(comp);
-			return new ResponseEntity<ComputerDTO>(computer, HttpStatus.OK);
+			return new ResponseEntity<>(computer, HttpStatus.OK);
 		} catch (TimestampException e) {
 			LOG.error(e.getMessage());
-			return new ResponseEntity<ComputerDTO>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}	
 	}
 
@@ -104,18 +104,18 @@ public class ComputerRestController {
 		try {
 			comp = ComputerMapper.dtoToComputer(computer);
 			computerService.update(comp);
-			return new ResponseEntity<ComputerDTO>(computer, HttpStatus.OK);
+			return new ResponseEntity<>(computer, HttpStatus.OK);
 		} catch (ValidatorException e) {
 			LOG.error(e.getMessage());
-			return new ResponseEntity<ComputerDTO>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}catch (TimestampException e) {
 			LOG.error(e.getMessage());
-			return new ResponseEntity<ComputerDTO>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteById(@PathVariable Long id) {
+	public ResponseEntity<Object> deleteById(@PathVariable Long id) {
 		try {
 			computerService.deleteById(id);
 			return new ResponseEntity<>(HttpStatus.OK);

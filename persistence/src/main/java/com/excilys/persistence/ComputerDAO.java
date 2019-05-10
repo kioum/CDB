@@ -13,8 +13,8 @@ import com.excilys.model.Computer;
 
 @Component
 public class ComputerDAO {
-	private final static String QUERY_GETLIST = "FROM Computer";
-	private final static String QUERY_FINDBYNAME = "FROM Computer c1 WHERE c1.name LIKE :name ";
+	private static final String QUERY_GETLIST = "FROM Computer";
+	private static final String QUERY_FINDBYNAME = "FROM Computer c1 WHERE c1.name LIKE :name ";
 
 	private SessionFactory sessionFactory;
 	private Session session;
@@ -28,8 +28,7 @@ public class ComputerDAO {
 
 	public List<Computer> getList(){
 		isOpenSession();
-		List<Computer> computers = this.session.createQuery(QUERY_GETLIST, Computer.class).list();
-		return computers;
+		return this.session.createQuery(QUERY_GETLIST, Computer.class).list();
 	}
 
 	public Optional<Computer> findById(Long id){

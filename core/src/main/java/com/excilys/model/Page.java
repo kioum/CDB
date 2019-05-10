@@ -60,7 +60,7 @@ public class Page<T> {
 	}
 
 	public int getMaxPage() {
-		return (int) (Math.floor(list.size()/maxElement));
+		return (int) (Math.floor(list.size()/(double)maxElement));
 	}
 
 	public int getNumPage() {

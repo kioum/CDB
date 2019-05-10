@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase;
+package com.excilys.config;
 
 import java.util.Properties;
 
@@ -41,7 +41,7 @@ public class AppConfig {
 	public HikariDataSource hikariDataSource() {
 		return new HikariDataSource(hikariConfig());
 	}
-	
+
 	@Bean
 	public LocalSessionFactoryBean sessionFactory() {
 		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();

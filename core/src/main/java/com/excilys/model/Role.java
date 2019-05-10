@@ -14,19 +14,19 @@ public class Role {
 	@Column(name="username")
 	private String username;
 	@Column(name="role")
-	private String role;
+	private String roleUser;
 	
 	public Role() {
 		super();
 		this.id = 0;
 		this.username = "";
-		this.role = "";
+		this.roleUser = "";
 	}
 	
 	public Role(String username, String role) {
 		super();
 		this.username = username;
-		this.role = role;
+		this.roleUser = role;
 	}
 	
 	public int getId() {
@@ -42,14 +42,14 @@ public class Role {
 		this.username = username;
 	}
 	public String getRole() {
-		return role;
+		return roleUser;
 	}
 	public void setRole(String role) {
-		this.role = role;
+		this.roleUser = role;
 	}
 
 	@Override
 	public String toString() {
-		return "Role [id=" + id + ", username=" + username + ", role=" + role + "]";
+		return "Role [id=" + id + ", username=" + username + ", role=" + roleUser + "]";
 	}
 }

@@ -1,6 +1,5 @@
 package com.excilys.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +20,8 @@ import com.excilys.persistence.ComputerDAO;
 public class ComputerService {
 	private ComputerDAO computerDAO;
 	private MessageSource messageSource;
+	
+	private static final String COMPUTER_ID = "computer.id";
 
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerService.class);
 
@@ -36,10 +37,10 @@ public class ComputerService {
 	public Computer findById(Long id) throws ComputerException {
 		Optional<Computer> optionComputer = computerDAO.findById(id);
 		if(optionComputer.isPresent()) {
-			return computerDAO.findById(id).get();			
+			return optionComputer.get();			
 		}
 		else {
-			throw new ComputerException(messageSource.getMessage("computer.id", null, LocaleContextHolder.getLocale()) +
+			throw new ComputerException(messageSource.getMessage(COMPUTER_ID, null, LocaleContextHolder.getLocale()) +
 					id + messageSource.getMessage("notfound", null, LocaleContextHolder.getLocale()));
 		}
 	}
@@ -54,7 +55,7 @@ public class ComputerService {
 			computerDAO.createOrUpdate(comp);
 		}catch (ComputerException e) { 
 			LOG.error(e.getMessage());
-			throw new ValidatorException(messageSource.getMessage("computer.id", null, LocaleContextHolder.getLocale()) 
+			throw new ValidatorException(messageSource.getMessage(COMPUTER_ID, null, LocaleContextHolder.getLocale()) 
 					+ comp.getId() + messageSource.getMessage("notexist", null, LocaleContextHolder.getLocale()));
 		}	
 	}
@@ -65,12 +66,12 @@ public class ComputerService {
 			computerDAO.deleteById(id);
 		} catch (ComputerException e) {
 			LOG.error(e.getMessage());
-			throw new ValidatorException(messageSource.getMessage("computer.id", null, LocaleContextHolder.getLocale()) 
+			throw new ValidatorException(messageSource.getMessage(COMPUTER_ID, null, LocaleContextHolder.getLocale()) 
 					+ id + " " + messageSource.getMessage("notexist", null, LocaleContextHolder.getLocale()));
 		}
 	}
 
-	public ArrayList<ComputerDTO> findByName(String search) {
+	public List<ComputerDTO> findByName(String search) {
 		return ComputerMapper.mapListDTO(computerDAO.findByName(search));
 	}
 }

@@ -19,7 +19,7 @@ import com.excilys.exception.ValidatorException;
 import com.excilys.service.CompanyService;
 
 @RestController
-@RequestMapping(path = "/company", produces = "application/json")
+@RequestMapping(path = "/companies", produces = "application/json")
 public class CompanyRestController {
 	private CompanyService companyService;
 	private static final Logger LOG = LoggerFactory.getLogger(CompanyRestController.class);
@@ -27,14 +27,14 @@ public class CompanyRestController {
 	public CompanyRestController(CompanyService companyService) {
 		this.companyService = companyService;
 	}
-	
+
 	@GetMapping
 	public ResponseEntity<List<CompanyDTO>> getAll(@RequestParam Map<String, String> paths) {		
-		return new ResponseEntity<List<CompanyDTO>>(companyService.getAll(), HttpStatus.OK);
+		return new ResponseEntity<>(companyService.getAll(), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteById(@PathVariable Long id) {
+	public ResponseEntity<Object> deleteById(@PathVariable Long id) {
 		try {
 			companyService.deleteById(id);
 			return new ResponseEntity<>(HttpStatus.OK);

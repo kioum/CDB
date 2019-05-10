@@ -29,10 +29,10 @@ public class UserRestController {
 	public ResponseEntity<User> createComputer(@Validated @RequestBody User user){
 		try {
 			userService.create(user);
-			return new ResponseEntity<User>(user, HttpStatus.OK);
+			return new ResponseEntity<>(user, HttpStatus.OK);
 		} catch (NoSuchMessageException | UserException e) {
 			LOG.error(e.getMessage());
-			return new ResponseEntity<User>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 	}

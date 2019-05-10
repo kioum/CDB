@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -80,7 +81,7 @@ public class ComputerMapperTest extends TestCase{
 		ArrayList<Computer> comp = new ArrayList<Computer>();
 		comp.add(ComputerMapper.map(rs));
 		
-		ArrayList<ComputerDTO> compDTO = ComputerMapper.mapListDTO(new ArrayList<Computer>());
+		List<ComputerDTO> compDTO = ComputerMapper.mapListDTO(new ArrayList<Computer>());
 		assertEquals(compDTO.size(), 0);
 
 		compDTO = ComputerMapper.mapListDTO(comp);

@@ -3,6 +3,7 @@ package com.excilys.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -41,7 +42,7 @@ public class CompanyMapperTest extends TestCase{
 		ArrayList<Company> comp = new ArrayList<Company>();
 		comp.add(CompanyMapper.map(rs));
 		
-		ArrayList<CompanyDTO> compDTO = CompanyMapper.mapDTO(new ArrayList<Company>());
+		List<CompanyDTO> compDTO = CompanyMapper.mapDTO(new ArrayList<Company>());
 		assertEquals(compDTO.size(), 0);
 
 		compDTO = CompanyMapper.mapDTO(comp);

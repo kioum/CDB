@@ -1,5 +1,5 @@
 package com.excilys.controller;
- 
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,9 +35,12 @@ public class ComputerController {
 	private CompanyService companyService;
 	private MessageSource messageSource;
 
-	private final String VIEW_DASHBOARD = "dashboard";
-	private final String VIEW_ADDCOMPUTER = "addComputer";
-	private final String VIEW_EDITCOMPUTER = "editComputer";
+	private static final String VIEW_DASHBOARD = "dashboard";
+	private static final String VIEW_ADDCOMPUTER = "addComputer";
+	private static final String VIEW_EDITCOMPUTER = "editComputer";
+
+	private static final String COMPUTER = "computer";
+	private static final String EXCEPTION = "exception";
 
 	public ComputerController(ComputerService computerService, CompanyService companyService, 
 			MessageSource message) {
@@ -53,7 +56,7 @@ public class ComputerController {
 
 	@GetMapping({ "/", "/dashboard", "/dashBoard", "/Dashboard", "/DashBoard" })
 	public String getDashBoard(@RequestParam(required = false) Map<String, String> paths, Model model) {
-		Page<ComputerDTO> pageComputer = new Page<ComputerDTO>(computerService.getAll(), 10);
+		Page<ComputerDTO> pageComputer = new Page<>(computerService.getAll(), 10);
 
 		String search = paths.get("search");
 		if(search != null && !search.equals("")) {
@@ -66,12 +69,12 @@ public class ComputerController {
 		}
 
 		String asc = paths.get("asc");
-		if(asc == null) asc = "true";
-		else if(asc != "") {
-			if(!Boolean.valueOf(asc))
-				Collections.reverse(pageComputer.getList());
-		}
- 
+		if(asc == null) 
+			asc = "true";
+
+		if("".equals(asc) && !Boolean.valueOf(asc))
+			Collections.reverse(pageComputer.getList());
+
 		String maxElement = paths.get("maxElement");
 		if(maxElement != null && !maxElement.equals("")) {
 			pageComputer.setMaxElement(Integer.valueOf(maxElement));
@@ -86,7 +89,7 @@ public class ComputerController {
 		model.addAttribute("search", search);
 		model.addAttribute("sortBy", sortBy);
 		model.addAttribute("asc", asc);
-		model.addAttribute("computer", new ComputerDTO());
+		model.addAttribute(COMPUTER, new ComputerDTO());
 
 		return VIEW_DASHBOARD;
 	}
@@ -98,17 +101,17 @@ public class ComputerController {
 				try {
 					computerService.deleteById(Long.valueOf(id));
 				} catch (ValidatorException e) {
-					model.addAttribute("exception", e.getMessage());
+					model.addAttribute(EXCEPTION, e.getMessage());
 				}
-		
-		return getDashBoard(new HashMap<String, String>(), model);
+
+		return getDashBoard(new HashMap<>(), model);
 	}
- 
+
 	@GetMapping({ "/AddComputer", "/addComputer", "/addcomputer" })
 	public String getAddServlet(Model model) {
 		model.addAttribute("companies", companyService.getAll());
-		model.addAttribute("computer", new ComputerDTO());
-		
+		model.addAttribute(COMPUTER, new ComputerDTO());
+
 		return VIEW_ADDCOMPUTER;
 	}
 
@@ -117,11 +120,11 @@ public class ComputerController {
 		try {
 			computerService.create(ComputerMapper.dtoToComputer(computer));
 		} catch (TimestampException e) {
-			model.addAttribute("exception", e.getMessage());
+			model.addAttribute(EXCEPTION, e.getMessage());
 			return getAddServlet(model);
 		}
 
-		return "redirect:/"+getDashBoard(new HashMap<String, String>(), model);
+		return "redirect:/"+getDashBoard(new HashMap<>(), model);
 	}
 
 	@GetMapping({ "/editcomputer", "/editComputer", "/EditComputer" })
@@ -133,13 +136,13 @@ public class ComputerController {
 			Computer comp = new Computer();
 			try {
 				comp = computerService.findById(Long.valueOf(id));
-				model.addAttribute("computer", ComputerMapper.computerToDTO(comp));
+				model.addAttribute(COMPUTER, ComputerMapper.computerToDTO(comp));
 			}catch (ComputerException e) {
 				model.addAttribute("id", id);
 				return "404";
 			}
 		} 
-		 
+
 		return VIEW_EDITCOMPUTER;
 	}
 
@@ -149,12 +152,12 @@ public class ComputerController {
 		try {
 			computerService.update(ComputerMapper.dtoToComputer(computer));
 		} catch (ValidatorException | TimestampException e) {
-			model.addAttribute("exception", e.getMessage());
-			Map<String, String> paths = new HashMap<String, String>();
+			model.addAttribute(EXCEPTION, e.getMessage());
+			Map<String, String> paths = new HashMap<>();
 			paths.put("id", String.valueOf(computer.getId()));
 			return getEditServlet(paths, model);
 		}
 
-		return "redirect:/"+getDashBoard(new HashMap<String, String>(), model);
+		return "redirect:/"+getDashBoard(new HashMap<>(), model);
 	}
 }

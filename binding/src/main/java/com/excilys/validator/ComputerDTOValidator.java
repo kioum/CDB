@@ -33,11 +33,14 @@ public class ComputerDTOValidator implements Validator{
 	public void validate(Object target, Errors errors) {
 		if(target == null)
 			errors.reject(messageSource.getMessage("computerValidator.null", null, LocaleContextHolder.getLocale()));
-		
+
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "id", messageSource.getMessage("computerValidator.id", null, LocaleContextHolder.getLocale()));
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", messageSource.getMessage("computerValidator.name", null, LocaleContextHolder.getLocale()));
-		
+
 		ComputerDTO computer = (ComputerDTO) target;
+
+		if(computer == null) 
+			return;
 		
 		if(computer.getId() < 0L) 
 			errors.reject(messageSource.getMessage("computerValidator.id", null, LocaleContextHolder.getLocale()));

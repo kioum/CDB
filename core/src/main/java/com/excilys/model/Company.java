@@ -1,5 +1,6 @@
 package com.excilys.model;
 
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -20,7 +21,7 @@ public class Company{
 	private long id;
 	@Column(name="name")
 	private String name;
-	
+
 	@Cascade(CascadeType.DELETE)
 	@OneToMany(mappedBy = "manufacturer", fetch=FetchType.LAZY)
 	private Set<Computer> computers;
@@ -41,14 +42,9 @@ public class Company{
 		this.name = name;
 	}
 
-
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (int) (id ^ (id >>> 32));
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
+		return Objects.hash(id);
 	}
 
 	@Override
@@ -60,14 +56,7 @@ public class Company{
 		if (getClass() != obj.getClass())
 			return false;
 		Company other = (Company) obj;
-		if (id != other.id)
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
+		return id == other.id;
 	}
 
 	@Override
@@ -92,7 +81,8 @@ public class Company{
 		public CompanyBuilder name(String name) {
 			if(name != null)
 				this.name = name;
-			else this.name = "";
+			else 
+				this.name = "";
 			return this;
 		}
 

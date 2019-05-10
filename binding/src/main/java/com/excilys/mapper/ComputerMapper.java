@@ -15,29 +15,30 @@ import com.excilys.util.AttrComputer;
 import com.excilys.util.TimestampConverter;
 
 public class ComputerMapper {
+	private ComputerMapper() {
+		
+	}
+	
 	public static Computer map(ResultSet res) throws SQLException {
-		Computer comp = new Computer();
-
 		Company company = new Company.CompanyBuilder()
 				.id(res.getLong("c2.id"))
 				.name(res.getString("c2.name")).build();
 		
-		comp = new Computer.ComputerBuilder()
+		return new Computer.ComputerBuilder()
 				.id(res.getLong("c1.id"))
 				.name(res.getString("c1.name"))
 				.introduced(res.getTimestamp("c1.introduced"))
 				.discontinued(res.getTimestamp("c1.discontinued")) 
 				.manufacturer(company).build();
-		
-		return comp;
 	}
 
-	public static ArrayList<ComputerDTO> mapListDTO(List<Computer> list) {
-		ArrayList<ComputerDTO> computers = new ArrayList<ComputerDTO>();
+	public static List<ComputerDTO> mapListDTO(List<Computer> list) {
+		String format = "yyyy-MM-dd";
+		List<ComputerDTO> computers = new ArrayList<>();
 
 		for(Computer comp:list) {
-			String introduced = TimestampConverter.formatToString(comp.getIntroduced(), "yyyy-MM-dd");
-			String discontinued = TimestampConverter.formatToString(comp.getDiscontinued(), "yyyy-MM-dd");
+			String introduced = TimestampConverter.formatToString(comp.getIntroduced(), format);
+			String discontinued = TimestampConverter.formatToString(comp.getDiscontinued(), format);
 			
 			if(comp.getManufacturer() == null)
 				comp.setManufacturer(new Company.CompanyBuilder().id(0).build());
@@ -51,8 +52,9 @@ public class ComputerMapper {
 	}
 
 	public static ComputerDTO computerToDTO(Computer comp) {
-		String introduced = TimestampConverter.formatToString(comp.getIntroduced(), "yyyy-MM-dd");
-		String discontinued = TimestampConverter.formatToString(comp.getDiscontinued(), "yyyy-MM-dd");
+		String format = "yyyy-MM-dd";
+		String introduced = TimestampConverter.formatToString(comp.getIntroduced(), format);
+		String discontinued = TimestampConverter.formatToString(comp.getDiscontinued(), format);
 		
 		if(comp.getManufacturer() != null)
 			return new ComputerDTO(comp.getId(), comp.getName(), introduced, 
@@ -69,10 +71,8 @@ public class ComputerMapper {
 		Company company = new Company.CompanyBuilder().id(computerDTO.getManufacturerId())
 				.name(computerDTO.getManufacturerName()).build();
 
-		Computer computer = new Computer.ComputerBuilder().id(computerDTO.getId()).name(name).introduced(introduced)
+		return new Computer.ComputerBuilder().id(computerDTO.getId()).name(name).introduced(introduced)
 				.discontinued(discontinued).manufacturer(company).build();
-
-		return computer;
 	}
 
 	public static List<ComputerDTO> sortBy(List<ComputerDTO> list, String attr){

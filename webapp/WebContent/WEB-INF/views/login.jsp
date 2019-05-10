@@ -47,6 +47,8 @@
 						</p>
 					</c:if>
 					<form action="loginProcess" method="POST">
+						<input type="hidden" name="${_csrf.parameterName}"
+							value="${_csrf.token}" />
 						<fieldset>
 							<div class="form-group">
 								<label for="username"> <spring:message code="userName" />

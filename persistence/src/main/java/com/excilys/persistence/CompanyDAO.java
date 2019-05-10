@@ -12,7 +12,7 @@ import com.excilys.model.Company;
 
 @Component
 public class CompanyDAO {
-	private final static String QUERY_GETLIST = "FROM Company";
+	private static final String QUERY_GETLIST = "FROM Company";
 
 	private SessionFactory sessionFactory;
 	private Session session;
@@ -24,8 +24,7 @@ public class CompanyDAO {
 
 	public List<Company> getList(){
 		isOpenSession();
-		List<Company> companies = this.session.createQuery(QUERY_GETLIST, Company.class).list();
-		return companies;
+		return this.session.createQuery(QUERY_GETLIST, Company.class).list();
 	}
 
 	public Optional<Company> findById(long id){

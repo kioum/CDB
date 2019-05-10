@@ -32,7 +32,7 @@ public class CompanyDTOValidator implements Validator {
 		
 		CompanyDTO company = (CompanyDTO) target;
 		
-		if(company.getId() < 0L) 
+		if(company != null && company.getId() < 0L) 
 			errors.reject(messageSource.getMessage("companyValidator.id", null, LocaleContextHolder.getLocale()));
 		
 	}

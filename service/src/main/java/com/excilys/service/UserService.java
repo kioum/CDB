@@ -3,7 +3,6 @@ package com.excilys.service;
 import java.util.Optional;
 
 import org.springframework.context.MessageSource;
-import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,7 +22,7 @@ public class UserService {
 		this.messageSource = messageSource;
 	}
 
-	public void create(User user) throws NoSuchMessageException, UserException {
+	public void create(User user) throws UserException {
 		Optional<User> optionComputer = userDAO.findByName(user.getName());
 		if(optionComputer.isPresent()) {
 			user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));

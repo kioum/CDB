@@ -35,7 +35,7 @@ public class CompanyService {
 	public Company findById(Long id) throws CompanyException {
 		Optional<Company> optionCompany = companyDAO.findById(id);
 		if(optionCompany.isPresent())
-			return companyDAO.findById(id).get();
+			return optionCompany.get();
 		else {
 			throw new CompanyException(messageSource.getMessage("company.id", null, LocaleContextHolder.getLocale()) +
 					id + messageSource.getMessage("notfound", null, LocaleContextHolder.getLocale()));
