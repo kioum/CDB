@@ -5,7 +5,11 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.excilys.dto.ComputerDTO;
 import com.excilys.exception.TimestampException;
@@ -15,15 +19,17 @@ import com.excilys.util.AttrComputer;
 import com.excilys.util.TimestampConverter;
 
 public class ComputerMapper {
-	private ComputerMapper() {
-		
-	}
+	private static final Logger LOG = LoggerFactory.getLogger(ComputerMapper.class);
 	
+	private ComputerMapper() {
+
+	}
+
 	public static Computer map(ResultSet res) throws SQLException {
 		Company company = new Company.CompanyBuilder()
 				.id(res.getLong("c2.id"))
 				.name(res.getString("c2.name")).build();
-		
+
 		return new Computer.ComputerBuilder()
 				.id(res.getLong("c1.id"))
 				.name(res.getString("c1.name"))
@@ -39,10 +45,10 @@ public class ComputerMapper {
 		for(Computer comp:list) {
 			String introduced = TimestampConverter.formatToString(comp.getIntroduced(), format);
 			String discontinued = TimestampConverter.formatToString(comp.getDiscontinued(), format);
-			
+
 			if(comp.getManufacturer() == null)
 				comp.setManufacturer(new Company.CompanyBuilder().id(0).build());
-			
+
 			computers.add(new ComputerDTO(comp.getId(), comp.getName(), introduced, 
 					discontinued, comp.getManufacturer().getId(), comp.getManufacturer().getName()));
 
@@ -51,14 +57,30 @@ public class ComputerMapper {
 		return computers;
 	}
 
+	public static List<ComputerDTO> hashMaptoDTO(List<HashMap<String, ?>> compJson) {
+		List<ComputerDTO> computers = new ArrayList<>();
+
+		for(HashMap<String, ?> json: compJson)
+			try {
+				computers.add(new ComputerDTO((long)json.get("id"), (String)json.get("name"), 
+						(String)json.get("introduced"), (String)json.get("discontinued"), 
+						(long)json.get("manufacturerId"), (String)json.get("manufacturerName")));
+			}catch(ClassCastException e ) {
+				LOG.error("Response of list Computers isn't a list of computerDTO");
+				return null;
+			}
+		return computers;
+	}
+
+
 	public static ComputerDTO computerToDTO(Computer comp) {
 		String format = "yyyy-MM-dd";
 		String introduced = TimestampConverter.formatToString(comp.getIntroduced(), format);
 		String discontinued = TimestampConverter.formatToString(comp.getDiscontinued(), format);
-		
+
 		if(comp.getManufacturer() != null)
 			return new ComputerDTO(comp.getId(), comp.getName(), introduced, 
-				discontinued, comp.getManufacturer().getId(), comp.getManufacturer().getName());
+					discontinued, comp.getManufacturer().getId(), comp.getManufacturer().getName());
 		else return new ComputerDTO(comp.getId(), comp.getName(), introduced, discontinued, 0L, null);
 	}
 

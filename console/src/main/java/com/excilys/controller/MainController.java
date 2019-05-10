@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.ws.rs.client.Client;
@@ -20,6 +21,7 @@ import com.excilys.dto.CompanyDTO;
 import com.excilys.dto.ComputerDTO;
 import com.excilys.exception.ComputerException;
 import com.excilys.exception.TimestampException;
+import com.excilys.mapper.CompanyMapper;
 import com.excilys.mapper.ComputerMapper;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
@@ -63,11 +65,13 @@ public class MainController {
 			return;
 		case "LISTCOMPUTER":
 			invocationBuilder = client.target(URL_API_COMPUTERS).path("").request(MediaType.APPLICATION_JSON);
-			drawList(invocationBuilder.get().readEntity(List.class));
+			List<ComputerDTO> computerDTO = ComputerMapper.hashMaptoDTO((List<HashMap<String, ?>>)invocationBuilder.get().readEntity(List.class));
+			drawList(computerDTO);
 			break;
 		case "LISTCOMPANY":
 			invocationBuilder = client.target(URL_API_COMPANIES).path("").request(MediaType.APPLICATION_JSON);
-			drawList(invocationBuilder.get().readEntity(List.class));
+			List<CompanyDTO> companyDTO = CompanyMapper.hashMaptoDTO((List<HashMap<String, ?>>)invocationBuilder.get().readEntity(List.class));
+			drawList(companyDTO);
 			break;
 		case "SHOWCOMPUTER":
 			drawComputer();
