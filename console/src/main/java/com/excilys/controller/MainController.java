@@ -3,6 +3,8 @@ package com.excilys.controller;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -41,7 +43,7 @@ public class MainController {
 	private static final String URL_API_USERS = "http://localhost:8080/webapp/users";
 
 	private static final String ENTERID = "Enter the id :";
-	
+
 	/** 
 	 * Constructor
 	 */
@@ -65,12 +67,14 @@ public class MainController {
 			return;
 		case "LISTCOMPUTER":
 			invocationBuilder = client.target(URL_API_COMPUTERS).path("").request(MediaType.APPLICATION_JSON);
-			List<ComputerDTO> computerDTO = ComputerMapper.hashMaptoDTO((List<HashMap<String, ?>>)invocationBuilder.get().readEntity(List.class));
+			List<HashMap<String, ?>> computerHash = castList(HashMap.class, invocationBuilder.get().readEntity(List.class));
+			List<ComputerDTO> computerDTO = ComputerMapper.hashMaptoDTO(computerHash);
 			drawList(computerDTO);
 			break;
 		case "LISTCOMPANY":
 			invocationBuilder = client.target(URL_API_COMPANIES).path("").request(MediaType.APPLICATION_JSON);
-			List<CompanyDTO> companyDTO = CompanyMapper.hashMaptoDTO((List<HashMap<String, ?>>)invocationBuilder.get().readEntity(List.class));
+			List<HashMap<String, ?>> companyHash = castList(HashMap.class, invocationBuilder.get().readEntity(List.class));
+			List<CompanyDTO> companyDTO = CompanyMapper.hashMaptoDTO(companyHash);
 			drawList(companyDTO);
 			break;
 		case "SHOWCOMPUTER":
@@ -248,5 +252,12 @@ public class MainController {
 		}
 
 		return new Timestamp(newdate.getTime());
+	}
+
+	public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {
+		List<T> r = new ArrayList<T>(c.size());
+		for(Object o: c)
+			r.add(clazz.cast(o));
+		return r;
 	}
 }

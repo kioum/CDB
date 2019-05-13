@@ -8,8 +8,8 @@ import com.excilys.controller.MainController;
 public class App {
 	public static final void main(String[] args) {
 		GenericApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-		MainController controler = context.getBean(MainController.class);
-		controler.mainMenu();
+		MainController controller = context.getBean(MainController.class);
+		controller.mainMenu();
 		context.close();
 	}
 }
